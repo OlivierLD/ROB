@@ -61,6 +61,9 @@ public class ExtraDataComputer extends Computer {
 	}
 
 	public ExtraDataComputer(Multiplexer mux, String prefix, Long... tbl) {
+		this(mux, prefix, tbl, true, false, null);
+	}
+	public ExtraDataComputer(Multiplexer mux, String prefix, Long[] tbl, boolean active, boolean verbose, String desc) {
 		super(mux);
 		if (prefix == null || prefix.length() != 2) {
 			throw new RuntimeException("Prefix must exist, and be EXACTLY 2 character long.");
@@ -72,6 +75,9 @@ public class ExtraDataComputer extends Computer {
 			ltcc.start();
 			this.longTimeCurrentCalculator.add(ltcc);
 		}
+		this.setActive(active);
+		this.setVerbose(verbose);
+		this.setDescription(desc);
 	}
 
 	/**

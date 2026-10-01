@@ -1295,10 +1295,13 @@ public class MuxInitializer {
                                     try {
                                         Computer twCurrentComputer = new ExtraDataComputer(mux,
                                                 prefix,
-                                                timeBufferLengths.toArray(new Long[timeBufferLengths.size()]));
-                                        twCurrentComputer.setVerbose("true".equals(cptrVerbose));
-                                        twCurrentComputer.setActive("true".equals(cptrActive));
-                                        twCurrentComputer.setDescription(cptrDesc);
+                                                timeBufferLengths.toArray(new Long[timeBufferLengths.size()]),
+                                                "true".equals(cptrActive),
+                                                "true".equals(cptrVerbose),
+                                                cptrDesc);
+//                                        twCurrentComputer.setVerbose("true".equals(cptrVerbose));
+//                                        twCurrentComputer.setActive("true".equals(cptrActive));
+//                                        twCurrentComputer.setDescription(cptrDesc);
                                         nmeaDataComputers.add(twCurrentComputer);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -1307,11 +1310,15 @@ public class MuxInitializer {
                                 case "dew-point-computer": // Computer
                                     String dpPrefix = muxProps.getProperty(String.format("computer.%s.prefix", MUX_IDX_FMT.format(cptrIdx)), "OS");
                                     try {
-                                        Computer dewPointComputer = new DewPointTemperatureComputer(mux, dpPrefix);
+                                        Computer dewPointComputer = new DewPointTemperatureComputer(mux,
+                                                dpPrefix,
+                                                "true".equals(cptrActive),
+                                                "true".equals(cptrVerbose),
+                                                cptrDesc);
                                         // dewPointComputer.setVerbose("true".equals(muxProps.getProperty(String.format("computer.%s.verbose", MUX_IDX_FMT.format(cptrIdx)))));
-                                        dewPointComputer.setVerbose("true".equals(cptrVerbose));
-                                        dewPointComputer.setActive("true".equals(cptrActive));
-                                        dewPointComputer.setDescription(cptrDesc);
+                                        // dewPointComputer.setVerbose("true".equals(cptrVerbose));
+                                        // dewPointComputer.setActive("true".equals(cptrActive));
+                                        // dewPointComputer.setDescription(cptrDesc);
                                         nmeaDataComputers.add(dewPointComputer);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -1323,7 +1330,7 @@ public class MuxInitializer {
                                     Long maxLength = null;
                                     String[] dataPath = null;
                                     String objectName = null;
-                                    String description = "Empty";
+                                    // String description; = "Empty";
                                     try {
                                         String propValue = muxProps.getProperty(String.format("computer.%s.ping-interval", MUX_IDX_FMT.format(cptrIdx)));
                                         if (propValue != null) {
@@ -1374,23 +1381,25 @@ public class MuxInitializer {
                                         System.err.println("object-name property:");
                                         ex.printStackTrace();
                                     }
-                                    try {
-                                        description = muxProps.getProperty(String.format("computer.%s.description", MUX_IDX_FMT.format(cptrIdx)), "Empty desc");
-                                    } catch (Exception ex) {
-                                        System.err.println("description property:");
-                                        ex.printStackTrace();
-                                    }
+//                                    try {
+//                                        description = muxProps.getProperty(String.format("computer.%s.description", MUX_IDX_FMT.format(cptrIdx)), "Empty desc");
+//                                    } catch (Exception ex) {
+//                                        System.err.println("description property:");
+//                                        ex.printStackTrace();
+//                                    }
                                     try {
                                         Computer longTermStorage = new LongTermStorage(mux,
                                                 pingInterval,
                                                 maxLength,
                                                 dataPath,
                                                 objectName,
-                                                description);
+                                                "true".equals(cptrActive),
+                                                "true".equals(cptrVerbose),
+                                                cptrDesc);
                                         // longTermStorage.setVerbose("true".equals(muxProps.getProperty(String.format("computer.%s.verbose", MUX_IDX_FMT.format(cptrIdx)))));
-                                        longTermStorage.setVerbose("true".equals(cptrVerbose));
-                                        longTermStorage.setActive("true".equals(cptrActive));
-                                        longTermStorage.setDescription(cptrDesc);
+                                        // longTermStorage.setVerbose("true".equals(cptrVerbose));
+                                        // longTermStorage.setActive("true".equals(cptrActive));
+                                        // longTermStorage.setDescription(cptrDesc);
                                         nmeaDataComputers.add(longTermStorage);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();

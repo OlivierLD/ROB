@@ -33,11 +33,17 @@ public class DewPointTemperatureComputer extends Computer {
 	}
 
 	public DewPointTemperatureComputer(Multiplexer mux, String prefix) {
+		this(mux, prefix, true, false, "");
+	}
+	public DewPointTemperatureComputer(Multiplexer mux, String prefix, boolean active, boolean verbose, String description) {
 		super(mux);
 		if (prefix == null || prefix.length() != 2) {
 			throw new RuntimeException("Prefix must exist, and be EXACTLY 2 character long.");
 		}
 		this.generatedStringsPrefix = prefix;
+		this.active = active;
+		this.verbose = verbose;
+		this.description = description;
 	}
 
 	/**

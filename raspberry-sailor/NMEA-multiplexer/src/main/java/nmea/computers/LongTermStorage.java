@@ -119,7 +119,14 @@ public class LongTermStorage extends Computer {
 		} // EOL while true
 	}, "dataCollector");
 
-	public LongTermStorage(Multiplexer mux, Long pingInterval, Long maxLength, String[] dataPath, String objectName, String desc) {
+	public LongTermStorage(Multiplexer mux,
+						   Long pingInterval,
+						   Long maxLength,
+						   String[] dataPath,
+						   String objectName,
+						   boolean active,
+						   boolean verbose,
+						   String desc) {
 		super(mux);
 		if (pingInterval != null) {
 			this.pingInterval = pingInterval;
@@ -129,6 +136,9 @@ public class LongTermStorage extends Computer {
 		}
 		this.dataPathInCache = dataPath;
 		this.storagePathInCache = objectName;
+
+		this.active = active;
+		this.verbose = verbose;
 		this.description = desc;
 		dataCollector.start();
 	}

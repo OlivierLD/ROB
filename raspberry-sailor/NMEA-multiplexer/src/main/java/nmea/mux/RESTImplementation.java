@@ -2382,7 +2382,12 @@ public class RESTImplementation {
 									}
 								}
 							}
-							Computer twCurrentComputer = new ExtraDataComputer(this.mux, twJson.getPrefix(), timeBufferLengths.toArray(new Long[timeBufferLengths.size()]));
+							Computer twCurrentComputer = new ExtraDataComputer(this.mux,
+									twJson.getPrefix(),
+									timeBufferLengths.toArray(new Long[timeBufferLengths.size()]),
+									twJson.isActive(),
+									twJson.isVerbose(),
+									twJson.getDescription());
 							nmeaDataComputers.add(twCurrentComputer);
 							String content = mapper.writeValueAsString(twCurrentComputer.getBean());
 							RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
