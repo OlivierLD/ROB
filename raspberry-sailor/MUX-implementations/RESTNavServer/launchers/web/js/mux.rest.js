@@ -1631,7 +1631,6 @@ let generateDiagram = () => {
 };
 
 /* Used for JSON formatter */
-
 function createJsonTree(data) {
     const container = document.createElement('div');
 
@@ -1691,17 +1690,33 @@ function getValClass(val) {
     return '';
 }
 
+let formattedJson = false;
+let jsonRawMap;
+
 let fmtJson = () => {
     let jsonContainer = document.getElementById('fmt-cache');
-    let theMap = JSON.parse(jsonContainer.getElementsByTagName('pre')[0].innerText);
+    if (!formattedJson) {
+        let theMap = JSON.parse(jsonContainer.getElementsByTagName('pre')[0].innerText);
+        jsonRawMap = theMap;
 
-    // let list = document.getElementById('json-viewer');
-    while (jsonContainer.hasChildNodes()) {
-        jsonContainer.removeChild(jsonContainer.children[0]);
+        // let list = document.getElementById('json-viewer');
+        while (jsonContainer.hasChildNodes()) {
+            jsonContainer.removeChild(jsonContainer.children[0]);
+        }
+        jsonContainer.appendChild(createJsonTree(theMap));
+        formattedJson = true;
+        document.getElementById("fmt-button").innerText = "Raw";
+    } else {
+        while (jsonContainer.hasChildNodes()) {
+            jsonContainer.removeChild(jsonContainer.children[0]);
+        }
+        let pre = document.createElement('pre');
+        pre.innerText = JSON.stringify(jsonRawMap, null, 2);
+        jsonContainer.appendChild(pre);
+        formattedJson = false;
+        document.getElementById("fmt-button").innerText = "Formatted";
     }
-    jsonContainer.appendChild(createJsonTree(theMap));
 };
-
 /* End of JSON formatter */
 
 let generateCache = () => {
@@ -1713,7 +1728,7 @@ let generateCache = () => {
         console.log("Done in " + (after - before) + " ms :", value);
         let json = JSON.parse(value);
         setRESTPayload(json, (after - before));
-        let html = `<h5>NMEA Cache at <i>${new Date()}</i>. <button onclick="fmtJson();">Formatted</button></h5>`;
+        let html = `<h5>NMEA Cache at <i>${new Date()}</i>. <button id="fmt-button" onclick="fmtJson();">Formatted</button></h5>`; // TODO raw-formatted
         if (json) {
             html += "<div id='fmt-cache' style='max-height: 150px; border: 1px solid silver; border-radius: 5px; overflow: auto;'>"
             html += "<pre>" + JSON.stringify(json, null, 2) + "</pre>";
