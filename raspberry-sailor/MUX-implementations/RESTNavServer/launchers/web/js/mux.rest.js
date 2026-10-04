@@ -1690,8 +1690,8 @@ function getValClass(val) {
     return '';
 }
 
-let formattedJson = false;
-let jsonRawMap;
+let formattedJson = false; // A switch
+let jsonRawMap;            // The original raw map (JSON stringified, indented with 2 blanks)
 
 let fmtJson = () => {
     let jsonContainer = document.getElementById('fmt-cache');
@@ -1728,7 +1728,7 @@ let generateCache = () => {
         console.log("Done in " + (after - before) + " ms :", value);
         let json = JSON.parse(value);
         setRESTPayload(json, (after - before));
-        let html = `<h5>NMEA Cache at <i>${new Date()}</i>. <button id="fmt-button" onclick="fmtJson();">Formatted</button></h5>`; // TODO raw-formatted
+        let html = `<h5>NMEA Cache at <i>${new Date()}</i>. <button id="fmt-button" onclick="fmtJson();">Formatted</button></h5>`;
         if (json) {
             html += "<div id='fmt-cache' style='max-height: 150px; border: 1px solid silver; border-radius: 5px; overflow: auto;'>"
             html += "<pre>" + JSON.stringify(json, null, 2) + "</pre>";

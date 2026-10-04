@@ -96,7 +96,7 @@ public class HTTPClient {
     public static Image getChart(final String urlString, String dir, String fileName, boolean verbose) throws Exception {
         String retFile = "";
 
-        if (true || verbose) {
+        if (verbose) {
             System.out.printf("Downloading %s into %s, as %s\n", urlString, dir, fileName);
         }
         /*

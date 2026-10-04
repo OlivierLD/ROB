@@ -1703,8 +1703,8 @@ function getValClass(val) {
     return '';
 }
 
-let formattedJson = false;
-let jsonRawMap;
+let formattedJson = false; // A switch
+let jsonRawMap;            // The original raw map (JSON stringified, indented with 2 blanks)
 
 let fmtJson = () => {
     let jsonContainer = document.getElementById('fmt-cache');

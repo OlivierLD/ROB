@@ -203,7 +203,7 @@ public class RESTImplementation {
 	}
 
 	private Response getCompositeHierarchy(Request request) {
-		if (true || VERBOSE) {
+		if (VERBOSE) {
 			System.out.println("getCompositeHierarchy, starting");
 		}
 		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
@@ -215,12 +215,12 @@ public class RESTImplementation {
 			String content;
 			try {
 				content = mapper.writeValueAsString(compositeHierarchy); // new Gson().toJson(compositeHierarchy);
-				if (true || VERBOSE) {
+				if (VERBOSE) {
 					System.out.println("getCompositeHierarchy returned:");
 					System.out.println(content);
 				}
 			} catch (JsonProcessingException jpe) {
-				if (true || VERBOSE) {
+				if (VERBOSE) {
 					System.err.println("getCompositeHierarchy failed with JsonProcessingException:");
 					jpe.printStackTrace();
 				}
@@ -235,7 +235,7 @@ public class RESTImplementation {
 			RESTProcessorUtil.generateResponseHeaders(response, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
-			if (true || VERBOSE) {
+			if (VERBOSE) {
 				System.err.println("getCompositeHierarchy failed:");
 				ex.printStackTrace();
 			}
