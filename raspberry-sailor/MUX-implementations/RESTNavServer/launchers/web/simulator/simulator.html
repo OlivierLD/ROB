@@ -155,6 +155,8 @@ button:disabled {
 	<script type="module" src="../webcomponents/VerticalGauge.js"></script>
 	<script type="module" src="../webcomponents/CompassRose.js"></script>
 
+    <script type="module" src="../webcomponents/JumboDisplay.js"></script>
+
     <link rel="stylesheet" href="../webcomponents/css/web-components.css">
 
     <script type="text/javascript" src="./utilities/Utilities.js"></script>         <!-- Dead Reckoning & CO -->
@@ -164,15 +166,22 @@ button:disabled {
 </head>
 <body>
 <h1>Nav Simulator</h1>
-Set your speed and heading, and start sailing!
+    Set your speed and heading, and start sailing!
+    <div style="float: right;">
+        <input type="radio" name="display-option" value="1" onchange="manageDisplayOption(this);" checked>Display Option One
+        <input type="radio" name="display-option" value="2" onchange="manageDisplayOption(this);">Display Option Two
+        <input type="radio" name="display-option" value="3" onchange="manageDisplayOption(this);">Display Option Three
+    </div>
+
 <hr/>
 <!-- Simulator will go here -->
 <div style="width: 90%; display: grid; grid-template-columns: auto auto;">
     <div><button id="start-stop" onclick="startStopSailing();">Start Sailing</button></div>
-    <div style="float: right;">
+    <!--div style="float: right;">
         <input type="radio" name="display-option" value="1" onchange="manageDisplayOption(this);" checked>Display Option One
         <input type="radio" name="display-option" value="2" onchange="manageDisplayOption(this);">Display Option Two
-    </div>
+        <input type="radio" name="display-option" value="3" onchange="manageDisplayOption(this);">Display Option Three
+    </div-->
 </div>
 <div style="max-height: 355px;
             overflow-y: hidden;
@@ -184,7 +193,7 @@ Set your speed and heading, and start sailing!
             background-image: url('images/horizon.jpeg');
             background-repeat: no-repeat;
             background-size: 100% 400px;">
-    <div style="width: 100%; display: grid; grid-template-columns: 33% 33% 33%;">
+    <div style="width: 100%; display: grid; grid-template-columns: 33.5% 33% 33.5%;">
         <div style="text-align: center;">
             <analog-display style="display: block;"
                     class="analogdisplay-flat-gray display-data"
@@ -203,18 +212,26 @@ Set your speed and heading, and start sailing!
                     width="300"
                     height="300"></analog-display>
 
-
             <vertical-gauge style="display: none;"
-                id="vertical-gauge-01"
-                class="vertical-gauge-03"
-                width="180"
-                height="300"
-                value="0"
-                majortick="1"
-                minortick="0.25"
-                fork="6"
-                label="Knots"
-                title="Vertical Gauge&#13;Speed in knots."></vertical-gauge>
+                    id="vertical-gauge-01"
+                    class="vertical-gauge-03"
+                    width="180"
+                    height="300"
+                    value="0"
+                    majortick="1"
+                    minortick="0.25"
+                    fork="6"
+                    label="Knots"
+                    title="Vertical Gauge&#13;Speed in knots."></vertical-gauge>
+
+            <jumbo-display style="display: none;"
+                    id="jumbo-sog"
+                    title="True Heading"
+                    class="jumbo-01 digital-font-white one-decimal"
+                    value="00.0"
+                    label="SOG"
+                    width="180"
+                    height="80"></jumbo-display>
 
             <div style="text-align: center;">
                 <button id="minusSOG" class="round-button" onclick="decreaseSOG();">-</button><button id="plusSOG" class="round-button" onclick="increaseSOG();">+</button>
@@ -241,7 +258,16 @@ Set your speed and heading, and start sailing!
                     width="500"
                     height="50"></compass-rose>
 
-            <div style="text-align: center; /* position: absolute; bottom: 10px; */">
+            <jumbo-display style="display: none;"
+                    id="jumbo-cog"
+                    title="COG"
+                    class="jumbo-01 digital-font-white zero-decimal"
+                    value="000"
+                    label="COG"
+                    width="180"
+                    height="80"></jumbo-display>
+
+                <div style="text-align: center; /* position: absolute; bottom: 10px; */">
                 <button id="minusCOG" class="round-button" onclick="decreaseCOG();">-</button><button id="plusCOG" class="round-button" onclick="increaseCOG();">+</button>
             </div>
         </div>
@@ -1435,12 +1461,24 @@ let setDisplayOption = (option) => {
             document.getElementById("cog").style.display = 'block';
             document.getElementById("vertical-gauge-01").style.display = 'none';
             document.getElementById("sog").style.display = 'block';
+            document.getElementById("jumbo-cog").style.display = 'none';
+            document.getElementById("jumbo-sog").style.display = 'none';
             break;
         case "2":
             document.getElementById("compass-rose-01").style.display = 'block';
             document.getElementById("cog").style.display = 'none';
             document.getElementById("vertical-gauge-01").style.display = 'block';
             document.getElementById("sog").style.display = 'none';
+            document.getElementById("jumbo-cog").style.display = 'none';
+            document.getElementById("jumbo-sog").style.display = 'none';
+            break;
+        case "3":
+            document.getElementById("compass-rose-01").style.display = 'none';
+            document.getElementById("cog").style.display = 'none';
+            document.getElementById("vertical-gauge-01").style.display = 'none';
+            document.getElementById("sog").style.display = 'none';
+            document.getElementById("jumbo-cog").style.display = 'block';
+            document.getElementById("jumbo-sog").style.display = 'block';
             break;
         default:
             break;
@@ -1483,6 +1521,7 @@ let decreaseSOG = () => {
         sog -= 0.1;
         document.getElementById("sog").value = sog.toFixed(1);
         document.getElementById("vertical-gauge-01").value = sog;
+        document.getElementById("jumbo-sog").value = sog;
     }
 };
 
@@ -1491,6 +1530,7 @@ let increaseSOG = () => {
     sog += 0.1;
     document.getElementById("sog").value = sog.toFixed(1);
     document.getElementById("vertical-gauge-01").value = sog;
+    document.getElementById("jumbo-sog").value = sog;
 };
 
 let decreaseCOG = () => {
@@ -1501,6 +1541,8 @@ let decreaseCOG = () => {
     }
     document.getElementById("cog").value = cog.toFixed(1);
     document.getElementById("compass-rose-01").value = cog;
+    document.getElementById("jumbo-cog").value = cog;
+
     document.getElementById("wheel").style.transform = `rotate(${cog}deg)`;
 };
 
@@ -1512,6 +1554,7 @@ let increaseCOG = () => {
     }
     document.getElementById("cog").value = cog.toFixed(1);
     document.getElementById("compass-rose-01").value = cog;
+    document.getElementById("jumbo-cog").value = cog;
     document.getElementById("wheel").style.transform = `rotate(${cog}deg)`;
 };
 
@@ -1559,10 +1602,12 @@ let plusSOGIsDown = false;
 
 window.onload = () => {
 
-
     let displayOption = getQSPrm("option");
     if (displayOption) {
         setDisplayOption(displayOption);
+
+        // name="display-option"
+        document.getElementsByName("display-option")[parseInt(displayOption) - 1].checked = true;
     }
 
     // To implement the continuous button down...

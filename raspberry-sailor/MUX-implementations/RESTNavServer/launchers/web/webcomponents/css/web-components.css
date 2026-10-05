@@ -118,8 +118,8 @@
 
 .jumbo-01 {
 	--bg-color: white;
-	--display-background-gradient-from: black;
-	--display-background-gradient-to: gray;
+	--display-background-gradient-from: rgba(0, 0, 0, 0.75);
+	--display-background-gradient-to: rgba(128, 128, 128, 0.5);
 	--grid-color: rgba(255, 255, 255, 0.7);
 	--display-color: cyan;
 	--value-nb-decimal: 2;
@@ -153,6 +153,19 @@ jumbo-display .digital-font-green {
 	--display-color: lightgreen;
 	--label-font: DigiFont;
 	--value-font: DigiFont;
+}
+
+jumbo-display .digital-font-white {
+	--display-color: white;
+	--label-font: DigiFont;
+	--value-font: DigiFont;
+}
+
+.zero-decimal {
+	--value-nb-decimal: 0;
+}
+.one-decimal {
+	--value-nb-decimal: 1;
 }
 
 .analogdisplay-day {
