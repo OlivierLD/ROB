@@ -4,6 +4,8 @@
  | WiP! Big Time!
  | To use with the Mux, driven by nmea.mux.ais.rest.yaml (for example)
  | See the result from another page, like http://localhost:9999/web/chartless.world.data.html
+ |
+ | QSPrm: test, option (see the code)
  +-->
 <html lang="en">
 <head>
@@ -146,8 +148,12 @@ button:disabled {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
+    <!-- Web Components. 2 options -->
 	<script type="module" src="../webcomponents/AnalogDisplay.js"></script>
 	<script type="module" src="../webcomponents/CompassGlobe.js"></script>
+
+	<script type="module" src="../webcomponents/VerticalGauge.js"></script>
+	<script type="module" src="../webcomponents/CompassRose.js"></script>
 
     <link rel="stylesheet" href="../webcomponents/css/web-components.css">
 
@@ -160,8 +166,14 @@ button:disabled {
 <h1>Nav Simulator</h1>
 Set your speed and heading, and start sailing!
 <hr/>
- <!-- Simulator will go here -->
-<button id="start-stop" onclick="startStopSailing();">Start Sailing</button>
+<!-- Simulator will go here -->
+<div style="width: 90%; display: grid; grid-template-columns: auto auto;">
+    <div><button id="start-stop" onclick="startStopSailing();">Start Sailing</button></div>
+    <div style="float: right;">
+        <input type="radio" name="display-option" value="1" onchange="manageDisplayOption(this);" checked>Display Option One
+        <input type="radio" name="display-option" value="2" onchange="manageDisplayOption(this);">Display Option Two
+    </div>
+</div>
 <div style="max-height: 355px;
             overflow-y: hidden;
             border: 1px solid silver;
@@ -172,9 +184,10 @@ Set your speed and heading, and start sailing!
             background-image: url('images/horizon.jpeg');
             background-repeat: no-repeat;
             background-size: 100% 400px;">
-    <div style="width: 100%; display: grid; grid-template-columns: auto auto auto;">
+    <div style="width: 100%; display: grid; grid-template-columns: 33% 33% 33%;">
         <div style="text-align: center;">
-            <analog-display class="analogdisplay-flat-gray display-data"
+            <analog-display style="display: block;"
+                    class="analogdisplay-flat-gray display-data"
                     title="Speed Over Ground&#13; in knots"
                     id="sog"
                     min-value="0"
@@ -189,6 +202,20 @@ Set your speed and heading, and start sailing!
                     rotate-digits="false"
                     width="300"
                     height="300"></analog-display>
+
+
+            <vertical-gauge style="display: none;"
+                id="vertical-gauge-01"
+                class="vertical-gauge-03"
+                width="180"
+                height="300"
+                value="0"
+                majortick="1"
+                minortick="0.25"
+                fork="6"
+                label="Knots"
+                title="Vertical Gauge&#13;Speed in knots."></vertical-gauge>
+
             <div style="text-align: center;">
                 <button id="minusSOG" class="round-button" onclick="decreaseSOG();">-</button><button id="plusSOG" class="round-button" onclick="increaseSOG();">+</button>
             </div>
@@ -197,14 +224,24 @@ Set your speed and heading, and start sailing!
             <img id="wheel" src="wheel.png" width="300" height="300" alt="Wheel" title="Wheel, COG" style="display: block; margin-left: auto; margin-right: auto;">
         </div>
         <div style="text-align: center;">
-            <compass-globe id="cog"
+            <compass-globe style="display: block;"
+                    id="cog"
                     class="globe-compass-01 display-data"
                     width="300"
                     height="300"
                     value="000"
                     label="COG"
                     title="Compass, COG"></compass-globe>
-            <div style="text-align: center;">
+
+            <compass-rose style="display: none; margin-top: 50px; margin-bottom: 200px;"
+                    id="compass-rose-01"
+                    class="day"
+                    title="Heading. COG"
+                    value="0"
+                    width="500"
+                    height="50"></compass-rose>
+
+            <div style="text-align: center; /* position: absolute; bottom: 10px; */">
                 <button id="minusCOG" class="round-button" onclick="decreaseCOG();">-</button><button id="plusCOG" class="round-button" onclick="increaseCOG();">+</button>
             </div>
         </div>
@@ -215,12 +252,18 @@ Set your speed and heading, and start sailing!
 <table id="leaflet-section" >
     <tr>
         <td valign="top">
-            <div class="switch-container" style="margin-left: 30px; text-align: right;" title="Chart layers">
+            <!--div class="switch-container" style="margin-left: 30px; text-align: right;" title="Chart layers">
                 <label class="switch switch-element">
                     <input id="slide-slider" type="checkbox" onchange="showSurface(this);" checked>
                     <span class="slider round"></span>
                 </label>
                 <span class="switch-element" id="carto-label">With Cartography</span>
+            </div-->
+
+            <div>
+                Layers:
+                <input type="checkbox" id="with-sat" onchange="setLayers();" checked>Sat Picture
+                <input type="checkbox" id="with-street-map" onchange="setLayers();" checked>Street Map
             </div>
 
             <!--div id="mapid" style="width: 1200px; height: 800px;"></div-->
@@ -314,6 +357,28 @@ function showSurface(checkbox) {
     } else {
         map.removeLayer(tilesOSM);
         document.getElementById("carto-label").innerHTML = "Sat Pic only";
+    }
+}
+
+function setLayers() {
+    let satCB = document.getElementById("with-sat");
+    let smCB  = document.getElementById("with-street-map");
+
+    if (satCB.checked) {
+        tiles.addTo(map);
+    } else {
+        map.removeLayer(tiles);
+    }
+
+    if (smCB.checked) {
+        if (satCB.checked) {
+            tilesOSM.setOpacity(0.5);
+        } else {
+            tilesOSM.setOpacity(1.0);
+        }
+        tilesOSM.addTo(map);
+    } else {
+        map.removeLayer(tilesOSM);
     }
 }
 
@@ -1357,6 +1422,31 @@ let startStopSailing = () => {
     }
 };
 
+let manageDisplayOption = (radio) => {
+    let option = radio.value;
+    console.log(`Option value: ${option}`);
+    setDisplayOption(option);
+};
+
+let setDisplayOption = (option) => {
+    switch (option) {
+        case "1":
+            document.getElementById("compass-rose-01").style.display = 'none';
+            document.getElementById("cog").style.display = 'block';
+            document.getElementById("vertical-gauge-01").style.display = 'none';
+            document.getElementById("sog").style.display = 'block';
+            break;
+        case "2":
+            document.getElementById("compass-rose-01").style.display = 'block';
+            document.getElementById("cog").style.display = 'none';
+            document.getElementById("vertical-gauge-01").style.display = 'block';
+            document.getElementById("sog").style.display = 'none';
+            break;
+        default:
+            break;
+    }
+}
+
 let betweenCalc = 5000;
 
 let sog = 4.5; sog = parseFloat(document.getElementById("sog").value);
@@ -1392,6 +1482,7 @@ let decreaseSOG = () => {
     if (sog > 0) {
         sog -= 0.1;
         document.getElementById("sog").value = sog.toFixed(1);
+        document.getElementById("vertical-gauge-01").value = sog;
     }
 };
 
@@ -1399,6 +1490,7 @@ let increaseSOG = () => {
     let sog = parseFloat(document.getElementById("sog").value);
     sog += 0.1;
     document.getElementById("sog").value = sog.toFixed(1);
+    document.getElementById("vertical-gauge-01").value = sog;
 };
 
 let decreaseCOG = () => {
@@ -1408,6 +1500,7 @@ let decreaseCOG = () => {
         cog += 360;
     }
     document.getElementById("cog").value = cog.toFixed(1);
+    document.getElementById("compass-rose-01").value = cog;
     document.getElementById("wheel").style.transform = `rotate(${cog}deg)`;
 };
 
@@ -1418,6 +1511,7 @@ let increaseCOG = () => {
         cog -= 360;
     }
     document.getElementById("cog").value = cog.toFixed(1);
+    document.getElementById("compass-rose-01").value = cog;
     document.getElementById("wheel").style.transform = `rotate(${cog}deg)`;
 };
 
@@ -1464,6 +1558,13 @@ let minusSOGIsDown = false;
 let plusSOGIsDown = false;
 
 window.onload = () => {
+
+
+    let displayOption = getQSPrm("option");
+    if (displayOption) {
+        setDisplayOption(displayOption);
+    }
+
     // To implement the continuous button down...
     // SOG
     document.getElementById("minusSOG").addEventListener("mousedown", () => {

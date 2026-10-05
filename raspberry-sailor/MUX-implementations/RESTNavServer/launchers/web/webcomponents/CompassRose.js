@@ -1,3 +1,6 @@
+/*
+ * Concave Compass Rose
+ */
 const compassRoseVerbose = false;
 const COMPASS_ROSE_TAG_NAME = 'compass-rose';
 

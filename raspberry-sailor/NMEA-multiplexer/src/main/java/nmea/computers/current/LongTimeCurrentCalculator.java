@@ -12,7 +12,7 @@ import nmea.parser.Speed;
 import nmea.parser.UTCDate;
 import nmea.parser.UTCHolder;
 import nmea.parser.UTCTime;
-import util.MercatorUtil;
+// import util.MercatorUtil;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -131,13 +131,21 @@ public class LongTimeCurrentCalculator /* extends Computer */ {
 									utcDate = new UTCHolder((UTCTime) ot);
 								}
 								Angle360 cmg = null;
-								try { cmg = (Angle360) cache.get(NMEADataCache.CMG); } catch (Exception ex) {}
+								try { cmg = (Angle360) cache.get(NMEADataCache.CMG); } catch (Exception ex) {
+									ex.printStackTrace();
+								}
 								GeoPos position = null;
-								try { position = (GeoPos) cache.get(NMEADataCache.POSITION); } catch (Exception ex) {}
+								try { position = (GeoPos) cache.get(NMEADataCache.POSITION); } catch (Exception ex) {
+									ex.printStackTrace();
+								}
 								Speed bsp = null;
-								try { bsp = (Speed) cache.get(NMEADataCache.BSP); } catch (Exception ex) {}
+								try { bsp = (Speed) cache.get(NMEADataCache.BSP); } catch (Exception ex) {
+									ex.printStackTrace();
+								}
 								Angle360 hdg = null;
-								try { hdg = (Angle360) cache.get(NMEADataCache.HDG_TRUE); } catch (Exception ex) {}
+								try { hdg = (Angle360) cache.get(NMEADataCache.HDG_TRUE); } catch (Exception ex) {
+									ex.printStackTrace();
+								}
 								// From a file: reset?
 								//            if (timeBuffer.size() > 1 && ((timeBuffer.get(timeBuffer.size() - 1).getValue().getTime() > utcDate.getValue().getTime())))
 								if (timeBuffer != null &&
@@ -149,7 +157,7 @@ public class LongTimeCurrentCalculator /* extends Computer */ {
 										utcDate.getValue() != null &&
 										((timeBuffer.get(timeBuffer.size() - 1).getValue().getTime() - utcDate.getValue().getTime()) > 1_000)) {
 									// Buffer Reset
-						//    System.out.println("== Resetting data buffers: last date in buffer=[" + SDF2.format(timeBuffer.get(timeBuffer.size() - 1).getValue()) + "] > current Date=[" + SDF2.format(utcDate.getValue()) + "]");
+									// System.out.println("== Resetting data buffers: last date in buffer=[" + SDF2.format(timeBuffer.get(timeBuffer.size() - 1).getValue()) + "] > current Date=[" + SDF2.format(utcDate.getValue()) + "]");
 									resetDataBuffers();
 								}
 
@@ -290,7 +298,7 @@ public class LongTimeCurrentCalculator /* extends Computer */ {
 					}
 					synchronized (this) {
 						if (verbose) {
-							System.out.println("  ...LongTimeCurrentCalculator going to wait, at " + new Date().toString() + " (will wait for " + (waitTime / 1_000) + " s)");
+							System.out.printf("  ...LongTimeCurrentCalculator going to wait, at %s (will wait for %d s)\n", new Date().toString(), (waitTime / 1_000));
 						}
 						try {
 							wait(waitTime);

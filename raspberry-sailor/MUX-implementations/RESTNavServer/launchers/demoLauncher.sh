@@ -220,7 +220,7 @@ while [[ "${GO}" == "true" ]]; do
     echo -e "|                                                                                         | ${RED}14${NC}. ShipModul, La Reveuse, replay (with AIS, speaking callback).                        |"
     echo -e "|                                                                                         | ${RED}14a${NC}. ShipModul, reading (for tests).                                                    |"
     echo -e "|                                                                                         | ${RED}15${NC}. Retour Portugal, replay.                                                            |"
-    echo -e "| ${RED}16${NC}. AIS Data and REST cache feeder (simulator)                                          |                                                                                         |"
+    echo -e "| ${RED}16${NC}. AIS Data and REST cache feeder (for simulator)                                      |                                                                                         |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
@@ -1281,7 +1281,7 @@ while [[ "${GO}" == "true" ]]; do
 	    fi
 	    echo -e "Also use, ${RED}curl -ivX POST http://localhost:${HTTP_PORT}/mux/nmea-sentence -d \"\$XXRMC,...\"  ${NC} to feed the cache..."
 	    echo -e "Also check out http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
-	    echo -e "Ready for the simulator..."
+	    echo -e "Ready for the simulator... See http://localhost:${HTTP_PORT}/web/simulator/simulator.html"
 	    GO=false
 	    ;;
 	  "20")

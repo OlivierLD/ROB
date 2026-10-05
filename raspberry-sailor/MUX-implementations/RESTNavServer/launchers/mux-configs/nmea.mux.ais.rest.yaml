@@ -1,13 +1,15 @@
 #
 # MUX definition.
 #
-name: "With no GPS, and AIS, for tests"
+name: "SF Bay, No GPS, with AIS, for tests and simulation"
 description:
   - Use for simulation.
   - AIS Data come from ais.exploratorium.edu:80
   - Use curl -X POST /mux/nmea-sentence -d "$XXRMC,..." to feed the cache with 'GPS' data
   - Used by option 16 in the demoLauncher
   - Requires Internet connection
+  - See http://localhost:XXXX/web/chartless.world.data.html
+  - And also http://localhost:XXXX/web/simulator/simulator.html
 context:
   with.http.server: true
   http.port: 9999

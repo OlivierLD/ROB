@@ -10,13 +10,17 @@ import nmea.api.Multiplexer;
 import nmea.parser.UTCDate;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TimeZone;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
  * Used to store data like PRMSL, temperature, etc, over time.
- *
  * To try:
  * curl -X GET http://localhost:1234/mux/cache | jq '."storage-data"'
  * (Cheat Sheet at https://lzone.de/cheat-sheet/jq https://developer.zendesk.com/documentation/integration-services/developer-guide/jq-cheat-sheet/)
@@ -40,10 +44,10 @@ public class LongTermStorage extends Computer {
 	private String[] dataPathInCache = { "Barometric Pressure", "value" };  // CSV in the yaml...
 	private String storagePathInCache = "BarographData"; // AKA List/Buffer name
 
-	private Map<String, Object> objectMap = new TreeMap<>();
+	private final Map<String, Object> objectMap = new TreeMap<>();
 	private final AtomicReference<NMEADataCache> cacheReference = new AtomicReference<>();
 
-	private Thread dataCollector = new Thread(() -> {
+	private final Thread dataCollector = new Thread(() -> {
 		while (true) { // Loop until dead
 			// NMEADataCache cache = ApplicationContext.getInstance().getDataCache();
 			cacheReference.set(ApplicationContext.getInstance().getDataCache());
@@ -70,7 +74,7 @@ public class LongTermStorage extends Computer {
 					}
 					if (finalData != null) {
 						found = true;
-						Date measureDate = null;
+						Date measureDate; // = null;
 						// Get GPS Date from cache, from the system if not found in cache
 						UTCDate utcDate = (UTCDate) cache.get(NMEADataCache.GPS_DATE_TIME, true);
 						if (utcDate != null) {

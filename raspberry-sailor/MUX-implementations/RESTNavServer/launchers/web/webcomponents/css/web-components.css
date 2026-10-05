@@ -784,3 +784,40 @@ compass-display .green {
 	--value-font: Verdana;
 	--value-color: cyan;
 }
+
+
+.vertical-gauge-01 {
+	--display-background-gradient-from: gray;
+	--display-background-gradient-to: darkgray;
+	--grid-color: black;
+	--display-color: white;
+	--value-frame-color: orange;
+	--value-color: white;
+	--value-nb-decimal: 2;
+	--label-font: 'American Typewriter', 'Courier New';
+	--value-font: 'American Typewriter', 'Courier New';
+}
+
+.vertical-gauge-02 {
+	--display-background-gradient-from: rgba(0, 0, 0, 0.75);
+	--display-background-gradient-to: rgba(128, 0, 0, 0.75);
+	--grid-color: silver;
+	--display-color: yellow;
+	--value-frame-color: cyan;
+	--value-color: limegreen;
+	--value-nb-decimal: 2;
+	--label-font: Verdana;
+	--value-font: 'Courier New';
+}
+
+.vertical-gauge-03 {
+	--display-background-gradient-from: rgba(0, 0, 0, 0.5);
+	--display-background-gradient-to: rgba(0, 0, 0, 0.5);
+	--grid-color: silver;
+	--display-color: yellow;
+	--value-frame-color: yellow;
+	--value-color: yellow;
+	--value-nb-decimal: 2;
+	--label-font: DigiFont;
+	--value-font: DigiFont;
+}
