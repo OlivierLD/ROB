@@ -223,7 +223,7 @@ class JumboDisplay extends HTMLElement {
 		}
 
 		let context = this.canvas.getContext('2d');
-		let scale = 1.0;
+		let scale = this.height / 60; // 1.0;
 
 		if (this.width === 0 || this.height === 0) { // Not visible
 			return;
@@ -266,7 +266,7 @@ class JumboDisplay extends HTMLElement {
 		context.fillStyle = this.jumboColorConfig.displayColor;
 		// Label
 		context.font = "bold " + Math.round(scale * 16) + "px " + this.jumboColorConfig.labelFont;
-		context.fillText(this.label, 5, 18);
+		context.fillText(this.label, 5, scale * 18);
 		// Value
 		context.font = "bold " + Math.round(scale * 60) + "px " + this.jumboColorConfig.valueFont;
 		let strVal = jumboValue.toFixed(this.jumboColorConfig.valueNbDecimal);

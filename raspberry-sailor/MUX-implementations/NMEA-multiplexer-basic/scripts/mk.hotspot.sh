@@ -36,3 +36,6 @@ nmcli con modify "${NETWORK_NAME}" wifi-sec.key-mgmt wpa-psk
 nmcli con modify "${NETWORK_NAME}" wifi-sec.psk "${NETWORK_PSWD}"
 nmcli con up "${NETWORK_NAME}"
 #
+# nmcli connection show
+# nmcli connection modify ${NETWORK_NAME} ipv4.address 192.168.1.1/24
+#

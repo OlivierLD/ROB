@@ -118,8 +118,8 @@
 
 .jumbo-01 {
 	--bg-color: white;
-	--display-background-gradient-from: rgba(0, 0, 0, 0.75);
-	--display-background-gradient-to: rgba(128, 128, 128, 0.5);
+	--display-background-gradient-from: rgba(0, 0, 0, 0.5);
+	--display-background-gradient-to: rgba(128, 128, 128, 0.25);
 	--grid-color: rgba(255, 255, 255, 0.7);
 	--display-color: cyan;
 	--value-nb-decimal: 2;
@@ -145,6 +145,18 @@
 
 jumbo-display .digital-font-orange {
 	--display-color: orange;
+	--label-font: DigiFont;
+	--value-font: DigiFont;
+}
+
+jumbo-display .digital-font-red {
+	--display-color: red;
+	--label-font: DigiFont;
+	--value-font: DigiFont;
+}
+
+jumbo-display .digital-font-yellow {
+	--display-color: yellow;
 	--label-font: DigiFont;
 	--value-font: DigiFont;
 }

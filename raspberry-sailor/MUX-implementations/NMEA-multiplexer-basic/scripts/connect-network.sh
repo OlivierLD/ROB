@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# Connect to an existing network.
 # NOT to be run with . ./connect-network.sh
 #
 pushd $(dirname $0) > /dev/null
@@ -8,6 +9,9 @@ echo -e "Disconnecting first..."
 #
 echo -e "Available network(s):"
 nmcli dev wifi list
+#
+# Another way:
+nmcli -p device
 #
 echo -en "Network to connect to: "
 read NETWORK_NAME

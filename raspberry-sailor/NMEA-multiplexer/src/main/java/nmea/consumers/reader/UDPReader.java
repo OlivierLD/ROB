@@ -77,7 +77,7 @@ public class UDPReader extends NMEAReader {
 						}
 						long after = System.currentTimeMillis();
 						if (drt.isAlive()) {
-//            System.out.println("Interrupting the DatagramReceiveThread");
+							// System.out.println("Interrupting the DatagramReceiveThread");
 							drt.interrupt();
 							if (timeout != -1 && (after - before) >= timeout) {
 								throw new RuntimeException("UDP took too long.");
@@ -100,8 +100,8 @@ public class UDPReader extends NMEAReader {
 				super.fireDataRead(n);
 			}
 		} catch (Exception e) {
-//    e.printStackTrace();
-//    JOptionPane.showMessageDialog(null, "No such UDP port " + udpport + "!", "Error opening port", JOptionPane.ERROR_MESSAGE);
+			// e.printStackTrace();
+			// JOptionPane.showMessageDialog(null, "No such UDP port " + udpport + "!", "Error opening port", JOptionPane.ERROR_MESSAGE);
 			manageError(e);
 		} finally {
 			try {
@@ -115,7 +115,7 @@ public class UDPReader extends NMEAReader {
 				System.err.println(">> Error when Closing Socket...");
 				ex.printStackTrace();
 			}
-//    closeReader();
+			// closeReader();
 		}
 	}
 

@@ -8,8 +8,8 @@ description:
   - Use curl -X POST /mux/nmea-sentence -d "$XXRMC,..." to feed the cache with 'GPS-like' data
   - Used by option 16 in the demoLauncher
   - Requires Internet connection
-  - See http://localhost:XXXX/web/chartless.world.data.html
-  - And also http://localhost:XXXX/web/simulator/simulator.html
+  - See http://localhost:9999/web/chartless.world.data.html
+  - And also http://localhost:9999/web/simulator/simulator.html
 context:
   with.http.server: true
   http.port: 9999
