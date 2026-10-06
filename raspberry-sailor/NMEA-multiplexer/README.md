@@ -10,7 +10,7 @@ Mutliplexer ? see [this](https://en.wikipedia.org/wiki/Multiplexer)!
 _Summary of the links used in this document:_
 - [Get started, fast](./getstarted.md)
 - [Manual](./manual.md)
-- [Note on WebSocket](./WebSockets.md)
+- [Note on WebSockets](./WebSockets.md)
 - [Demos](./demos.md)
 - [Examples](./examples.md)
 - [Case Study](./casestudy.md). Comparison with Node-RED
