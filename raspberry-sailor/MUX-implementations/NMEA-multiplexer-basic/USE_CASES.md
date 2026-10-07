@@ -18,7 +18,7 @@ machine-a [NMEA-multiplexer] $ ../../gradlew shadowJar -x :astro-computer:AstroC
 - Deploy for prod, [Raspberry Pi and GPS]  
   Generic example, showing how to deploy _your_ configuration to prod.  
   In a separate document, [here](./use_cases/USE_CASES_1.md).
-- [A Raspberry Pi A+, with a GPS, a BME280, and a 128x64 SSD1306 (using SPI), push buttons]  
+- A Raspberry Pi A+, with a GPS, a BME280, and a 128x64 SSD1306 (using SPI), push buttons.  
   How to setup a A Raspberry Pi A+, with a GPS, a BME280, and a 128x64 SSD1306. Two push-buttons.  
   In a separate document, [here](./use_cases/USE_CASES_2.md).
 - Deploy for prod, [Raspberry Pi, GPS, BME280, SSD1306, push buttons]  
