@@ -187,7 +187,9 @@ Forwarders:
 
 Sensors:
 - **BME280** reads raw data from a BME280 sensor (Temperature, Pressure, Humidity), and produces `XDR` and `MDA` NMEA Sentences.
-- **BMP180** reads raw data from a BMP180 sensor (Temperature, Pressure), and produces `XDR` and `MDA` NMEA Sentences.
+- **BMP180** reads raw data from a BMP180 sensor (Temperature, Pressure), and produces `XDR` and `MDA` NMEA Sentences.  
+  The two above can generate a barometric graph.  
+  ![Barograph](../MUX-implementations/NMEA-multiplexer-basic/doc_resources/barograph.png)
 - **HTU21D-F** reads raw data from a HTU21D-F sensor (Temperature, Humidity), and produces `XDR` NMEA Sentences.
 - **LSM303** reads raw data from a LSM303 sensor (3D magnetometer and accelerometer), and produces `XDR` NMEA Sentences for pitch and roll, `HDM` for heading.
 - **HMC5883L** reads raw data from a HMC5883L sensor (3D magnetometer), and produces `XDR` NMEA Sentences for pitch and roll, `HDM` for heading.
