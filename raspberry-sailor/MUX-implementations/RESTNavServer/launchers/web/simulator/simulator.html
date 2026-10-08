@@ -3,9 +3,13 @@
  | Requires Internet access (for Leaflet)
  | WiP! Big Time!
  | To use with the Mux, driven by nmea.mux.ais.rest.yaml (for example)
+ | Designed to see how the collision detection (borders, AIS)  is working
  | See the result from another page, like http://localhost:9999/web/chartless.world.data.html
  |
- | QSPrm: test, option (see the code)
+ | QS Prms (see the code):
+ | - test
+ | - option (3 different UIs)
+ | - interval
  +-->
 <html lang="en">
 <head>
@@ -148,7 +152,7 @@ button:disabled {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-    <!-- Web Components. 2 options -->
+    <!-- Web Components. Several options -->
 	<script type="module" src="../webcomponents/AnalogDisplay.js"></script>
 	<script type="module" src="../webcomponents/CompassGlobe.js"></script>
 
@@ -181,7 +185,7 @@ button:disabled {
 
     </div>
     <!--
-<h1>Nav Simulator</h1>
+    <h1>Nav Simulator</h1>
     Set your speed and heading, and start sailing!
     <div style="float: right;">
         <input type="radio" name="display-option" value="1" onchange="manageDisplayOption(this);" checked>Display Option One

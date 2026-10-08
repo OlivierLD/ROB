@@ -308,7 +308,12 @@ public class BorderManager extends Computer {
 						if (collisionCallback != null) {
 							// A test
 							String messageToSpeak = warningText; // "Honk honk!!"; // With more data
-							collisionCallback.accept(messageToSpeak);
+							if (collisionCallback instanceof RESTClientCollisionCallback) {
+								System.out.printf("--> Replacing the payload [%s] with [Warning!]\n", messageToSpeak);
+								collisionCallback.accept("Warning!"); // TODO Finish that!
+							} else {
+								collisionCallback.accept(messageToSpeak);
+							}
 							// TextToSpeech.speak(messageToSpeak);
 						}
 					}
