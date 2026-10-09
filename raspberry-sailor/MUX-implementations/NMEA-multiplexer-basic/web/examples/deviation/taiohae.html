@@ -17,6 +17,8 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
+  <link rel="stylesheet" href="../../css/web-components.css">
+
   <style type="text/css">
 
 .list-link {
@@ -411,8 +413,9 @@ compass-rose .day {
 <div id="page-header">
     <div style="display: grid; grid-template-columns: auto auto auto;">
         <div>
-            <h1 style="padding-left: 10px;">Don Pedro, &eacute;laboration d'une courbe de deviation</h1>
-            3 novembtre 2010.
+            <h1 style="padding-left: 10px;">Don Pedro, &eacute;laboration d'une courbe de d&eacute;viation</h1>
+            3 novembre 2010.<br/>
+            Raw logged data are available from <a href="https://github.com/OlivierLD/ROB/tree/master/raspberry-sailor/Swing/Deviation-Tool" target="_blank">Here</a>.
         </div>
 
         <div style="text-align: right; padding-right: 20px;">
@@ -537,6 +540,7 @@ compass-rose .day {
           </div>
       </div>
     </div>
+  </div>
 </div>
 
 <hr/>
@@ -629,31 +633,21 @@ compass-rose .day {
         return (getGCDistanceInDegrees(from, to) * 60);
     };
 
-    /*
-    let map = L.map('mapid'); // .setView([currentLatitude, currentLongitude], 13);
-
-    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		maxZoom: 19,
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	}).addTo(map);
-    */
     let map = L.map('mapid'); // .setView([currentLatitude, currentLongitude], 13);
 
 	let mbAttr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
 	let mbUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
 
     const tiles = L.tileLayer(mbUrl, {
-		maxZoom: 19,
+		maxZoom: 18,
 		attribution: mbAttr
 	}).addTo(map);
 
     const tilesOSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		maxZoom: 19,
+		maxZoom: 18,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         opacity: 0.5
 	}).addTo(map);
-
-
 
     let latlngs; // To be populated from JSON.
 
@@ -681,8 +675,7 @@ compass-rose .day {
     // Used as an example, See "// markers" below. Used to hold pictures.
     const ALL_MARKERS = [[], [], []];
 
-
-    // TODO Choose the track
+    // TODO Choose the track?
     const TRACK_DATA = [ './taiohae.2010.json', '', '' ];
 
     let trackData = TRACK_DATA[0];
@@ -737,7 +730,7 @@ compass-rose .day {
                     polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
 
                     // zoom the map to the polyline
-                    map.fitBounds(polyline.getBounds());
+                    map.fitBounds(polyline.getBounds()); // Warning: could exceed maxZoom
 
                     // let tooltip = L.tooltip()
                     //                 .setLatLng(L.latLng([0.0, 0.0]))
