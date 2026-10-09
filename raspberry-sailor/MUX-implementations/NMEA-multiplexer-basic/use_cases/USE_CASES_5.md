@@ -10,7 +10,7 @@ _**Note**_: the links below are just examples, provided to have an idea of the c
 - [Keyboard](https://www.pearl.fr/article/TG1541/clavier-usb-lumineux-azerty-avec-pave-numerique) (QWERTY or AZERTY)
 - Mouse, Trackball, or track pad (many options to choose from!)
 
-## AIS Receiver Option
+## AIS _Receiver_ Option
 - [Wegmatt](https://wegmatt.com/).
 - [Get started](https://wegmatt.com/files/dAISy%20HAT%20AIS%20Receiver%20Quickstart.pdf)
 - [Raspberry Pi AIS-HAT, WegMatt](https://shop.wegmatt.com/products/daisy-hat-ais-receiver)
@@ -24,9 +24,9 @@ _**Note**_: the links below are just examples, provided to have an idea of the c
 ---
 
 ### Context
-The Raspberry Pi emits its own network (yes, you can have a network, and no Internet...), and is connected to the boat's sensors (ShipModul or so).  
+The Raspberry Pi emits its own network (yes, you can have a network, and no Internet...), and is connected to the boat's sensors (ShipModul or so), speaking NMEA-0183.  
 Data can be visualized on the screen connected to the Raspberry Pi, or from any network-aware device, with a (recent, or at least not too old) browser.  
-The Raspberry Pi is strong enough to host programs like [OpenCPN](https://opencpn.org/).  
+The Raspberry Pi is strong and powerful enough to host programs like [OpenCPN](https://opencpn.org/).  
 The Multiplexer (options to be defined, technical doc [here](https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/NMEA-multiplexer/manual.md) - don't be scared, we'll help you) is also running on the Raspberry Pi.  
 An OS like [Twister OS](https://twisteros.com/) is a very good option.
 

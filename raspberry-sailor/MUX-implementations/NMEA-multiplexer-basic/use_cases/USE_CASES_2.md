@@ -1,5 +1,5 @@
 # Use-case 2
-### A Raspberry Pi A+, with a GPS, a BME280, and a 128x64 SSD1306 (using SPI)
+### A Raspberry Pi A+, with a GPS, a BME280, and a 128x64 SSD1306 (using SPI here)
 > Suitable for hiking, kayaking, this kind of things.  
 > Position is read from a Serial GPS, Atmospheric data from a [BME280](https://www.adafruit.com/product/2652).  
 > Data are displayed on a [small OLED screen](https://www.adafruit.com/product/326), and logged into a file, to be replayed later.
