@@ -8,7 +8,7 @@ _**Note**_: the links below are just examples, provided to have an idea of the c
 - [In a box](https://www.kubii.com/fr/boitiers-fixations/2681-boitier-officiel-pour-raspberry-pi-4-3272496298583.html)
 - A Screen (power supply 12v, or USB), with an HDMI cord. Like [this](https://www.amazon.fr/Yodoit-Portable-Moniteur-B%C3%A9quille-Haut-parleurs/dp/B0F82M3GHX/ref=asc_df_B0F82M3GHX?mcid=b898da6d55c23e2897ce0722a272fa60&tag=googshopfr-21&linkCode=df0&hvadid=701511851432&hvpos=&hvnetw=g&hvrand=13635281505204187963&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9109278&hvtargid=pla-2451665989584&hvocijid=13635281505204187963-B0F82M3GHX-&hvexpln=0&th=1).
 - [Keyboard](https://www.pearl.fr/article/TG1541/clavier-usb-lumineux-azerty-avec-pave-numerique) (QWERTY or AZERTY)
-- Mouse, Trackball, or track pad (many options to choose from!)
+- Mouse, Trackball, or track pad (many options to choose from, your job!)
 
 ## AIS _Receiver_ Option
 - [Wegmatt](https://wegmatt.com/).
