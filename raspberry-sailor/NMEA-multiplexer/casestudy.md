@@ -1,5 +1,5 @@
 # Raspberry Pi Zero W
-## Java Custom NMEA Multiplexer, or Node-RED ?
+## Java Custom NMEA Multiplexer, or Node-RED?
 
 The Raspberry Pi Zero W is a small single-board computer that
 - Runs Linux (Pixel, a clone of Jessie)

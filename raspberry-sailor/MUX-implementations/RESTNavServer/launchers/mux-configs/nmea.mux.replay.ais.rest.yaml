@@ -1,0 +1,51 @@
+#
+# MUX definition.
+#
+name: "SF Bay, No GPS, with AIS, for tests and simulation."
+description:
+  - Use for simulation.
+  - AIS Data come from a log file. #ais.exploratorium.edu:80
+  - Use curl -X POST /mux/nmea-sentence -d "$XXRMC,..." to feed the cache with 'GPS-like' data
+  - Used by option 16b in the demoLauncher
+  - Does not requires Internet connection (except for Leaflets)
+  - See http://localhost:9999/web/chartless.world.data.html
+  - And also http://localhost:9999/web/simulator/simulator.html
+context:
+  with.http.server: true
+  http.port: 9999
+  init.cache: true
+  markers.list:
+    - markers: mux-configs/markers/markers.sf.bay.yaml
+channels:
+  - type: zda
+    description: "ZDA Generator, GP prefix."
+    active: true
+    verbose: false
+  - type: file
+    filename: sample.data/ais.nmea
+    verbose: false
+    active: true
+    # between-records: 1000
+    loop: true
+    # sentence.filters: VDM
+    # device.filters: AI
+    description: "Replaying AIS Data"
+#forwarders:
+#  - type: file
+#    filename: ./ais.nmea
+#    flush: true
+#    device.filters: AI
+#    verbose: false
+#    active: true
+#    description: "Store AIS sentences for replay"
+computers:
+  - class: nmea.computers.AISManager
+    properties: mux-configs/ais.mgr.properties
+    active: true
+    verbose: false
+    description: "Manage AIS collisions with other boats"
+  - class: nmea.computers.BorderManager
+    properties: mux-configs/border.mgr.properties
+    active: true
+    verbose: false
+    description: "Manage border's proximity. Driven by border.mgr.properties"
