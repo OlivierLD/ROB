@@ -69,7 +69,7 @@ MEMORY_GAUGE=true
 MEM_POLLING_INTERVAL=2
 #
 # CP=../build/libs/RESTNavServer-1.0-all.jar
-CP=$(find ../build/libs -name '*-all.jar')
+CP=$(find ./build/libs -name '*-all.jar')
 #
 OS=$(uname -a | awk '{ print $1 }')
 if [[ "${OS}" == "Darwin" ]]; then
