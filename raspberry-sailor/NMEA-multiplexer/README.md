@@ -107,7 +107,9 @@ To be able to use it outside gradle, run (on Linux/Debian/Raspberry Pi):
 ```bash
  sudo apt-get install librxtx-java
 ```
-See how this is used and referred to in `mux.sh` (the launching script).
+See how this is used and referred to in `mux.sh` (the launching script).  
+_**WARNING**_: this `librxtx-java` might not be suitable for all JDKs... In case of problem,
+do look into the `stty` options...
 
 ---
 

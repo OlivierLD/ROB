@@ -20,9 +20,9 @@ forwarders:
   - type: file
     filename: data.nmea
     flush: true
-    # verbose: false
+    verbose: false
+    active: true
     # timebase.filename=true
     # filename.suffix=_LOG
     # log.dir=logged
     # split=hour
-
