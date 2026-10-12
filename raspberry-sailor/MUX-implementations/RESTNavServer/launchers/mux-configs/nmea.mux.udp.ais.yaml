@@ -8,7 +8,7 @@ description:
   - The file must obviously be here for the replay to work.
   - Markers and Borders demo/tests
   - AIS Data forwarded by OpenCPN, reading from sinagot.net (and read from udp channel). May be disabled...
-  - Can forward data on UDP:7002
+  - Can forward data on UDP:7002, and more
 context:
   with.http.server: true
   http.port: 9999
@@ -38,6 +38,7 @@ channels:
 #    port: 8002
 #    timeout: -1
 #    verbose: false
+#    active: true
 forwarders:
 #  - type: file
 #    verbose: false
@@ -47,14 +48,19 @@ forwarders:
 #    # sentence.filters: MWV, VHW, HDG
 #    sentence.filters: ~GGA,~GSA,~GSV
 #  - type: console
-  - type: udp
-    port: 7002
-    active: false
+#  - type: udp
+#    port: 8002
+#    active: true
+#    verbose: true
+#    description: "To be read by OpenCPN (or others)"
+  - type: tcp
+    port: 7001
+    active: true
     verbose: false
     description: "To be read by OpenCPN (or others)"
 computers:
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.properties
-    verbose: false
+    verbose: true
     active: true
     description: "This one gives a fog horn when possible detection is detected."
