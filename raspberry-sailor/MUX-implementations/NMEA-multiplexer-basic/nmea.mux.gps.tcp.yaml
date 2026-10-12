@@ -14,11 +14,19 @@ context:
     - markers: markers.biscay.yaml
     - markers: markers.iberica.west.yaml
 channels:
-  - type: serial
-    port: /dev/ttyS80
-    baudrate: 4800
+#  - type: serial
+#    port: /dev/ttyS80
+#    baudrate: 4800
 #    sentence.filters: RMC,GLL
+#    active: true
 #    verbose: true
+#    description: "Requires an apt install librxtx-java. See below..."
+  - type: file
+    filename: /dev/ttyACM0
+    # sentence.filters: ~GGA,~GSV,~GSA
+    active: true
+    verbose: false
+    description: "Requires an stty -F /dev/ttyACM0 raw 4800 cs8 clocal. Use it with JDK 17... LibRxtx might be a problem."
 forwarders:
   - type: file
     # filename: data.nmea

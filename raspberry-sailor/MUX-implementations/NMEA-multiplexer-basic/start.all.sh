@@ -149,8 +149,10 @@ elif [[ "${OPTION}" == "NAV-SERVER" ]]; then
   SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   # nohup ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
   if [[ ${NAVSERVER_NB_CLASSES} -eq 0 ]]; then
+    echo -e "Launching mux"
     nohup ./mux.sh ${PROP_FILE} &
   else
+    echo -e "Launching NavServer"
     nohup ./runNavServer.sh --mux:${PROP_FILE} --no-date &
   fi
   #
