@@ -10,12 +10,15 @@ _**Note**_: the links below are just examples, provided to have an idea of the c
 - A Screen (power supply 12v, or USB), with an HDMI cord. Like [this](https://www.amazon.fr/Yodoit-Portable-Moniteur-B%C3%A9quille-Haut-parleurs/dp/B0F82M3GHX/ref=asc_df_B0F82M3GHX?mcid=b898da6d55c23e2897ce0722a272fa60&tag=googshopfr-21&linkCode=df0&hvadid=701511851432&hvpos=&hvnetw=g&hvrand=13635281505204187963&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9109278&hvtargid=pla-2451665989584&hvocijid=13635281505204187963-B0F82M3GHX-&hvexpln=0&th=1).
 - [Keyboard](https://www.pearl.fr/article/TG1541/clavier-usb-lumineux-azerty-avec-pave-numerique) (QWERTY or AZERTY...)
 - Mouse, Trackball, or track pad (many options to choose from, your job!)
+- Optional, an [SSD](https://www.kubii.com/fr/boitiers-ventiles-intelligents/3139-boitier-argon-one-m2-3272496304116.html?gad_source=1&gad_campaignid=22579261906&gbraid=0AAAAApc7Y9kvwyEFC9LEbX0w5hLkZ_Fzo&gclid=CjwKCAjwoaLWBhAWEiwAnyitu6nbPiqGCjoZMldFi2hCN01qy4V5w_FkLt84cegmc-_cXhJvLFxzfhoCIcMQAvD_BwE) (Solid State Drive) instead of a SD Card
 
 ## AIS _Receiver_ Option
 - [Wegmatt](https://wegmatt.com/).
 - [Get started](https://wegmatt.com/files/dAISy%20HAT%20AIS%20Receiver%20Quickstart.pdf)
 - [Raspberry Pi AIS-HAT, WegMatt](https://shop.wegmatt.com/products/daisy-hat-ais-receiver)
 - [Raspberry Pi AIS-HAT, OpenMarine](https://shop.openmarine.net/home/14-daisy-hat-ais-receiver.html)
+
+Requires an antenna (VHF-like, a cheap one will do), works very well.
 
 ## Extra
 - A [BME280](https://www.adafruit.com/product/2652) or [BMP180](https://www.alibaba.com/pla/BMP180-GY-68-33V-5V-BMP-180-Temperature_1601258226008.html?mark=google_shopping&biz=pla&searchText=electronic+components&product_id=1601258226008&pcy=fr_fr&src=sem_ggl&field=UG&from=sem_ggl&cmpgn=22889997309&adgrp=184184039735&fditm=&tgt=pla-2426194943436&locintrst=&locphyscl=9109278&mtchtyp=&ntwrk=g&device=c&dvcmdl=&creative=769301584071&plcmnt=&plcmntcat=&aceid=&position=&gad_source=1&gad_campaignid=22889997309&gbraid=0AAAAAD8m77prknzKuHOPnobJhLRJhaNn3&gclid=CjwKCAjwoaLWBhAWEiwAnyituwUAFi1j_D2e30QtmCTB03nXi-rumaNeVdon_UWhQrmVl2fDIs2BDRoC9ygQAvD_BwE) can be useful to get the atmospheric pressure and air temperature.   

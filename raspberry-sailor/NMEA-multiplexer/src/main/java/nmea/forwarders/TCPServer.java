@@ -174,7 +174,7 @@ public class TCPServer implements Forwarder {
 						System.out.println(".......... serverSocket waiting (TCP:" + tcpPort + ").");
 					}
 					Socket clientSkt = parent.serverSocket.accept();
-					if (instance.props != null && "true".equals(instance.props.getProperty("verbose"))) {
+					if (instance.props != null && parent.isVerbose()) { // "true".equals(instance.props.getProperty("verbose"))) {
 						System.out.println(".......... serverSocket accepted (TCP:" + tcpPort + ").");
 					}
 					parent.setSocket(clientSkt);
@@ -182,8 +182,8 @@ public class TCPServer implements Forwarder {
 				System.out.println("EndOfWhileLoop in SocketThread");
 			} catch (Exception ex) {
 				System.err.printf("-> SocketThread port %d: %s\n", tcpPort, ex.getLocalizedMessage());
-				ex.printStackTrace();
-				throw new RuntimeException(ex);
+				// ex.printStackTrace();
+				// throw new RuntimeException(ex);
 			}
 			System.out.printf("..... End of TCP SocketThread, port %d\n.", tcpPort);
 		}

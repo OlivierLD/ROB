@@ -67,12 +67,12 @@ public class UDPServer implements Forwarder {
 	@Override
 	public void write(byte[] message) {
 		if (!this.isActive()) {
-			// TODO Honk
+			// TODO Honk?
 			return;
 		}
 		try {
 			// Create datagram socket
-			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+			if (this.props != null && this.isVerbose()) { // "true".equals(this.props.getProperty("verbose"))) {
 				System.out.printf("Creating Datagram Socket (%s, %d)\n", address, udpPort);
 			}
 			DatagramSocket dsocket = null;
@@ -82,21 +82,21 @@ public class UDPServer implements Forwarder {
 			} else {
 				dsocket = new DatagramSocket(udpPort, address);
 			}
-			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+			if (this.props != null && this.isVerbose()) { // "true".equals(this.props.getProperty("verbose"))) {
 				System.out.println("DatagramSocket created");
 			}
 
 			// Initialize a datagram
 			DatagramPacket packet = new DatagramPacket(message, message.length, address, udpPort);
 			dsocket.send(packet);
-			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+			if (this.props != null && this.isVerbose()) { // "true".equals(this.props.getProperty("verbose"))) {
 				System.out.println("UDP Message sent");
 			}
 			if (address.isMulticastAddress()) {
 				((MulticastSocket) dsocket).leaveGroup(address);
 			}
 			dsocket.close();
-			if (this.props != null && "true".equals(this.props.getProperty("verbose"))) {
+			if (this.props != null && this.isVerbose()) { // "true".equals(this.props.getProperty("verbose"))) {
 				System.out.println("DatagramSocket Closed");
 			}
 		} catch (Exception ex) {

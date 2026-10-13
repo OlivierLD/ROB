@@ -147,17 +147,21 @@ public class MuxInitializer {
                     deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
                     sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
                     String desc = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)), "");
+                    boolean active = "true".equals(muxProps.getProperty(String.format("mux.%s.active", MUX_IDX_FMT.format(muxIdx)), "true"));
 
                     if (verbose) {
                         spitOutSentenceFilters(sentenceFilters);
                         System.out.printf("Instantiation of class %s, desc is [%s]\n", clss, desc);
                     }
                     Object dynamic = Class.forName(clss)
-                            .getDeclaredConstructor(String[].class, String[].class, Multiplexer.class, String.class)
+                            .getDeclaredConstructor(String[].class, String[].class, Multiplexer.class, boolean.class, boolean.class, String.class)
                             .newInstance(
                                     !deviceFilters.trim().isEmpty() ? deviceFilters.split(",") : null,
                                     !sentenceFilters.trim().isEmpty() ? sentenceFilters.split(",") : null,
-                                    mux, desc);
+                                    mux,
+                                    active,
+                                    verbose,
+                                    desc);
                     if (dynamic instanceof NMEAClient) {
                         NMEAClient nmeaClient = (NMEAClient) dynamic;
 
