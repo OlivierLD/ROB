@@ -3548,7 +3548,7 @@ public class RESTImplementation {
 			}
 			String content = sb.toString();
 
-			RESTProcessorUtil.generateResponseHeaders(response, "plain/text", content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, "plain/text; charset=utf-8", content.getBytes().length);
 			response.setPayload(content.getBytes());
 
 			return response;
