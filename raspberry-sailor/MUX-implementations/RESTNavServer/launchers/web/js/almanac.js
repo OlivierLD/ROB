@@ -160,7 +160,7 @@ let publishAlmanac = function(options, callback) {
 
 };
 
-let publishLunar= function(options, callback) {
+let publishLunar = function(options, callback) {
 
 	console.log(`publishLunar, options: ${JSON.stringify(options)}`);
 
