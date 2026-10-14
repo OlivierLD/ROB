@@ -254,7 +254,7 @@ public class RESTImplementation {
 		Response response = new Response(request.getProtocol(), Response.STATUS_OK);
 		try {
 			String content = System.getProperty("polar.file.location");
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			response = HTTPServer.buildErrorResponse(response,
@@ -279,7 +279,7 @@ public class RESTImplementation {
 			}
 		}
 		String content = "OK";
-		RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+		RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 		response.setPayload(content.getBytes());
 		return response;
 	}
@@ -294,7 +294,7 @@ public class RESTImplementation {
 				// Missing, no worries.
 				content = "null";
 			}
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			response = HTTPServer.buildErrorResponse(response,
@@ -401,7 +401,7 @@ public class RESTImplementation {
 				this.navRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", ipAddress, content));
 			}
 
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			response = HTTPServer.buildErrorResponse(response,
@@ -425,7 +425,7 @@ public class RESTImplementation {
 				this.navRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", cpuTemperature, content));
 			}
 
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			response = HTTPServer.buildErrorResponse(response,
@@ -449,7 +449,7 @@ public class RESTImplementation {
 				this.navRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", diskUsage, content));
 			}
 
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			response = HTTPServer.buildErrorResponse(response,
@@ -473,7 +473,7 @@ public class RESTImplementation {
 				this.navRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", memoryUsage, content));
 			}
 
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			response = HTTPServer.buildErrorResponse(response,
@@ -497,7 +497,7 @@ public class RESTImplementation {
 				this.navRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", cpuLoad, content));
 			}
 
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			response = HTTPServer.buildErrorResponse(response,

@@ -289,7 +289,7 @@ public class RESTImplementation {
 				this.systemRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", ipAddress, content));
 			}
 
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			response = HTTPServer.buildErrorResponse(response,
@@ -313,7 +313,7 @@ public class RESTImplementation {
 				this.systemRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", cpuTemperature, content));
 			}
 
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			response = HTTPServer.buildErrorResponse(response,
@@ -337,7 +337,7 @@ public class RESTImplementation {
 				this.systemRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", diskUsage, content));
 			}
 
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			response = HTTPServer.buildErrorResponse(response,
@@ -361,7 +361,7 @@ public class RESTImplementation {
 				this.systemRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", memoryUsage, content));
 			}
 
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			response = HTTPServer.buildErrorResponse(response,
@@ -385,7 +385,7 @@ public class RESTImplementation {
 				this.systemRequestManager.getLogger().log(Level.INFO, String.format("%s => %s", cpuLoad, content));
 			}
 
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			response = HTTPServer.buildErrorResponse(response,

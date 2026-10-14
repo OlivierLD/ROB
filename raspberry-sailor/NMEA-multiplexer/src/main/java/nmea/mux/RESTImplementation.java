@@ -3383,7 +3383,7 @@ public class RESTImplementation {
 			System.out.printf("Find script completed, status %d, found %d files\n", exitStatus, list.size());
 
 			String content = mapper.writeValueAsString(list);
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (IOException | InterruptedException ex) {
 			ex.printStackTrace();
@@ -3415,7 +3415,7 @@ public class RESTImplementation {
 			} else if (fmt.equals("duration")) {
 				content = DURATION_FMT.format(new Date());
 			}
-			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN, content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -3548,7 +3548,7 @@ public class RESTImplementation {
 			}
 			String content = sb.toString();
 
-			RESTProcessorUtil.generateResponseHeaders(response, "plain/text; charset=utf-8", content.getBytes().length);
+			RESTProcessorUtil.generateResponseHeaders(response, HttpHeaders.TEXT_PLAIN_UTF8, content.getBytes().length);
 			response.setPayload(content.getBytes());
 
 			return response;
