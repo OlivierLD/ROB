@@ -85,11 +85,11 @@ elif [[ "${OS}" == "Linux" ]]; then
   CP=${CP}:/usr/share/java/RXTXcomm.jar # For Raspberry Pi. Should already be in the fat-jar.
 fi
 #
+JAVA_OPTS="-Dfile.encoding=UTF-8"
+#
 if [[ "$DEFAULT_POS" != "" ]]; then
   echo -e "Setting JAVA_OPTS to \"$DEFAULT_POS\" "
-  JAVA_OPTS="$DEFAULT_POS"
-else
-  JAVA_OPTS=
+  JAVA_OPTS="${JAVA_OPTS} ${DEFAULT_POS}"
 fi
 JAVA_OPTS="${JAVA_OPTS} -Djava.util.logging.config.file=logging.properties"
 JAVA_OPTS="${JAVA_OPTS} -Dwith.tide.coeffs=${WITH_TIDE_COEFFS}"

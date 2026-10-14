@@ -18,7 +18,7 @@ fi
 #
 echo Using properties file ${MUX_PROP_FILE}
 #
-JAVA_OPTIONS=
+JAVA_OPTIONS="-Dfile.encoding=UTF-8"
 if [[ "$OS" == "Darwin" ]]; then
   # Copy the jnilib file where it belongs, if it is not there.
   JAVA_OPTIONS="${JAVA_OPTIONS} -Djava.library.path=/Library/Java/Extensions"       # for Mac

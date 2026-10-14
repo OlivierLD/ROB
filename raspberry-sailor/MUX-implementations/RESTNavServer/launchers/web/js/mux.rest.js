@@ -492,7 +492,7 @@ let channelList = () => {
                 case 'file':
                     html += ("<tr>" +
                     "<td valign='top'><b>file</b></td>" +
-                    "<td valign='top'>Name: " + json[i].file + "<br>Archive ?: " + json[i].zip  +"<br>Path in archive: " + json[i].pathInArchive  +
+                    "<td valign='top'>Name: " + json[i].file + "<br>Archive: " + json[i].zip  +"<br>Path in archive: " + json[i].pathInArchive  +
                         "<br>Between reads: " + json[i].pause + " ms" +
                         "<br>Loop: " + json[i].loop +
                     "</td>" +
@@ -1322,7 +1322,7 @@ let generateDiagram = () => {
             switch (type) {
                 case 'file':
                     html += ("<tr" + (json[i].active === false ? " class='inactive'" : "") + ">" + "<td valign='top'><b>file</b></td>" + "<td valign='top'>File: " + json[i].file +
-                        "<br>Archive ?: " + json[i].zip  +
+                        "<br>Archive: " + json[i].zip  +
                         "<br>Path in archive: " + (json[i].pathInArchive ? json[i].pathInArchive : "-")  +
                         "<br>Between reads: " + json[i].pause + " ms" +
                         "<br>Loop: " + json[i].loop +

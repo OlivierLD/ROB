@@ -86,7 +86,7 @@
 
 		function displayErr(err) {
 			if (err) {
-				document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
+				document.getElementById("err-mess").innerHTML += ("<small>" + err + "</small><br/>");
 			}
 		}
 
@@ -130,7 +130,7 @@
 		</p>
 	</div>
 	<hr/>
-	<div id="err-mess" style="margin: 5px; padding: 5px; border: 1px solid silver; border-radius: 5px;"></div>
+	<div id="err-mess" style="margin: 5px; padding: 5px; border: 1px solid silver; border-radius: 5px; max-height: 100px; overflow-y: scroll;"></div>
 	<button onclick="document.getElementById('err-mess').innerHTML = '';">Clear Err. Messages</button>
 </body>
 </html>

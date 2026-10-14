@@ -17,6 +17,7 @@ channels:
   - type: zda
     description: "ZDA Generator, GP prefix."
     active: true
+    verbose: false
   - type: rest           # Pings the Python REST Server, for tests. Verb is GET.
     protocol: http
     machine-name: localhost
@@ -33,7 +34,7 @@ channels:
     verbose: true
   - class: nmea.consumers.client.RandomMTWClient   # This is for debugging. Random Water Temperature
     reader: nmea.consumers.reader.RandomMTWReader
-    verbose: true
+    verbose: false
     active: true
     sentence.filters: ~XXX
     description: "This is for debugging and illustration of a dynamic channel class. Random Water Temperature and more. Device prefix: AE, Sentences: MTW, XDR, MTA, MDA, MMB"
