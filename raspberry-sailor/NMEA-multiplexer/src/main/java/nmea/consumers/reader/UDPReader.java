@@ -100,7 +100,9 @@ public class UDPReader extends NMEAReader {
 				super.fireDataRead(n);
 			}
 		} catch (Exception e) {
-			// e.printStackTrace();
+			if (true) {
+				e.printStackTrace();
+			}
 			// JOptionPane.showMessageDialog(null, "No such UDP port " + udpport + "!", "Error opening port", JOptionPane.ERROR_MESSAGE);
 			manageError(e);
 		} finally {

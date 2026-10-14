@@ -296,6 +296,7 @@ while [[ "${GO}" == "true" ]]; do
 	        ;;
 	      "1")
 	        PROP_FILE=mux-configs/nmea.mux.no.gps.yaml
+	        # PROP_FILE=mux-configs/nmea.mux.udp.input.yaml
 	        displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_1_00}
 	        ;;
 	      "1a")
@@ -492,6 +493,7 @@ while [[ "${GO}" == "true" ]]; do
 	    ;;
 	  "1")
       PROP_FILE=mux-configs/nmea.mux.no.gps.yaml
+      # PROP_FILE=mux-configs/nmea.mux.udp.input.yaml
       # export INFRA_VERBOSE=true
       #
       NOHUP=""

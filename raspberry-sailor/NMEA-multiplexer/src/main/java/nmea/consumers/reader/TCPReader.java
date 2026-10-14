@@ -72,8 +72,9 @@ public class TCPReader extends NMEAReader {
 	@Override
 	public void startReader() {
 		super.enableReading();
+		InetAddress address = null;
 		try {
-			InetAddress address = InetAddress.getByName(hostName);
+			address = InetAddress.getByName(hostName);
 //    System.out.println("INFO:" + hostName + " (" + address.toString() + ")" + " is" + (address.isMulticastAddress() ? "" : " NOT") + " a multicast address");
 			skt = new Socket(address, tcpPort);
 
@@ -109,7 +110,7 @@ public class TCPReader extends NMEAReader {
 					byte[] toPrint = new byte[nn];
 					System.arraycopy(buffer, 0, toPrint, 0, nn);
 					s = new String(toPrint) + NMEAParser.NMEA_SENTENCE_SEPARATOR;
-	//      System.out.println("TCP:" + s);
+			//      System.out.println("TCP:" + s);
 					NMEAEvent n = new NMEAEvent(this, s);
 					super.fireDataRead(n);
 				}
@@ -126,10 +127,11 @@ public class TCPReader extends NMEAReader {
 //			}
 			if (se.getMessage().indexOf("Connection refused") > -1) {
 				System.out.println("TCPReader: Refused (1)");           // TODO Explain !
-				// se.printStackTrace();
+    			System.out.println("INFO:" + hostName + " (" + address  + ")" + " is" + (address.isMulticastAddress() ? "" : " NOT") + " a multicast address");
+				se.printStackTrace();
 			} else if (se.getMessage().indexOf("Connection reset") > -1) {
 				System.out.println("TCPReader: Reset (2)");
-				// se.printStackTrace();
+				se.printStackTrace();
 			} else {
 				// TODO Tweak the cases below...
 				boolean tryAgain = false;
