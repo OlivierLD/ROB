@@ -20,6 +20,7 @@ context:
 channels:
   - type: file
     filename: /dev/ttyACM0  # Requires a "stty -F /dev/ttyACM0 raw 4800 cs8 clocal (in /etc/rc.local ?)"
+    active: true
     verbose: false
 #    sentence.filters: ~GGA,~GSV,~GSA
 #    sentence.filters: ~GLL
@@ -36,9 +37,11 @@ forwarders:
 #    rest.query.string: ""
     rest.onclose.resource: /ssd1306/bye-and-clear-screen
     rest.onclose.verb: PUT
+    active: true
     verbose: false
   - type: file
     verbose: false
+    active: true
     # zipped: true
     log.dir: logged
     sentence.filters: ~GGA,~GSV,~GSA

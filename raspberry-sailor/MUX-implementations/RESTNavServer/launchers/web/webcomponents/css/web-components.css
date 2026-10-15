@@ -1,4 +1,3 @@
-/* Widget specific */
 .pluviometer-day {
 	--with-shadow: true;
 	--shadow-color: LightGrey;
@@ -845,4 +844,19 @@ compass-display .green {
 	--value-nb-decimal: 2;
 	--label-font: DigiFont;
 	--value-font: DigiFont;
+}
+
+.barograph {
+    --display-background-gradient-from: white;
+    --display-background-gradient-to: white;
+    --grid-color: orange;
+	--abscissa-color: red;
+    --display-color: purple;
+}
+.thermograph {
+    --display-background-gradient-from: white;
+    --display-background-gradient-to: white;
+    --grid-color: orange;
+	--abscissa-color: navy;
+    --display-color: navy;
 }

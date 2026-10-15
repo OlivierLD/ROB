@@ -10,6 +10,7 @@ description:
   - Reads GPS
   - Reads BME280 (REST, port 9876)
   - Forward data to "NMEA Cache forwarder" (on SSD1306, port 8080)
+  - Optional LongTerm storage for PRMSL
   - Log data in a file (data.nmea)
 context:
   with.http.server: true
@@ -21,11 +22,12 @@ channels:
   # Requires a "stty -F /dev/ttyACM0 raw 4800 cs8 clocal (in /etc/rc.local ?)"
   - type: file
     filename: /dev/ttyACM0
+    active: true
     verbose: false
 #    sentence.filters: ~GGA,~GSV,~GSA
 #    sentence.filters: ~GLL
 #    sentence.filters: RMC,GLL
-  - type: rest           # Pings the Python REST Server for the BME280 data (GET)
+  - type: rest           # Pings the Python REST Server for the BME280 data (verb is GET)
     protocol: http
     machine-name: localhost
     # machine-name: 192.168.50.10
@@ -34,7 +36,9 @@ channels:
     # query-string:      # Would include the ?, and subsequent &...
     # jqs:               # JQ String, to apply on the response
     between-loops: 2000  # in ms
+    active: true
     verbose: false
+    description: "Pings the Python REST Server for the BME280 data (curl -X GET http://localhost:9876/bme280/nmea-data)"
 #  - type: tcp
 #    server: 192.168.1.103
 #    port: 9876
@@ -51,7 +55,9 @@ forwarders:
 #    rest.query.string: ""
     rest.onclose.resource: /ssd1306/bye-and-clear-screen
     rest.onclose.verb: PUT
+    active: true
     verbose: false
+    description: "Display data from the cache on the SSD1306"
   - type: file
     # filename: data.nmea
     # flush: true
@@ -65,7 +71,17 @@ forwarders:
   - type: tcp
     port: 7001
     active: true
-# computers:
+computers:
+  - type: long-term-storage   # Here for PRMSL
+    ping-interval: 900   # 15 minutes, 15 x 60s
+    max-length: 672      # 672 points, each 15 minutes: One week: 7 * (24 * 4)
+    data-path: "Barometric Pressure,value"  # CSV list, path in the cache
+    # Try curl -X GET http://localhost:9999/mux/cache | jq '."PRMSL-buff" | length'
+    # Generates a "PRMSL-buff": { "2026-10-15T07:08:11": 1013.2, ... } in the cache
+    object-name: "PRMSL-buff"
+    description: "Long term PRMSL storage, useful for a barograph"
+    active: false
+    verbose: false
 #   - type: "tw-current"
 #     # Only if there is a MHU and HDG or HDM data
 #     prefix: "CC"

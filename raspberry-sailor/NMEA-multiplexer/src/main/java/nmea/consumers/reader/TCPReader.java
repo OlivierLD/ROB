@@ -157,7 +157,7 @@ public class TCPReader extends NMEAReader {
 				}
 			}
 		} catch (Exception e) {
-//    e.printStackTrace();
+			// e.printStackTrace();
 			manageError(e);
 		}
 		if (this.keepTrying && this.goRead) { // Reconnect

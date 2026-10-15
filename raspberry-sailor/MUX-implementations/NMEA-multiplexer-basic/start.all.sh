@@ -115,7 +115,7 @@ NAVSERVER_NB_CLASSES=$(jar -tvf ./build/libs/mux-all.jar | grep NavServer | wc -
 #
 if [[ "${OPTION}" == "BME280-SSD" ]]; then
   # PROP_FILE=nmea.mux.gps.sensor.2.nmea-fwd.yaml
-  PROP_FILE=nmea.mux.gps.sensor.nmea-fwd.yaml
+  PROP_FILE=nmea.mux.gps.sensor.nmea-fwd-ssd.yaml
   SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   echo -e "Starting Mux, ${SERVER_HTTP_PORT}"
   if [[ ${NAVSERVER_NB_CLASSES} -eq 0 ]]; then
