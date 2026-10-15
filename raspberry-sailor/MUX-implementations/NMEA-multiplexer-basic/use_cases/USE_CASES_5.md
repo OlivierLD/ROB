@@ -35,7 +35,9 @@ Data can be visualized on the screen connected to the Raspberry Pi, or from any 
 The Raspberry Pi is strong and powerful enough to host programs like [OpenCPN](https://opencpn.org/).  
 The Multiplexer (options to be defined, technical doc [here](https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/NMEA-multiplexer/manual.md) - don't be scared, we'll help you) is also running on the Raspberry Pi.  
 An OS like [Twister OS](https://twisteros.com/) is a very good option.
+
 ---
+
 Adapters (power supply, HDMI sockets, serial/USB ports) and SD Card have to be provided as well.  
 SSD drives also exist.
 
