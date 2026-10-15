@@ -42,7 +42,7 @@ Along the same lines, you can use Compasses (HMC5883L), Triple-Axis Gyroscopes (
 ### Context
 The Raspberry Pi emits its own network (yes, you can have a network, and no Internet...), and is connected to the boat's sensors (ShipModul or so), speaking NMEA-0183.  
 Data can be visualized on the screen connected to the Raspberry Pi, or from any network-aware device, with a (recent, or at least not too old) browser.  
-The Raspberry Pi is strong and powerful enough to host programs like [OpenCPN](https://opencpn.org/).  
+The Raspberry Pi mentioned here (4B) is strong and powerful enough to host programs like [OpenCPN](https://opencpn.org/).  
 The Multiplexer (options to be defined, technical doc [here](https://github.com/OlivierLD/ROB/blob/master/raspberry-sailor/NMEA-multiplexer/manual.md) - don't be scared, we'll help you) is also running on the Raspberry Pi.  
 An OS like [Twister OS](https://twisteros.com/) is a very good option.
 
