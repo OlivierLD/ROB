@@ -21,11 +21,21 @@ _**Note**_: the links below are just examples, provided to have an idea of the c
 Requires an antenna (VHF-like, a cheap one will do), works very well.
 
 ## Extra
-- A [BME280](https://www.adafruit.com/product/2652) or [BMP180](https://www.alibaba.com/pla/BMP180-GY-68-33V-5V-BMP-180-Temperature_1601258226008.html?mark=google_shopping&biz=pla&searchText=electronic+components&product_id=1601258226008&pcy=fr_fr&src=sem_ggl&field=UG&from=sem_ggl&cmpgn=22889997309&adgrp=184184039735&fditm=&tgt=pla-2426194943436&locintrst=&locphyscl=9109278&mtchtyp=&ntwrk=g&device=c&dvcmdl=&creative=769301584071&plcmnt=&plcmntcat=&aceid=&position=&gad_source=1&gad_campaignid=22889997309&gbraid=0AAAAAD8m77prknzKuHOPnobJhLRJhaNn3&gclid=CjwKCAjwoaLWBhAWEiwAnyituwUAFi1j_D2e30QtmCTB03nXi-rumaNeVdon_UWhQrmVl2fDIs2BDRoC9ygQAvD_BwE) can be useful to get the atmospheric pressure and air temperature.   
+With its GPIO (General Purpose Input Output) header, the Raspberry Pi can connect to many sensors, with all kind of protocols, like (among others)
+Serial, SPI (Shareable Peripheral Interface), or I2C (I 'square' C, Integrated Circuit to Integrated Circuit).
+Having a measure of the Atmospheric Pressure can be an asset when sailing a boat...
+
+- A [BME280](https://www.adafruit.com/product/2652) or [BMP180](https://www.alibaba.com/pla/BMP180-GY-68-33V-5V-BMP-180-Temperature_1601258226008.html?mark=google_shopping&biz=pla&searchText=electronic+components&product_id=1601258226008&pcy=fr_fr&src=sem_ggl&field=UG&from=sem_ggl&cmpgn=22889997309&adgrp=184184039735&fditm=&tgt=pla-2426194943436&locintrst=&locphyscl=9109278&mtchtyp=&ntwrk=g&device=c&dvcmdl=&creative=769301584071&plcmnt=&plcmntcat=&aceid=&position=&gad_source=1&gad_campaignid=22889997309&gbraid=0AAAAAD8m77prknzKuHOPnobJhLRJhaNn3&gclid=CjwKCAjwoaLWBhAWEiwAnyituwUAFi1j_D2e30QtmCTB03nXi-rumaNeVdon_UWhQrmVl2fDIs2BDRoC9ygQAvD_BwE) can be used to get the atmospheric pressure and air temperature (and more).   
   _This one needs not to be too close to the CPU of the Raspberry Pi, as the temperature of the CPU
   might impact your measures._  
 - Those data can be used to display graphs, like this:  
   ![this](../../../RaspberryPythonServers/python/pure.python.bme280/doc/web.ui.png)
+
+For details on the code and the wiring, see 
+- [here](../../../RaspberryPythonServers/python/pure.python.bme280/README.md) in english.
+- ou [ici](../../../RaspberryPythonServers/python/pure.python.bme280/README_fr.md) en fran&ccedil;ais.
+
+Along the same lines, you can use Compasses (HMC5883L), Triple-Axis Gyroscopes (L3GD20), etc...
 
 ---
 
@@ -39,6 +49,6 @@ An OS like [Twister OS](https://twisteros.com/) is a very good option.
 ---
 
 Adapters (power supply, HDMI sockets, serial/USB ports) and SD Card have to be provided as well.  
-SSD drives also exist.
+Optional SSD drives also exist, as mentioned above.
 
 ---
