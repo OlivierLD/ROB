@@ -6,7 +6,7 @@ description:
   - Replay a log file from the logged folder.
   - The file must obviously be here for the replay to work.
   - Markers and Borders tests
-  - WebUI is available. Check out http://machine:8080/web/index.raw.html
+  - WebUI is available. Check out http://machine:8080/web/index.raw.html to start with...
 context:
   with.http.server: true
   http.port: 8080
@@ -46,6 +46,8 @@ forwarders:
 computers:
   - class: nmea.computers.BorderManager
     properties: border.mgr.properties
+    active: true
     verbose: false
+    description: "Can call a REST SenseHAT server, see it at https://github.com/OlivierLD/small-boards/blob/master/RaspberryPi/SenseHat/SenseHatRESTServer.py"
   - class: nmea.computers.NextWaypointManager
     verbose: true
