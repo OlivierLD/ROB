@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+  #!/usr/bin/env bash
 #
 # WIP
 # Warning: If possible, run the process on the target machine.
@@ -112,6 +112,7 @@ mkdir ${distdir}/build
 mkdir ${distdir}/build/libs
 mkdir ${distdir}/polars
 mkdir ${distdir}/scripts
+mkdir ${distdir}/resources
 #
 # 3 - Copying required resources
 #
@@ -137,6 +138,7 @@ rm index.html
 popd
 #
 cp -r scripts/* ${distdir}/scripts
+cp -r resources/* ${distdir}/resources
 # Properties files
 cp *.properties ${distdir}
 cp *.yaml ${distdir}
