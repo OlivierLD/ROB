@@ -45,7 +45,7 @@ body {
 }
 
 .description {
-    color: white;
+    color: orange;
     text-align: right;
     padding-right: 10px;
 }
@@ -63,25 +63,28 @@ body {
 	<div id="side-nav" class="sidenav" onmouseleave="closeNav()">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 		<a href="javascript:void(0)" onclick="document.getElementById('the-frame').src='';" title="Remove all data, clean screen.">Clear</a>
+		<hr/>
 		<a href="admin.html" target="iframe_a" title="Admin screen">Admin</a>
 		<a href="logMgmt.html" target="iframe_a" title="Log files managements">Log Management</a>
-		<a href="runner.html" target="iframe_a" title="Mobile client">Mobile client</a>
+		<hr/>
+		<!--a href="runner.html" target="iframe_a" title="Mobile client">Mobile client</a-->
 		<a href="gps.demo.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS Demo (analog)</a>
 		<a href="gps.digital.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS Demo (digital)</a>
 		<a href="leaflet.demo.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS/Leaflet Demo</a>
         <div class="description">Requires Internet Connection</div>
-		<a href="googlemaps.demo.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS/GoogleMaps Demo</a>
-        <div class="description">Requires Internet Connection</div>
-		<a href="googlemaps.driving.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS/GoogleMaps Driving Demo</a>
+		<!--a href="googlemaps.demo.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS/GoogleMaps Demo</a>
+        <div class="description">Requires Internet Connection</div-->
+		<!--a href="googlemaps.driving.html" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS/GoogleMaps Driving Demo</a>
         <div class="description">Requires Internet Connection</div>
 		<a href="googlemaps.driving.html?type=walk" target="iframe_a" title="Requires the MUX to be running with a GPS connected (or a replay)">GPS/GoogleMaps Walking Demo</a>
-        <div class="description">Requires Internet Connection</div>
+        <div class="description">Requires Internet Connection</div-->
 		<a href="console.html" target="iframe_a" title="NMEA Data. Requires proper MUX settings">Instruments Console</a>
 		<a href="wsconsole.html" target="iframe_a" title="NMEA Data. Requires proper MUX settings">WS Console</a>
-        <div class="description">Requires a WebSocket server to be up and running.</div>
-		<a href="weather.station.console.html" target="iframe_a" title="NMEA Weather Station Data (basic UI). Requires proper MUX settings">Weather Station Data</a>
-		<a href="weather.station.html" target="iframe_a" title="NMEA Weather Station Data (WebComponents UI). Requires proper MUX settings">Weather Station Data (WebComponents)</a>
-		<a href="weather.graph.html" target="iframe_a" title="Atmospheric Data (WebComponents UI). Requires proper MUX settings">Atmospheric Data (Graphs, WebComponents)</a>
+        <div class="description">A Tests. Requires a WebSocket server to be up and running (like <code>wsnmea.parser.js</code>).</div>
+		<!--a href="weather.station.console.html" target="iframe_a" title="NMEA Weather Station Data (basic UI). Requires proper MUX settings">Weather Station Data</a>
+		<a href="weather.station.html" target="iframe_a" title="NMEA Weather Station Data (WebComponents UI). Requires proper MUX settings">Weather Station Data (WebComponents)</a-->
+		<a href="weather.graph.html" target="iframe_a" title="Atmospheric Data (WebComponents UI). Requires proper MUX settings">Atmospheric Data</a>
+		<div class="description">Graphs, WebComponents.<br/>Requires proper MUX settings</div>
 	</div>
 
     <div>
