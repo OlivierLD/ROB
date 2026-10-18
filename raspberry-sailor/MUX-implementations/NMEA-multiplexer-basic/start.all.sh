@@ -60,7 +60,7 @@ if [[ $# -gt 0 ]]; then
   fi
 fi
 #
-MAP_SERIAL_PORT=false  # File or sym-link. false: map/link to port /dev/ttyS80, true: map to file
+MAP_SERIAL_PORT=true  # File or sym-link. false: map/link to port /dev/ttyS80, true: map to file
 # Required if serial port is read as a file
 if [[ "${MAP_SERIAL_PORT}" == "true" ]]; then
   echo -e "Mapping /dev/ttyACM0 to a file."
@@ -151,7 +151,7 @@ elif [[ "${OPTION}" == "NAV-SERVER" ]] || [[ "${OPTION}" == "TEST" ]]; then
     PROP_FILE=nmea.mux.bora.tgrva.yaml  # Data replay, from a zip
   fi
   NAV_SERVER_EXTRA_OPTIONS=
-  SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
+  export SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   # nohup ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
   if [[ ${NAVSERVER_NB_CLASSES} -eq 0 ]]; then
     echo -e "=> Launching mux"
