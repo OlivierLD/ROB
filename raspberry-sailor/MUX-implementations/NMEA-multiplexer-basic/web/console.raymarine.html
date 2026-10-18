@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ ! NMEA Console, with Web Components.
+ ! Get the data from navrest.NavServer, started for example by ./runNavServer.sh
+ ! Uses ES6 Promises to get to Ajax
+ !
+ ! WiP
+ +-->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Raymarine like NMEA Console</title>
+	<link rel="icon" href="data:image/png;base64,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">
+
+	<link rel="stylesheet" href="css/stylesheet.css">
+	<link rel="stylesheet" href="css/web-components.css">
+	<link rel="stylesheet" href="css/rocker.css">
+
+	<!-- Web Components -->
+	<script type="module" src="webcomponents/WindAngleDisplay.js"></script>
+
+	<!-- Scripts -->
+	<script type="text/javascript" src="js/date.proto.js"></script>
+	<script type="text/javascript" src="js/pub.sub.js"></script>
+	<script type="text/javascript" src="js/ajax.manager.js"></script>
+
+	<script type="text/javascript">
+
+	    function decToSex(val, ns_ew) {
+			let absVal = Math.abs(val);
+			let intValue = Math.floor(absVal);
+			let dec = absVal - intValue;
+			let i = intValue;
+			dec *= 60;
+			let s = i + "°" + dec.toFixed(2) + "'";
+
+			if (val < 0) {
+				s += (ns_ew === 'NS' ? 'S' : 'W');
+			} else {
+				s += (ns_ew === 'NS' ? 'N' : 'E');
+			}
+			return s;
+	    }
+
+		function updateDisplayStyle(style, id) {
+			setTheme(style);
+			document.getElementById(id).classList.add('yellow-droplet');
+			document.getElementById(id).repaint();
+		}
+
+		/**
+		 *  SUBSCRIBERS HERE.
+		 *
+		 * The following subscriptions make the distinction between Ajax & WebSockets
+		 * (See the initAjax & initWS methods)
+		 *
+		 * Event's definition (topic's name) is in ajax.manager.js, method onMessage
+		 * See also : const POS = 'pos';
+		 */
+		/* global events gpsPosition setData gpsSatelliteData */
+		events.subscribe('pos', (val) => {
+			gpsPosition = val;
+			try {
+				document.getElementById('world-map-01').setUserPosition({ latitude: val.lat, longitude: val.lng });
+				document.getElementById('world-map-01').positionLabel = "GPS";
+				document.getElementById('world-map-01').repaint();
+			} catch (err) {
+			  // console.log('Oops'); // absorb
+			}
+			document.getElementById('position-01').innerHTML = decToSex(gpsPosition.lat, "NS") + "<br/>" + decToSex(gpsPosition.lng, "EW");
+		});
+		events.subscribe('bsp', function(val) {
+			setData('bsp-01', val);
+		});
+		events.subscribe('sog', function(val) {
+			document.getElementById('sog-01').innerHTML = val.toFixed(2) + " kts";
+		});
+		events.subscribe('cog', function(val) {
+			document.getElementById('cog-01').innerHTML = val.toFixed(0) + " &deg;";
+		});
+		events.subscribe('dbt', function(val) {
+			document.getElementById('dbt-01').innerHTML = val.toFixed(2) + " m";
+		});
+
+		events.subscribe('wt', function(val) {
+			document.getElementById('sea-temp-01').innerHTML = val.toFixed(1) + "&deg;C";
+		});
+		events.subscribe('at', function(val) {
+			document.getElementById('air-temp-01').innerHTML = val.toFixed(1) + "&deg;C";
+		});
+
+		events.subscribe('log', function(val) {
+			let elem = document.getElementById('bsp-01');
+			elem.digitalDataVal = val;
+			elem.repaint();
+		});
+		events.subscribe('gps-time', function(val) {
+			// val.format("Y-M-d H:i:s")
+			let time = new Date(val).format("H:i:s");
+			setData('analog-watch-01', time);
+			let date = new Date(val).format("d-m-Y-l");
+			setData('calendar-01', date);
+			if (gpsPosition !== undefined) {
+				let gpsDate = new Date(val);
+				/* global getAstroData DURATION_FMT withWanderingBodies withStars withConstellations astroCallback */
+				getAstroData(gpsDate.format(DURATION_FMT), gpsPosition, withWanderingBodies, withStars, withConstellations, astroCallback);
+			}
+		});
+		events.subscribe('gps-sat', function(val) {
+//		console.log("Satellite data:", val);
+			gpsSatelliteData = val;
+		});
+		events.subscribe('hdg', function(val) {
+			hdg = val;
+			setData('compass-rose-01', val);
+		});
+		events.subscribe('twd', function(val) {
+			setData('compass-01', val);
+		});
+
+		events.subscribe('twa', function(val) {
+			twa = val;
+			// setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
+			document.getElementById('true-wind-01').innerHTML = tws.toFixed(1) + " kts, " + twa.toFixed(0) + "&deg;";
+		});
+		events.subscribe('tws', function(val) {
+			tws = val;
+			// setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
+			document.getElementById('true-wind-01').innerHTML = tws.toFixed(1) + " kts, " + twa.toFixed(0) + "&deg;";
+		});
+		events.subscribe('aws', function(val) {
+			aws = val;
+			setData('aw-01', JSON.stringify({ ws: aws, wa: awa}));
+			document.getElementById('app-wind-01').innerHTML = aws.toFixed(1) + " kts, " + awa.toFixed(0) + "&deg;";
+		});
+		events.subscribe('awa', function(val) {
+			awa = val;
+			setData('aw-01', JSON.stringify({ ws: aws, wa: awa}));
+			document.getElementById('app-wind-01').innerHTML = aws.toFixed(1) + " kts, " + awa.toFixed(0) + "&deg;";
+		});
+	</script>
+
+	<style>
+		:root {
+			--padding: 50px;
+			--perspective: 100em;
+			--rotateX: -15deg;
+		}
+
+		html {
+			height: 100%;
+			background-color: black;
+		}
+
+		body {
+			background-color: black;
+			color: white;
+			font-family: "Helvetica Neue", Verdana, Arial, Helvetica, sans-serif;
+			/* background-image: linear-gradient(to bottom right, #4d4d4d, black); */
+			background: radial-gradient(at top, DarkGrey -8%, black 55%);
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+		}
+
+		div#styles {
+			padding: 5px;
+		}
+
+
+		select {
+			font-size: 16px;
+			margin: 5px;
+			padding: 5px;
+			border-radius: 5px;
+			border: 1px solid orange;
+		}
+
+		.black-frame {
+			padding: 3px;
+			margin: 1px;
+			border-radius: 5px;
+			border: 1px solid silver;
+		}
+
+		.centered {
+			text-align: center;
+		}
+
+		.small-box {
+			padding: 10px;
+		}
+
+		.mirror {
+			display: block;
+			-webkit-transform: matrix(-1, 0, 0, 1, 0, 0);
+			-moz-transform: matrix(-1, 0, 0, 1, 0, 0);
+			-o-transform: matrix(-1, 0, 0, 1, 0, 0);
+			transform: matrix(-1, 0, 0, 1, 0, 0);
+		}
+
+		.mirror-upside-down {
+			display: block;
+			-webkit-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+			-moz-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+			-o-transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+			transform: matrix(-1, 0, 0, 1, 0, 0) rotate(180deg) perspective(var(--perspective)) rotateX(var(--rotateX));
+		}
+
+		.tab {
+			overflow: hidden;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			background-color: rgba(241, 241, 241, 0.5);
+		}
+
+		/* Style the buttons inside the tab */
+		.tab button {
+			background-color: inherit;
+			float: left;
+			border: none;
+			outline: none;
+			cursor: pointer;
+			padding: 14px 16px;
+			transition: 0.3s;
+			font-size: 17px;
+		}
+
+		/* Change background color of buttons on hover */
+		.tab button:hover {
+			background-color: #ddd;
+		}
+
+		/* Create an active/current tablink class */
+		.tab button.active {
+			background-color: #ccc;
+		}
+
+		.boat-data { /* Order is important */
+			transition: visibility 0.5s, opacity 0.5s linear, height 0.5s;
+		}
+
+		.raw-table {
+			border-color: cyan;
+			font-family: "Helvetica Neue", "Lato", Verdana, Helvetica, Geneva, sans-serif;
+			font-size: 20px;
+		}
+
+		th {
+			font-family: inherit;
+			font-size: inherit;
+		}
+
+		td {
+			font-family: inherit;
+			font-size: inherit;
+			padding: 5px;
+		}
+	</style>
+
+	<!-- All logic in the script below -->
+	<script type="text/javascript" src="./console.logic.js"></script>
+</head>
+<body>
+
+	<table width="100%">
+		<tr>
+			<td><h2>Raymarine-like NMEA Console</h2></td>
+		</tr>
+	</table>
+	<hr/>
+	<div id="styles">
+		<!-- Widget Style & Page BG -->
+		Widget Style:
+		<select id="widgets-style" onchange="updateDisplayStyle(this.value, 'aw-01');">
+			<option value="analogdisplay-day" selected>Day</option>
+			<option value="analogdisplay-night">Night</option>
+			<option value="analogdisplay-monochrome-cyan">Cyan</option>
+			<option value="analogdisplay-monochrome-orange">Orange</option>
+			<option value="analogdisplay-monochrome-yellow">Yellow</option>
+			<option value="analogdisplay-flat-gray">Flat Gray</option>
+			<option value="analogdisplay-flat-black">Flat Black</option>
+		</select>
+		Page Background:
+		<input type="radio" id="black" name="page-bg" value="BLACK" onchange="changeBG(this.value);">Black
+		<input type="radio" id="dark" name="page-bg" value="DARK" onchange="changeBG(this.value);" checked>Dark
+		<input type="radio" id="light" name="page-bg" value="LIGHT" onchange="changeBG(this.value);">Light
+		<input type="radio" id="white" name="page-bg" value="WHITE" onchange="changeBG(this.value);">White
+	</div>
+	<hr/>
+
+	<!--
+	  Good grid resource at:
+	  https://css-tricks.com/snippets/css/complete-guide-grid/
+	  https://www.w3schools.com/css/css_grid.asp
+	 -->
+
+	<!-- The NMEA widgets. The 50px columns are here for the perspective, they are pads on the left and right -->
+	<div id="one" style="display: block;">
+		<div id="nmea-widgets-1" style="display: grid; grid-template-columns: var(--padding) auto var(--padding); padding: 10px; text-align: center;">
+			<div id="boat-data" class="boat-data" style="height: auto; opacity: 1; visibility: visible; display: grid; grid-column-start: 2; grid-template-columns: auto;">
+				<div id="top-row" style="display: grid; grid-template-columns: 25% 25% 25% 25%;">
+					<div class="black-frame small-box">
+						Boat Position
+						<div id="position-01" style="text-align: right; font-size: 24px; font-weight: bold;">
+						</div>
+					</div>
+					<div class="black-frame small-box">
+						SOG
+						<div id="sog-01" style="text-align: right; font-size: 24px; font-weight: bold;">
+						</div>
+					</div>
+					<div class="black-frame small-box">
+						COG
+						<div id="cog-01" style="text-align: right; font-size: 24px; font-weight: bold;">
+						</div>
+					</div>
+					<div class="black-frame small-box">
+						DBT
+						<div id="dbt-01" style="text-align: right; font-size: 24px; font-weight: bold;">
+						</div>
+					</div>
+				</div>
+				<div id="row-1" style="display: grid; grid-column-start: 1; grid-template-columns: 30% auto 30%; padding: 10px;">
+					<div>
+						<!-- Air Temp -->
+						Air Temp
+						<hr/>
+						<div id="air-temp-01" class="centered" style="font-size: 96px; font-weight: bold; text-align: left;">
+							-.- &deg;C
+						</div>
+					</div>
+					<!--
+					 !	APP WIND DISPLAY
+					 +-->
+					<div id="analog">
+						<div class="/*black-frame*/ centered">
+							<wind-angle-display class="analogdisplay-day yellow-droplet"
+												title="Apparent Wind Speed&#13;in Knots"
+												id="aw-01"
+												value="{ &quot;wa&quot;: 0, &quot;ws&quot;: 0.0 }"
+												major-ticks="30"
+												minor-ticks="5"
+												with-border="true"
+												with-digits="true"
+												label="App Wind"
+												hand="droplet"
+												width="500"
+												height="500"></wind-angle-display>
+						</div>
+						<div class="/*black-frame*/ centered">
+							<!--input type="checkbox" class="border-cb" onchange="setBorder(this, 'aw-01');" checked>With Border -->
+
+							<div style="margin: 2px;" title="Scroll every 5 seconds.">
+								<span style="font-weight: bold; font-style: italic;">With Border</span>
+								<!--br/-->
+								<label class="rocker" style="font-size: 0.50em; vertical-align: middle;">
+									<input type="checkbox" onchange="setBorder(this, 'aw-01');" id="scroll-switch" checked>
+									<span class="switch-left">On</span>
+									<span class="switch-right">Off</span>
+								</label>
+							</div>
+
+						</div>
+					</div>
+					<div>
+						<!-- Sea Temp & Wind -->
+						Sea Temp
+						<hr/>
+						<div id="sea-temp-01" class="centered" style="font-size: 96px; font-weight: bold; text-align: right;">
+							-.- &deg;C
+						</div>
+						<hr/>
+						Wind
+						<hr/>
+						<div id="wind-01" class="centered" style="font-size: 48px; font-weight: bold;">
+							<div style="display: grid; grid-template-columns: auto auto;"><span>AW</span><span id="app-wind-01" style="text-align: right;">-.- kts, --- &deg;</span></div>
+							<div style="display: grid; grid-template-columns: auto auto;"><span>TW</span><span id="true-wind-01" style="text-align: right;">-.- kts, --- &deg;</span></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div> <!-- End of Tab id="one" -->
+
+</body>
+</html>

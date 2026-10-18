@@ -1335,8 +1335,10 @@ window.onload = () => {
 	/* global initAjax */
 	initAjax(); // Default. See later for a WebSocket option. Contains the loops on REST requests
 
-	callFirst("world-map-01"); // Will change the background, based on the Sun's altitude
-	callAfter('world-map-01'); // Adding Satellites plot.
+    if (document.getElementById('world-map-01') !== null) {
+        callFirst("world-map-01"); // Will change the background, based on the Sun's altitude
+        callAfter('world-map-01'); // Adding Satellites plot.
+	}
 
 	// Query String prms, border, bg, style, like ?border=n&bg=black&style=orange&boat-data=n
 	let style = getQSPrm('style');

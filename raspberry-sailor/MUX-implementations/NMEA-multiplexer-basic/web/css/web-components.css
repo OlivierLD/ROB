@@ -472,6 +472,10 @@ analog-display .analog-for-prmsl {
 	--value-font-size-factor: 0.75
 }
 
+.yellow-droplet {
+	--hand-color: rgba(255, 255, 0, 0.75);
+}
+
 compass-rose .day {
     --bg-color: white;
     --digit-color: #404040;

@@ -27,6 +27,8 @@ display_help ( ) {
   echo -e "  starts the python server for an ssd1306 screen, and a Multiplexer"
   echo -e "${CYAN}NAV-SERVER${NC}"
   echo -e "  starts only a Multiplexer, with more REST operations."
+  echo -e "${CYAN}TEST${NC}"
+  echo -e "  starts only a Multiplexer, with REST operations. Logged data replay."
   echo -e "${BOLD_GREEN_BLINK}Unmanaged CLI parameters will result in a exit.${NC}"
   echo -e "-----------------------------------------------------------------------"
 }
@@ -101,6 +103,8 @@ elif [[ "${OPTION}" == "SSD1306" ]]; then
   sleep 10
 elif [[ "${OPTION}" == "NAV-SERVER" ]]; then
   echo -e "No python server to be started for NAV-SERVER option"
+elif [[ "${OPTION}" == "TEST" ]]; then
+  echo -e "No python server to be started for TEST option"
 else
   echo -e ">> Unmanaged OPTION ${OPTION}"
   display_help
@@ -141,8 +145,11 @@ elif [[ "${OPTION}" == "SSD1306" ]]; then
   else
     nohup ./runNavServer.sh --mux:${PROP_FILE} &
   fi
-elif [[ "${OPTION}" == "NAV-SERVER" ]]; then
+elif [[ "${OPTION}" == "NAV-SERVER" ]] || [[ "${OPTION}" == "TEST" ]]; then
   PROP_FILE=nmea.mux.gps.tcp.yaml
+  if [[ "${OPTION}" == "TEST" ]]; then
+    PROP_FILE=nmea.mux.bora.tgrva.yaml  # Data replay, from a zip
+  fi
   NAV_SERVER_EXTRA_OPTIONS=
   SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   # nohup ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
