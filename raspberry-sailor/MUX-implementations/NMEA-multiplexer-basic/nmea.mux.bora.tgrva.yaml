@@ -6,6 +6,7 @@ context:
   with.http.server: true
   http.port: 8888
   init.cache: true
+  default.declination: 14    # 14 degrees East
   deviation.file.name: "dp_2011_04_15.csv"
   max.leeway: 10.0
   damping: 30
@@ -25,7 +26,7 @@ forwarders:
     port: 7001
     active: true
     verbose: false
-    description: ""
+    description: "To TCP:7001"
 computers:
   - type: tw-current
     #  in seconds:      30s 1m  10m
