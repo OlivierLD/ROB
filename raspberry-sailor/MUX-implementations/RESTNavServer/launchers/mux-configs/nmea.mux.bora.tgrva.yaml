@@ -6,6 +6,7 @@ context:
   with.http.server: true
   http.port: 9999
   init.cache: true
+  default.declination: 10    # 10 degrees East
   deviation.file.name: "dp_2011_04_15.csv"
   max.leeway: 10.0
   damping: 30
@@ -17,17 +18,26 @@ channels:
     path.in.zip: 2011-01-29.strait.to.tongareva.for.DR.txt.nmea
     between-records: 1000
     loop: true
+    active: true
     verbose: false
+    description: "Replay log between Bora-Bora and Tongareva"
 forwarders:
   # - class: nmea.forwarders.CharacterConsoleWriter
   #   properties: mux-configs/char.console.properties
   - type: "tcp"
     port: 7001
+    active: true
+    verbose: false
+    description: "To TCP:7001"
   - type: "gpsd"
     port: 2947
     properties: mux-configs/gpsd.properties
+    active: false
+    verbose: false
 computers:
   - type: tw-current
     #  in seconds:      30s 1m  10m
     time.buffer.length: 30, 60, 600
-
+    active: true
+    verbose: false
+    description: "Long Time Current Calculator, 30, 60 and 600 seconds."

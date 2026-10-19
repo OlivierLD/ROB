@@ -327,7 +327,7 @@ function onMessage(json) {
 		}
 		try {
 		    let csp = json["Current calculated with damping"]["600000"].speed.speed;
-			events.publish(CPS_600000, csp);
+			events.publish(CSP_600000, csp);
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "CSP-600000");
 		}

@@ -458,6 +458,33 @@ function onMessage(json) {
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "heading");
 		}
+        // Max leeway
+        try {
+            let maxlwy = json["Max Leeway"];
+            if (maxlwy !== undefined) {
+                events.publish(events.topicNames.MAX_LEEWAY_ANGLE, maxlwy);
+            }
+        } catch (err) {
+            errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Max Leeway");
+        }
+
+        // Declination "D": {
+        //     "angle": 10.0
+        //   },
+        try {
+            if (json.D !== undefined && json.D.angle !== undefined) {
+                let decl = json.D.angle;
+                if (decl !== undefined) {
+                    events.publish(events.topicNames.DECL, decl);
+                }
+            } else {
+                let decl = json["Default Declination"].angle;
+                events.publish(events.topicNames.DECL, decl);
+            }
+        } catch (err) {
+            errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "Declination");
+        }
+
 		try {
 			let twd = json.TWD.angle;
 			events.publish(TWD, twd);
@@ -582,7 +609,7 @@ function onMessage(json) {
 		}
 		try {
 		    let csp = json["Current calculated with damping"]["600000"].speed.speed;
-			events.publish(CPS_600000, csp);
+			events.publish(CSP_600000, csp);
 		} catch (err) {
 			errMess += ((errMess.length > 0 ? ", " : "Cannot read ") + "CSP-600000");
 		}
