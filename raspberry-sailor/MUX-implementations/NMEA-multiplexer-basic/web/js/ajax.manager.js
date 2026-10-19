@@ -172,6 +172,36 @@ function getNMEAData() {
 
 const FETCH_VERBOSE = false;
 
+/*
+ * Doc at http://api.open-notify.org/
+ * Also try this: http://api.open-notify.org/astros.json
+ */
+function getISSDataFromServer() {
+    return getPromise('/server/generic-get', DEFAULT_TIMEOUT, 'GET', 200, null, false, [{
+        name: 'get-url',
+        value: 'http://api.open-notify.org/iss-now.json'
+    }]);
+}
+
+function getISSData() {
+    return getPromise('http://api.open-notify.org/iss-now.json',
+        DEFAULT_TIMEOUT,
+        'GET',
+        200,
+        null,
+        false,
+        [{
+            name: 'Access-Control-Allow-Origin',
+            value: '*'
+        }, {
+            name: 'Access-Control-Allow-Methods',
+            value: 'GET, POST, PUT, OPTIONS, HEAD'
+        }, {
+            name: 'Access-Control-Allow-Headers',
+            value: 'Content-Type'
+        }]);
+}
+
 function fetchNMEA() {
 	try {
 		let getData = getNMEAData();
