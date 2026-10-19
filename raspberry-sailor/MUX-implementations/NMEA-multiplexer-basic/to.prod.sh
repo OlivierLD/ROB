@@ -152,6 +152,7 @@ cp start.all.sh ${distdir}
 cp log.*.sh ${distdir}
 cp -r polars/* ${distdir}/polars
 cp zero*.csv ${distdir}
+cp dp_2011*.csv ${distdir}
 cp ../../NMEA-multiplexer/find.port.sh ${distdir}
 # cp tomux.sh ${distdir}
 # cp killmux.sh ${distdir}
@@ -220,7 +221,7 @@ echo -e "| Examples of /etc/rc.local are provided. See rc.local*.sh, in the 'scr
 echo -e "| The script 'start.all.sh' is worth a look too.                                                   |"
 echo -e "| Once the server is started, try http://<host>:<port>/zip/index.html from a browser...            |"
 echo -e "+--------------------------------------------------------------------------------------------------+"
-echo -e "PS: Current folder is $(PWD) "
+echo -e "PS: Current folder is ${PWD} "
 echo -e ""
 echo -e "For tests, you can run (form the distrib folder, if not dropped):"
 echo -e "./mux.sh nmea.mux.basics.yaml   (Ctrl+C to stop it)"

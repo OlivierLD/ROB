@@ -19,10 +19,17 @@ channels:
     loop: true
     active: true
     verbose: false
+    description: "Replay log between Bora-Bora and Tongareva"
 forwarders:
   - type: "tcp"
     port: 7001
+    active: true
+    verbose: false
+    description: ""
 computers:
   - type: tw-current
     #  in seconds:      30s 1m  10m
     time.buffer.length: 30, 60, 600
+    active: true
+    verbose: false
+    description: "Long Time Current Calculator, 30, 60 and 600 seconds."
