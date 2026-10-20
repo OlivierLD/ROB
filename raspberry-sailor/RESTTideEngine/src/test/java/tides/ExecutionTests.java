@@ -167,7 +167,9 @@ public class ExecutionTests {
                     2022,
                     1,
                     Calendar.YEAR,
-                    "publishagenda.sh");
+                    "publishagenda.sh",
+                    "EN",
+                    "US");
             System.out.println(String.format("%s generated", f));
             System.out.println("Done!");
         } catch (Exception ex) {

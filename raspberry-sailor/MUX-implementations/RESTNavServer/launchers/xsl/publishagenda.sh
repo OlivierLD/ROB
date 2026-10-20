@@ -27,7 +27,7 @@ export CP=${CP}:${HOME}/libs/xdo-0301.jar
 export XSL_STYLESHEET=./agenda2fop.xsl
 # Page Format?
 if [[ "${FORMAT}" == "" ]]; then
-  # TODO Manage that
+  # TODO Manage that, interactively?...
   # echo -en "Final document format: US Letter [1], A4 [2] > "
   # read FORMAT  # Default Letter
   FORMAT=1

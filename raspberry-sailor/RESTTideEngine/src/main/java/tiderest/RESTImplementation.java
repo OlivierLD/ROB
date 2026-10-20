@@ -115,7 +115,7 @@ public class RESTImplementation {
 					this::publishSunDocument,
 					"Generates Sun table - rise, set, transit (or agenda, if query parameter 'agenda' is set to 'y') document (pdf)." +
 							"Not strictly tide related... " +
-							"Expects a json payload like Like {\"startMonth\":1,\"startYear\":2022,\"nb\":1,\"quantity\":\"YEAR\",\"position\":{\"latitude\":47.34,\"longitude\":-3.12},\"timeZone\":\"Europe/Paris\"}"),
+							"Expects a json payload like Like {\"startMonth\":1,\"startYear\":2022,\"nb\":1,\"quantity\":\"YEAR\",\"position\":{\"latitude\":47.34,\"longitude\":-3.12},\"timeZone\":\"Europe/Paris\",\"lang\":\"FR\",\"fmt\":\"A4\"}"),
 			new Operation(
 					"POST",
 					TIDE_PREFIX + "/tide-stations/{station-name}/wh/details",
@@ -867,6 +867,7 @@ public class RESTImplementation {
 					if (options.timeZone == null) {
 						errMess += ((errMess.length() > 0 ? "\n" : "") + "TimeZone not found in payload.");
 					}
+					// fmt & lang also available
 				} catch (Exception ex) {
 					response = HTTPServer.buildErrorResponse(response,
 							Response.BAD_REQUEST,
@@ -882,7 +883,7 @@ public class RESTImplementation {
 
 					try {
 						String toJson = mapper.writeValueAsString(options);
-						// Like {"startMonth":1,"startYear":2022,"nb":1,"quantity":"YEAR","position":{"latitude":47.34,"longitude":-3.12},"timeZone":"Europe/Paris","stationName":"Whatever"}
+						// Like {"startMonth":1,"startYear":2022,"nb":1,"quantity":"YEAR","position":{"latitude":47.34,"longitude":-3.12},"timeZone":"Europe/Paris","stationName":"Whatever","lang":"EN","fmt":"US"}
 						System.out.println(toJson);
 					} catch (Exception ex) {
 						ex.printStackTrace();
@@ -914,7 +915,9 @@ public class RESTImplementation {
 								options.startYear,
 								options.nb,
 								(options.quantity.equals(Quantity.MONTH) ? Calendar.MONTH : Calendar.YEAR),
-								script);
+								script,
+								options.lang,
+								options.fmt);
 						response.setPayload(generatedFileName.getBytes());
 					}
 				} catch (Exception ex) {

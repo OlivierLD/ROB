@@ -144,7 +144,7 @@ public class TidePublisher {
             if (fmt != null) {
                 cmd += String.format(" %s", fmt);
             } else {
-                System.out.println("No format provided, might be asked...");
+                System.out.println("No format provided, might be asked..."); // TODO Provide it !
             }
             System.out.println("Executing System Command:" + cmd);
             Process p = Runtime.getRuntime().exec(cmd);

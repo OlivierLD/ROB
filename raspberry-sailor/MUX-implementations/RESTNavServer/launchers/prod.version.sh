@@ -91,13 +91,15 @@ function openBrowser() {
 #
 function displayHelp() {
   echo -e "--------------------------------"
-  echo -e "PropFile $1, will open $2"
+  echo -e "PropFile $1, will open $2 (on demand)"
   cat $1
   echo -e "" # CR-NL
   echo -e "--------------------------------"
 }
 #
-echo -e "Starting NMEA Multiplexer, full version."
+echo -e "+------------------------------------------+"
+echo -e "| Starting NMEA Multiplexer, full version. |"
+echo -e "+------------------------------------------+"
 #
 NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --http-port:${HTTP_PORT}"
 #
@@ -165,5 +167,5 @@ else
 fi
 echo -e "Also try: curl -X GET http://localhost:${HTTP_PORT}/mux/cache | jq"
 #######
-echo -e "Bye now. See you ✋"
+echo -e "Done launching. See you ✋"
 #

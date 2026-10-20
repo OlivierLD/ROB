@@ -6,9 +6,7 @@ import tideengine.BackEndTideComputer;
 import tideengine.TideStation;
 import tideengine.TideUtilities;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -214,7 +212,9 @@ public class TidePublisher {
 			int sy,
 			int nb,
 			int q,
-			String scriptToRun)
+			String scriptToRun,
+			String lang,
+			String fmt)
 			throws Exception {
 
 		System.out.println("Starting month:" + sm + ", year:" + sy);
@@ -275,10 +275,27 @@ public class TidePublisher {
 		System.out.println("Generation completed.");
 		// Ready for transformation
 		try {
+			// This is a system script.
 			String cmd = // "." + File.separator + "xsl" + File.separator + (scriptToRun == null ? TIDE_TABLE : scriptToRun) + " " + radical;
-					     SCRIPT_PATH + File.separator + (scriptToRun == null ? TIDE_TABLE : scriptToRun) + " " + radical;
+					     SCRIPT_PATH + File.separator + (scriptToRun == null ? TIDE_TABLE : scriptToRun) +
+								 " " + radical + " " + lang + " " + fmt;
 			System.out.println("Command:" + cmd);
 			Process p = Runtime.getRuntime().exec(cmd);
+
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+
+			// Read the output from the command
+			System.out.println("Here is the standard output of the command:\n");
+			String s = null;
+			while ((s = stdInput.readLine()) != null) {
+				System.out.println(s);
+			}
+			// Read any errors from the attempted command
+			System.out.println("Here is the standard error of the command (if any):\n");
+			while ((s = stdError.readLine()) != null) {
+				System.out.println(s);
+			}
 			int exitStatus = p.waitFor();
 			System.out.println("Script completed, status " + exitStatus);
 			System.out.printf("File %s.pdf generated\n", radical);
