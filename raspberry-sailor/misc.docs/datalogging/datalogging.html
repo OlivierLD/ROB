@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Boat Data 101</title>
+  <link rel="icon" href="data:image/png;base64,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">
+  <link type="text/css" rel="stylesheet" href="./print.css"/>
+  <script type="module" src="boatoverview/boat-overview.js"></script>
+  <script type="text/javascript" src="utils/NavigationHelper.js"></script>
+  <script type="text/javascript">
+
+		function applyClass(id, classList) {
+			let widget = document.getElementById(id);
+			let cssClass = classList.value;
+			widget.className = cssClass;
+			widget.repaint();
+		}
+
+		function updateBoatShape(id, shape) {
+			console.log('Setting', id, 'to', shape);
+			let elem = document.getElementById(id);
+			elem.boatShape = shape;
+		}
+
+		function updateWithGPS(id, checked) {
+			let elem = document.getElementById(id);
+			elem.withGPS = checked;
+		}
+
+		function updateWithCurrent(id, checked) {
+			let elem = document.getElementById(id);
+			elem.withCurrent = checked;
+		}
+
+		function updateWithWind(id, checked) {
+			let elem = document.getElementById(id);
+			elem.withWind = checked;
+		}
+
+		function updateWithTrueWind(id, checked) {
+			let elem = document.getElementById(id);
+			elem.withTrueWind = checked;
+		}
+
+		function updateWithVMG(id, checked) {
+			let elem = document.getElementById(id);
+			elem.withVMG = checked;
+			document.getElementById('vmg-option').style.display = (checked ? 'block' : 'none');
+		}
+
+		function updateWithW(id, checked) {
+			let elem = document.getElementById(id);
+			elem.withW = checked;
+		}
+
+		function updateWithLabels(id, checked) {
+			let elem = document.getElementById(id);
+			elem.withLabels = checked;
+		}
+
+		function updateZoom(id, value) {
+			let elem = document.getElementById(id);
+			elem.zoomOnBoat = value;
+		}
+
+		function setVMGOption(section, id, value) {
+			let elem = document.getElementById(id);
+			elem.vmgOnWind = (value === 'WIND');
+			if (value === 'WAYPOINT') {
+				elem.wpName = 'Way Point'; // A WP name would go here
+			}
+			updateBoatContext(section);
+		}
+
+		const BSP_COEFF = 1;
+		const HDG_OFFSET = 0;
+		const AWS_COEFF = 1;
+		const AWA_OFFSET = 0;
+
+		function updateBoatContext(section) {
+
+			console.log('Updating section ' + section);
+
+			let bo = document.getElementById('boat-overview-' + section);
+
+			let bsp = bo.bsp;
+			let sog = bo.sog;
+			let aws = bo.aws;
+			let awa = bo.awa;
+			let cog = bo.cog;
+			let hdc = bo.hdc;
+			let maxLeeway = 0;
+			let lwy = bo.lwy;
+
+			try {
+				bsp = parseFloat(document.getElementById(section + '-bsp').value);
+			} catch (err) {
+			}
+			try {
+				sog = parseFloat(document.getElementById(section + '-sog').value);
+			} catch (err) {
+			}
+			try {
+				aws = parseFloat(document.getElementById(section + '-aws').value);
+			} catch (err) {
+			}
+			try {
+				awa = parseInt(document.getElementById(section + '-awa').value);
+			} catch (err) {
+			}
+			try {
+				cog = parseInt(document.getElementById(section + '-cog').value);
+			} catch (err) {
+			}
+			try {
+				hdc = parseInt(document.getElementById(section + '-hdc').value);
+			} catch (err) {
+			}
+
+			try {
+				maxLeeway = parseFloat(document.getElementById(section + '-mlwy').value);
+			} catch (err) {
+			}
+
+			let Decl = bo.Decl;
+			try {
+				Decl = (parseInt(document.getElementById(section + '-Decl-deg').value) +
+						(parseFloat(document.getElementById(section + '-Decl-min').value) / 60)) * (document.getElementById(section + '-Decl-sign').value === 'E' ? 1 : -1);
+			} catch (err) {
+				console.debug("1 - Argh!", err);
+			}
+			let dev = bo.dev;
+			try {
+				dev = (parseInt(document.getElementById(section + '-dev-deg').value) +
+						(parseFloat(document.getElementById(section + '-dev-min').value) / 60)) * (document.getElementById(section + '-dev-sign').value === 'E' ? 1 : -1);
+			} catch (err) {
+				console.debug("2 - Argh!", err);
+			}
+			// Calculation
+			try {
+				lwy = NavigationHelper.leewayEvaluator(awa, maxLeeway);
+			} catch (err) {
+				console.debug("3 - Argh!", err);
+			}
+			let hdg = bo.hdg;
+			if (hdc !== undefined) {
+				try {
+					hdg = NavigationHelper.hdgFromHdc(hdc, Decl, dev);
+				} catch (err) {
+					console.debug("4 - Argh!", err);
+				}
+			}
+			let tw = NavigationHelper.twCalculator(
+					aws, AWS_COEFF,
+					awa, AWA_OFFSET,
+					hdg, HDG_OFFSET,
+					sog, cog);
+			let current = NavigationHelper.currentCalculator(bsp, BSP_COEFF, hdg, HDG_OFFSET, lwy, sog, cog);
+
+			let b2wp = bo.b2wp;
+			let b2wpVal = "";
+			try {
+				b2wpVal = document.getElementById(section + '-b2wp').value;
+			} catch (err) {
+				console.debug("5 - Argh!", err);
+			}
+			if (b2wpVal.length > 0) {
+				b2wp = parseInt(b2wpVal);
+			}
+			let vmgs = NavigationHelper.vmgCalculator(sog, cog, tw.twd, tw.twa, bsp, hdg, b2wp);
+
+			let resContent =
+					'LWY:' + lwy.toFixed(1) + '\272 \n' +
+					'True HDG:' + hdg.toFixed(1) + '\272 \n' +
+					'TWS:' + tw.tws.toFixed(2) + ' kts\n' +
+					'TWA:' + tw.twa.toFixed(1) + '\272 \n' +
+					'TWD:' + tw.twd.toFixed(1) + '\272 \n' +
+					'D:' + Decl.toFixed(1) + '\272 \n' +
+					'd:' + dev.toFixed(1) + '\272 \n' +
+					'Current Dir:' + current.cdr.toFixed(1) + '\272 \n' +
+					'Current Speed:' + current.csp.toFixed(2) + ' kts';
+
+			console.log(resContent);
+
+			let wpName = "";
+			try {
+				wpName = document.getElementById(section + '-wpname').value;
+			} catch (err) {
+				console.debug("6 - Argh!", err);
+			}
+
+			// Update graph here
+			let graph = document.getElementById('boat-overview-' + section);
+			graph.bsp = bsp;
+			graph.hdg = hdg;
+			graph.aws = aws;
+			graph.awa = awa;
+			graph.tws = tw.tws;
+			graph.twa = tw.twa;
+			graph.twd = tw.twd;
+			graph.cog = cog;
+			graph.sog = sog;
+			graph.csp = current.csp;
+			graph.cdr = current.cdr;
+			graph.Decl = Decl;
+			graph.dev = dev;
+			graph.lwy = lwy;
+
+			let cmg = (hdg + lwy) % 360;
+			while (cmg < 0) {
+				cmg += 360;
+			}
+			graph.cmg = cmg;
+
+			if (graph.vmgOnWind) {
+				graph.vmg = vmgs.vmgWind;
+			} else {
+				graph.b2wp = b2wp;
+				graph.wpName = wpName;
+				graph.vmg = vmgs.vmgWayPoint;
+			}
+		}
+	</script>
+</head>
+<body style="background-color: silver;">
+<h1>Boat Data 101</h1>
+<div>
+  <h2>Headings, HDG, HDM, HDC, Declination, deviation, Variation</h2>
+  The boat heading is given by the compass, that gives the Compass Heading (HDC).
+  <br/>
+  The magnetic masses of the boat influence the compass, which is a magnetic device. This influence is called the <b>compass deviation</b>, noted <b>d</b>.
+  It depends on the boat and on its heading. Your compass has to be calibrated, the output of this calibration is a <b>deviation curve</b>, that gives the value of the deviation for any given heading.
+  <br/>
+  The <b>deviation</b> is between the Compass Heading (HDC) and the Magnetic Heading (HDM).
+  <br/>
+  Between the Magnetic Heading (HDM) and the True Heading (HDG) is the <b>Magnetic Declination</b> (noted D). It depends on your location, and on the date (it changes over time for a given location).
+  The Magnetic Declination is given on the charts, and sometimes returned by the <b>RMC</b> sentence of the GPS.
+  <br/>
+  The algebraic sum of the Declination and the deviation is called the <b>Compass' Variation</b> (noted <b>W</b>).
+  <table>
+    <tr>
+      <td valign="top">
+        <boat-overview id="boat-overview-01"
+                       class="boat-overview-02"
+                       width="500"
+                       height="400"
+                       boat-shape="MONO"
+                       zoom-on-boat="1"
+                       bsp="8.0"
+                       hdg="0"
+                       lwy="0"
+                       cmg="00"
+                       decl="14"
+                       dev="-5"
+                       with-current="false"
+                       with-gps="false"
+                       with-wind="false"
+                       with-w="true"
+                       with-vmg="false"></boat-overview>
+      </td>
+      <td valign="top">
+        <label for="hull-type-1">Hull type</label>
+        <select id="hull-type-1" onchange="updateBoatShape('boat-overview-01', this.value);">
+          <option value="MONO">Monohull</option>
+          <option value="CATA">Catamaran</option>
+          <option value="TRI">Trimaran</option>
+          <option value="PLANE">Plane</option>
+        </select>
+        <table>
+          <tr>
+            <th style="border: 1px solid silver; border-radius: 3px;">D</th>
+            <th style="border: 1px solid silver; border-radius: 3px;">d (from dev curve)</th>
+          </tr>
+          <tr>
+            <td style="border: 1px solid orange; border-radius: 3px;">
+              <select id="01-Decl-sign" onchange="updateBoatContext('01');">
+                <option value="E" selected>E</option>
+                <option value="W">W</option>
+              </select>
+              <input type="number" id="01-Decl-deg" min="0" step="1" title="degrees" placeholder="D degree" value="14"
+                     style="width: 50px; text-align: right;" onchange="updateBoatContext('01');"/>&deg;
+              <input type="number" id="01-Decl-min" min="0" max="59" step="0.1" title="minutes" placeholder="D min"
+                     value="0.0" style="width: 50px; text-align: right;" onchange="updateBoatContext('01');"/>'
+            </td>
+            <td style="border: 1px solid orange; border-radius: 3px;">
+              <select id="01-dev-sign" onchange="updateBoatContext('01');">
+                <option value="E">E</option>
+                <option value="W" selected>W</option>
+              </select>
+              <input type="number" id="01-dev-deg" min="0" step="1" title="degrees" placeholder="d degree" value="5"
+                     style="width: 50px; text-align: right;" onchange="updateBoatContext('01');"/>&deg;
+              <input type="number" id="01-dev-min" min="0" max="59" step="0.1" title="minutes" placeholder="d min"
+                     value="0.0" style="width: 50px; text-align: right;" onchange="updateBoatContext('01');"/>'
+            </td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td><span title="Compass Heading">HDC:</span></td>
+            <td style="width: 500px;">
+              <input type="range" value="351" min="0" max="360" step="1" style="width: 90%;"
+                     oninput="updateBoatContext('01'); hdc01.value = this.value;" id="01-hdc" title="From the compass"/>
+              <output name="hdc01" id="hdc01" style="color: cyan;">351</output>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="padding: 10px;">
+              <label for="zoom-1">Graph Zoom:</label><input style="width: 40px;" type="number"
+                                                          onchange="updateZoom('boat-overview-01', this.value);"
+                                                          id="zoom-1" value="1.0" min="0.1" step="0.01"
+                                                          placeholder="Zoom value"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="padding: 10px;">
+              Style:
+              <select onchange="applyClass('boat-overview-01', this);">
+                <option value="boat-overview-01">One</option>
+                <option value="boat-overview-02" selected>Two</option>
+              </select>
+
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+  <h2>Leeway</h2>
+  This one is hard to normalize... It takes some intuition from the navigator. This intuition can be influenced by many
+  factors, like the sea state, the weather situation, the skills of the driver..., etc.
+  <br/>
+  It depends on the Apparent Wind Angle (AWA), and a MaxLeeway value.
+  <br/>
+  The formula we use here is <code>Leeway = MaxLeeway &times; cos(AWA)</code>, when <code>AWA &isin; [-90, 90]</code>, 0 otherwise.
+  <table>
+    <tr>
+      <td valign="top">
+        <boat-overview id="boat-overview-02"
+                       class="boat-overview-02"
+                       width="500"
+                       height="400"
+                       boat-shape="MONO"
+                       zoom-on-boat="1"
+                       bsp="8.0"
+                       hdg="0"
+                       lwy="0"
+                       cmg="0"
+                       awa="100"
+                       aws="15"
+                       decl="14"
+                       dev="-5"
+                       with-current="false"
+                       with-gps="false"
+                       with-wind="true"
+                       with-true-wind="false"
+                       with-w="false"
+                       with-vmg="false"></boat-overview>
+      </td>
+      <td valign="top">
+        <label for="hull-type-2">Hull type</label>
+        <select id="hull-type-2" onchange="updateBoatShape('boat-overview-02', this.value);">
+          <option value="MONO">Monohull</option>
+          <option value="CATA">Catamaran</option>
+          <option value="TRI">Trimaran</option>
+          <option value="PLANE">Plane</option>
+        </select>
+        <table>
+          <tr>
+            <td><span title="Apparent Wind Angle">AWA:</span></td>
+            <td style="width: 500px;">
+              <input type="range" value="100" min="-180" max="180" step="1" style="width: 90%;"
+                     oninput="updateBoatContext('02'); awa02.value = this.value;" id="02-awa" title="AWA"/>
+              <output name="awa" id="awa02" style="color: cyan;">100</output>
+            </td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td>
+              <label for="02-mlwy">Max Leeway</label>
+              <input type="number" id="02-mlwy" min="0" step="0.1" placeholder="Max Leeway" value="10.0"
+                     style="width: 50px; text-align: right;" onchange="updateBoatContext('02');"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="padding: 10px;">
+              <label for="zoom-2">Graph Zoom:</label><input style="width: 40px;" type="number"
+                                                          onchange="updateZoom('boat-overview-02', this.value);"
+                                                          id="zoom-2" value="1.0" min="0.1" step="0.01"
+                                                          placeholder="Zoom value"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="padding: 10px;">
+              Style:
+              <select onchange="applyClass('boat-overview-02', this);">
+                <option value="boat-overview-01">One</option>
+                <option value="boat-overview-02" selected>Two</option>
+              </select>
+
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <h2>True Wind</h2>
+  The True wind is to be calculated <i>with the GPS data</i>.
+  <br/>
+  <i>Picture that (and draw a sketch if needed):</i><br>
+  You are "sailing" in <b>no</b> wind <i>at all</i> (like in the San Francisco Bay in winter), and a 5 knot current is taking you out of the Bay (or inside, or wherever).
+  <br>
+  BSP is zero, <b>T</b>rue <b>W</b>ind <b>S</b>peed (TWS) is zero too, and in this case, AWS would be the speed of the current (5 knots), the AWA will depend on (but be equivalent to) the direction the current is taking you to.
+  <br>
+  If you calculate the TWS based on BSP, CMG, AWA and AWS, you will find a TWS equal to AWS - which is wrong because there is <i><u>no</u> wind</i>, and a wrong TWA (and <b>T</b>rue <b>W</b>ind <b>D</b>irection (TWD) as well, no wind has no direction).
+  <br>
+  <b><i>But</i></b>, if you replace BSP with <b>S</b>peed <b>O</b>ver <b>G</b>round (SOG), and CMG with <b>C</b>ourse <b>O</b>ver <b>G</b>round (COG), you are back in business; COG is the current direction, SOG is the current speed.
+  <br>
+  Think about it.
+  <br><br>
+  This obviously requires the knowledge of SOG &amp; COG, returned by a GPS.
+  <br><br>
+  When the boat is moving, that eventually means that an accurate TWA and TWS (and TWD) is elaborated by an accurate knowledge of
+  <ul>
+    <li>COG</li>
+    <li>SOG</li>
+    <li>AWA</li>
+    <li>AWS</li>
+    <li>CMG</li>
+  </ul>
+  In short: this is not trivial. At all, by far, mostly because of CMG (see above for details).
+
+  <table>
+    <tr>
+      <td valign="top">
+        <boat-overview id="boat-overview-03"
+                       class="boat-overview-02"
+                       width="500"
+                       height="400"
+                       boat-shape="MONO"
+                       zoom-on-boat="1"
+                       bsp="8.0"
+                       hdg="0"
+                       lwy="0"
+                       cmg="0"
+                       awa="100"
+                       aws="15"
+                       decl="14"
+                       dev="-5"
+                       cog="345"
+                       sog="8.2"
+                       tws="19.4"
+                       twa="123"
+                       twd="123"
+                       with-current="false"
+                       with-gps="true"
+                       with-wind="true"
+                       with-true-wind="true"
+                       with-w="false"
+                       with-vmg="false"></boat-overview>
+      </td>
+      <td valign="top">
+        <label for="hull-type-3">Hull type</label>
+        <select id="hull-type-3" onchange="updateBoatShape('boat-overview-03', this.value);">
+          <option value="MONO">Monohull</option>
+          <option value="CATA">Catamaran</option>
+          <option value="TRI">Trimaran</option>
+          <option value="PLANE">Plane</option>
+        </select>
+        <table>
+          <tr>
+            <td><span title="Apparent Wind Angle">AWA:</span></td>
+            <td style="width: 500px;">
+              <input type="range" value="100" min="-180" max="180" step="1" style="width: 90%;"
+                     oninput="updateBoatContext('03'); awa03.value = this.value;" id="03-awa" title="AWA"/>
+              <output name="awa" id="awa03" style="color: cyan;">100</output>
+            </td>
+          </tr>
+          <tr>
+            <td><span title="Apparent Wind Speed">AWS:</span></td>
+            <td style="width: 500px;">
+              <input type="range" value="15" min="0" max="50" step="1" style="width: 90%;"
+                     oninput="updateBoatContext('03'); aws03.value = this.value;" id="03-aws" title="AWS"/>
+              <output name="aws" id="aws03" style="color: cyan;">15</output>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"><hr/></td>
+          </tr>
+          <tr>
+            <td><span title="Course Over Ground">COG:</span></td>
+            <td style="width: 500px;">
+              <input type="range" value="350" min="0" max="360" step="1" style="width: 90%;"
+                     oninput="updateBoatContext('03'); cog03.value = this.value;" id="03-cog" title="COG"/>
+              <output name="cog" id="cog03" style="color: cyan;">350</output>
+            </td>
+          </tr>
+          <tr>
+            <td><span title="Speed Over Ground">SOG:</span></td>
+            <td style="width: 500px;">
+              <input type="range" value="8.2" min="0" max="30" step="0.1" style="width: 90%;"
+                     oninput="updateBoatContext('03'); sog03.value = this.value;" id="03-sog" title="SOG"/>
+              <output name="sog" id="sog03" style="color: cyan;">8.2</output>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"><hr/></td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <label for="03-mlwy">Max Leeway</label>
+              <input type="number" id="03-mlwy" min="0" step="0.1" placeholder="Max Leeway" value="10.0"
+                     style="width: 50px; text-align: right;" onchange="updateBoatContext('03');"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="padding: 10px;">
+              <label for="zoom-3">Graph Zoom:</label><input style="width: 40px;" type="number"
+                                                          onchange="updateZoom('boat-overview-03', this.value);"
+                                                          id="zoom-3" value="1.0" min="0.1" step="0.01"
+                                                          placeholder="Zoom value"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="padding: 10px;">
+              Style:
+              <select onchange="applyClass('boat-overview-03', this);">
+                <option value="boat-overview-01">One</option>
+                <option value="boat-overview-02" selected>Two</option>
+              </select>
+
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <h2>Current, VMG</h2>
+  The full picture.
+  <table>
+    <tr>
+      <td valign="top">
+        <boat-overview id="boat-overview-04"
+                       class="boat-overview-02"
+                       width="500"
+                       height="400"
+                       boat-shape="MONO"
+                       zoom-on-boat="1"
+                       bsp="8.0"
+                       hdg="0"
+                       lwy="0"
+                       cmg="0"
+                       awa="100"
+                       aws="15"
+                       decl="14"
+                       dev="-5"
+                       cog="345"
+                       sog="8.2"
+                       tws="19.4"
+                       twa="123"
+                       twd="123"
+                       vmg="-5.63"
+                       cdr="273"
+                       csp="1.43"
+                       with-current="true"
+                       with-gps="true"
+                       with-wind="true"
+                       with-true-wind="true"
+                       with-w="false"
+                       with-vmg="true"></boat-overview>
+      </td>
+      <td valign="top">
+        <label for="hull-type-4">Hull type</label>
+        <select id="hull-type-4" onchange="updateBoatShape('boat-overview-04', this.value);">
+          <option value="MONO">Monohull</option>
+          <option value="CATA">Catamaran</option>
+          <option value="TRI">Trimaran</option>
+          <option value="PLANE">Plane</option>
+        </select>
+        <table>
+          <tr>
+            <td><span title="Apparent Wind Angle">AWA:</span></td>
+            <td style="width: 500px;">
+              <input type="range" value="100" min="-180" max="180" step="1" style="width: 90%;"
+                     oninput="updateBoatContext('04'); awa04.value = this.value;" id="04-awa" title="AWA"/>
+              <output name="awa" id="awa04" style="color: cyan;">100</output>
+            </td>
+          </tr>
+          <tr>
+            <td><span title="Apparent Wind Speed">AWS:</span></td>
+            <td style="width: 500px;">
+              <input type="range" value="15" min="0" max="50" step="1" style="width: 90%;"
+                     oninput="updateBoatContext('04'); aws04.value = this.value;" id="04-aws" title="AWS"/>
+              <output name="aws" id="aws04" style="color: cyan;">15</output>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"><hr/></td>
+          </tr>
+          <tr>
+            <td><span title="Course Over Ground">COG:</span></td>
+            <td style="width: 500px;">
+              <input type="range" value="350" min="0" max="360" step="1" style="width: 90%;"
+                     oninput="updateBoatContext('04'); cog04.value = this.value;" id="04-cog" title="COG"/>
+              <output name="cog" id="cog04" style="color: cyan;">350</output>
+            </td>
+          </tr>
+          <tr>
+            <td><span title="Speed Over Ground">SOG:</span></td>
+            <td style="width: 500px;">
+              <input type="range" value="8.2" min="0" max="30" step="0.1" style="width: 90%;"
+                     oninput="updateBoatContext('04'); sog04.value = this.value;" id="04-sog" title="SOG"/>
+              <output name="sog" id="sog04" style="color: cyan;">8.2</output>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"><hr/></td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <label for="04-mlwy">Max Leeway</label>
+              <input type="number" id="04-mlwy" min="0" step="0.1" placeholder="Max Leeway" value="10.0"
+                     style="width: 50px; text-align: right;" onchange="updateBoatContext('04');"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="padding: 10px;">
+              <label for="zoom-4">Graph Zoom:</label><input style="width: 40px;" type="number"
+                                                          onchange="updateZoom('boat-overview-04', this.value);"
+                                                          id="zoom-4" value="1.0" min="0.1" step="0.01"
+                                                          placeholder="Zoom value"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="padding: 10px;">
+              Style:
+              <select onchange="applyClass('boat-overview-04', this);">
+                <option value="boat-overview-01">One</option>
+                <option value="boat-overview-02" selected>Two</option>
+              </select>
+
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <dl>
+    <dt>A note about the current</dt>
+    <dd>
+      On the figure above, the current is calculated by triangulation. This is an interesting trigonometry exercice, involving many angles and many parameters
+      as you can see.
+      <br/>
+      The experience shows that the current estimation is much more accurate when the values are smoothed over a period of time (like 1 to 10 minutes).
+      We will get back to this in another document.
+    </dd>
+  </dl>
+</div>
+<hr/>
+Oliv did it. 2018.
+</body>
+</html>
