@@ -35,9 +35,10 @@ display_help ( ) {
 
 display_usage ( ) {
   SERVER_IP=$(hostname -I | awk '{ print $1 }')
-  echo -e "${CYAN}If mux is started, try curl to check the REST available MUX operations: curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/oplist${NC}"
-  echo -e "${CYAN}                            to check the REST available SSD1306 operations: curl -X GET on http://${SERVER_IP}:8080/ssd1306/oplist${NC}"
-  echo -e "${CYAN}                            to check the REST available BME280 operations: curl -X GET on http://${SERVER_IP}:9876/bme280/oplist${NC}"
+  echo -e "${CYAN}If mux is started, try curl to check the REST available MUX operations: curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/oplist | jq${NC}"
+  echo -e "${CYAN}                                                   All REST operations: curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/oplist | jq${NC}"
+  echo -e "${CYAN}                            to check the REST available SSD1306 operations: curl -X GET on http://${SERVER_IP}:8080/ssd1306/oplist | jq${NC}"
+  echo -e "${CYAN}                            to check the REST available BME280 operations: curl -X GET on http://${SERVER_IP}:9876/bme280/oplist | jq${NC}"
   echo -e "${CYAN}                   Web server available, see http://${SERVER_IP}:${SERVER_HTTP_PORT}/web/index.html or http://${SERVER_IP}:${SERVER_HTTP_PORT}/zip/index.html${NC}"
   echo -e "${YELLOW}Try curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/cache | jq '.\"Solar time\"'${NC}"
   echo -e "${YELLOW}Try curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/cache | jq '.NMEA_AS_IS'${NC}"
@@ -48,7 +49,7 @@ display_usage ( ) {
 echo -e "${RED}Warning !! Make sure this is matching the one in rc.local !!${NC}"
 echo -e "           Assuming we're working from ~pi/nmea-dist"
 #
-# Can be EINK2-13, SSD1306, or BME280-SSD (BME280 + SSD1306), or NAV-SERVER
+# Can be EINK2-13, SSD1306, or BME280-SSD (BME280 + SSD1306), NAV-SERVER, or TEST
 OPTION=EINK2-13        # Default value
 if [[ $# -gt 0 ]]; then
   # echo -e "CLI prm: $1"
@@ -112,7 +113,7 @@ else
   exit 1
 fi
 # Start the MUX
-echo -e "Step 2 - Starting the MUX"
+echo -e "Step 2 - Starting the MUX, from ~pi/nmea-dist"
 cd ~pi/nmea-dist
 rm nohup.out 2> /dev/null
 NAVSERVER_NB_CLASSES=$(jar -tvf ./build/libs/mux-all.jar | grep NavServer | wc -l)
@@ -165,7 +166,7 @@ elif [[ "${OPTION}" == "NAV-SERVER" ]] || [[ "${OPTION}" == "TEST" ]]; then
   echo -e "Also try: curl -X GET http://localhost:${SERVER_HTTP_PORT}/mux/cache | jq"
   echo -e "          curl -X GET http://localhost:${SERVER_HTTP_PORT}/oplist | jq"
 else
-  # This should have been taken of previously
+  # This should have been taken care of previously
   echo -e ">> Unmanaged OPTION ${OPTION}"
   display_help
   echo -e "Aborting"
