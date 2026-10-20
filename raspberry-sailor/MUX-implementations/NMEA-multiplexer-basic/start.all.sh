@@ -35,10 +35,10 @@ display_help ( ) {
 
 display_usage ( ) {
   SERVER_IP=$(hostname -I | awk '{ print $1 }')
-  echo -e "${CYAN}If mux is started, try curl to check the REST available MUX operations: curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/oplist | jq${NC}"
-  echo -e "${CYAN}                                                   All REST operations: curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/oplist | jq${NC}"
-  echo -e "${CYAN}                            to check the REST available SSD1306 operations: curl -X GET on http://${SERVER_IP}:8080/ssd1306/oplist | jq${NC}"
-  echo -e "${CYAN}                            to check the REST available BME280 operations: curl -X GET on http://${SERVER_IP}:9876/bme280/oplist | jq${NC}"
+  echo -e "${CYAN}If mux is started, try curl to check the REST available MUX operations: curl -X GET http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/oplist | jq${NC}"
+  echo -e "${CYAN}                                                   All REST operations: curl -X GET http://${SERVER_IP}:${SERVER_HTTP_PORT}/oplist | jq${NC}"
+  echo -e "${CYAN}                        to check the REST available SSD1306 operations: curl -X GET http://${SERVER_IP}:8080/ssd1306/oplist | jq${NC}"
+  echo -e "${CYAN}                         to check the REST available BME280 operations: curl -X GET http://${SERVER_IP}:9876/bme280/oplist | jq${NC}"
   echo -e "${CYAN}                   Web server available, see http://${SERVER_IP}:${SERVER_HTTP_PORT}/web/index.html or http://${SERVER_IP}:${SERVER_HTTP_PORT}/zip/index.html${NC}"
   echo -e "${YELLOW}Try curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/cache | jq '.\"Solar time\"'${NC}"
   echo -e "${YELLOW}Try curl -X GET on http://${SERVER_IP}:${SERVER_HTTP_PORT}/mux/cache | jq '.NMEA_AS_IS'${NC}"
