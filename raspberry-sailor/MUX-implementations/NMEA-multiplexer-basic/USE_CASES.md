@@ -7,7 +7,7 @@ The "simplest" configuration would involve
 - A simple GPS, plugged into the Raspberry Pi with its USB socket.
 
 > _**Note**_: We limit here the connected devices to a simple USB GPS.  
-> More data can obviously obtained from the boat's electronic. ShipModul and other such
+> More data can obviously be obtained from the boat's electronic. `ShipModul` and other such
 > devices allow an `NMEA0183` flow to be read from the USB port of any computer.
 
 From such a configuration, we would be able to read the GPS data, like Position, Course Over Ground, Speed Over Ground, etc.  
@@ -54,6 +54,6 @@ machine-a [NMEA-multiplexer] $ ../../gradlew shadowJar -x :astro-computer:AstroC
 - The smallest (and cheapest) Navigation Station. Raspberry Pi Zero W, GPS, optional e-ink bonnet. In a separate document, [here](./HOWTO.md).
 - A stronger configuration. Raspberry Pi 4B, GPS, screen, keyboard.... In a separate document, [here](./use_cases/USE_CASES_5.md).
 - This list is not closed - nor closeable.  
-  Also see [here](https://hocus-blogus.blogspot.com/2021/01/several-configurations-for-raspberry-pi.html).
+  Also see [here](https://hocus-blogus.blogspot.com/2021/01/several-configurations-for-raspberry-pi.html), several RPi configs...
 
 ---
