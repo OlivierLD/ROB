@@ -28,14 +28,14 @@ export XSL_STYLESHEET=./agenda2fop.xsl
 # Page Format?
 if [[ "${FORMAT}" == "" ]]; then
   # Manage that, interactively, or not...
-  if [[ -t 1 ]]; then
+  if [[ -t 1 ]]; then  # Run from a terminal
     echo -e "Running from a Terminal"
     echo -en "Final document format: US Letter [1], A4 [2] > "
     read FORMAT  # Default Letter
     if [[ "${FORMAT}" == "" ]]; then
       FORMAT=1
     fi
-  else
+  else     # Not from a terminal
     echo -e "Not-a-terminal, defaulting to US"
     FORMAT=1
   fi
@@ -49,8 +49,10 @@ else
 fi
 #
 if [[ "${LANG}" == "FR" ]]; then # Language Option, mentioned in main stylesheet
+  echo -e "We'll speak French."
   cp literals_fr.xsl literals.xsl
 else
+  echo -e "We'll speak English."
   cp literals_en.xsl literals.xsl
 fi
 #

@@ -116,6 +116,11 @@ fi
 echo -e "Step 2 - Starting the MUX, from ~pi/nmea-dist"
 cd ~pi/nmea-dist
 rm nohup.out 2> /dev/null
+
+# TODO An interactive option ?
+NOHUP=
+# NOHUP=nohup
+
 NAVSERVER_NB_CLASSES=$(jar -tvf ./build/libs/mux-all.jar | grep NavServer | wc -l)
 #
 if [[ "${OPTION}" == "BME280-SSD" ]]; then
@@ -124,27 +129,27 @@ if [[ "${OPTION}" == "BME280-SSD" ]]; then
   SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   echo -e "Starting Mux, ${SERVER_HTTP_PORT}"
   if [[ ${NAVSERVER_NB_CLASSES} -eq 0 ]]; then
-    nohup ./mux.sh ${PROP_FILE} &
+    ${NOHUP} ./mux.sh ${PROP_FILE} &
   else
-    nohup ./runNavServer.sh --mux:${PROP_FILE} &
+    ${NOHUP} ./runNavServer.sh --mux:${PROP_FILE} &
   fi
 elif [[ "${OPTION}" == "EINK2-13" ]]; then
   PROP_FILE=nmea.mux.gps.nmea-fwd.yaml
   SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   echo -e "Starting Mux, ${SERVER_HTTP_PORT}"
   if [[ ${NAVSERVER_NB_CLASSES} -eq 0 ]]; then
-    nohup ./mux.sh ${PROP_FILE} &
+    ${NOHUP} ./mux.sh ${PROP_FILE} &
   else
-    nohup ./runNavServer.sh --mux:${PROP_FILE} &
+    ${NOHUP} ./runNavServer.sh --mux:${PROP_FILE} &
   fi
 elif [[ "${OPTION}" == "SSD1306" ]]; then
   PROP_FILE=nmea.mux.gps.nmea-fwd-ssd.yaml
   SERVER_HTTP_PORT=$(cat ${PROP_FILE} | grep http.port | head -1 | awk '{ print $2 }')
   echo -e "Starting Mux, port ${SERVER_HTTP_PORT}"
   if [[ ${NAVSERVER_NB_CLASSES} -eq 0 ]]; then
-    nohup ./mux.sh ${PROP_FILE} &
+    ${NOHUP} ./mux.sh ${PROP_FILE} &
   else
-    nohup ./runNavServer.sh --mux:${PROP_FILE} &
+    ${NOHUP} ./runNavServer.sh --mux:${PROP_FILE} &
   fi
 elif [[ "${OPTION}" == "NAV-SERVER" ]] || [[ "${OPTION}" == "TEST" ]]; then
   PROP_FILE=nmea.mux.gps.tcp.yaml
@@ -156,10 +161,10 @@ elif [[ "${OPTION}" == "NAV-SERVER" ]] || [[ "${OPTION}" == "TEST" ]]; then
   # nohup ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
   if [[ ${NAVSERVER_NB_CLASSES} -eq 0 ]]; then
     echo -e "=> Launching mux"
-    nohup ./mux.sh ${PROP_FILE} &
+    ${NOHUP} ./mux.sh ${PROP_FILE} &
   else
     echo -e "=> Launching NavServer"
-    nohup ./runNavServer.sh --mux:${PROP_FILE} --no-date &
+    ${NOHUP} ./runNavServer.sh --mux:${PROP_FILE} --no-date &
   fi
   #
   echo -e "${RED}In a browser: http://localhost:${SERVER_HTTP_PORT}/zip/index.html${NC}"
