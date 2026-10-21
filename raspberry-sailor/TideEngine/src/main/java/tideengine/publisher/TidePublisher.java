@@ -275,27 +275,28 @@ public class TidePublisher {
 		System.out.println("Generation completed.");
 		// Ready for transformation
 		try {
-			// This is a system script.
+			// This is a system (bash) script.
 			String cmd = // "." + File.separator + "xsl" + File.separator + (scriptToRun == null ? TIDE_TABLE : scriptToRun) + " " + radical;
 					     SCRIPT_PATH + File.separator + (scriptToRun == null ? TIDE_TABLE : scriptToRun) +
 								 " " + radical + " " + lang + " " + fmt;
-			System.out.println("Command:" + cmd);
+			System.out.println("Executing command:" + cmd);
 			Process p = Runtime.getRuntime().exec(cmd);
 
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
 			// Read the output from the command
-			System.out.println("Here is the standard output of the command:\n");
+			System.out.println("------ Standard output of the command:\n");
 			String s = null;
 			while ((s = stdInput.readLine()) != null) {
 				System.out.println(s);
 			}
 			// Read any errors from the attempted command
-			System.out.println("Here is the standard error of the command (if any):\n");
+			System.out.println("------ Standard error of the command (if any):\n");
 			while ((s = stdError.readLine()) != null) {
 				System.out.println(s);
 			}
+			System.out.println("----------------------------------");
 			int exitStatus = p.waitFor();
 			System.out.println("Script completed, status " + exitStatus);
 			System.out.printf("File %s.pdf generated\n", radical);

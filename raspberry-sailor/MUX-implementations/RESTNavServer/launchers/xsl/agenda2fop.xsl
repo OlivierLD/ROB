@@ -81,7 +81,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="2.0">
-  <xsl:import href="page.xsl"/>
+  <xsl:import href="page.xsl"/>     <!-- US Letter or A4 -->
+  <xsl:import href="literals.xsl"/> <!-- Language specific -->
 
   <xsl:template match="/">
     <fo:root>
@@ -154,18 +155,18 @@
                 <fo:block text-align="center" font-family="Courier" font-weight="bold"
                       font-size="9pt">
                   <xsl:choose>
-                    <xsl:when test="./@month = '1'">January</xsl:when>
-                    <xsl:when test="./@month = '2'">February</xsl:when>
-                    <xsl:when test="./@month = '3'">March</xsl:when>
-                    <xsl:when test="./@month = '4'">April</xsl:when>
-                    <xsl:when test="./@month = '5'">May</xsl:when>
-                    <xsl:when test="./@month = '6'">June</xsl:when>
-                    <xsl:when test="./@month = '7'">July</xsl:when>
-                    <xsl:when test="./@month = '8'">August</xsl:when>
-                    <xsl:when test="./@month = '9'">September</xsl:when>
-                    <xsl:when test="./@month = '10'">October</xsl:when>
-                    <xsl:when test="./@month = '11'">November</xsl:when>
-                    <xsl:when test="./@month = '12'">December</xsl:when>
+                    <xsl:when test="./@month = '1'"><xsl:copy-of select="$january-name"/></xsl:when>
+                    <xsl:when test="./@month = '2'"><xsl:copy-of select="$february-name"/></xsl:when>
+                    <xsl:when test="./@month = '3'"><xsl:copy-of select="$march-name"/></xsl:when>
+                    <xsl:when test="./@month = '4'"><xsl:copy-of select="$april-name"/></xsl:when>
+                    <xsl:when test="./@month = '5'"><xsl:copy-of select="$may-name"/></xsl:when>
+                    <xsl:when test="./@month = '6'"><xsl:copy-of select="$june-name"/></xsl:when>
+                    <xsl:when test="./@month = '7'"><xsl:copy-of select="$july-name"/></xsl:when>
+                    <xsl:when test="./@month = '8'"><xsl:copy-of select="$august-name"/></xsl:when>
+                    <xsl:when test="./@month = '9'"><xsl:copy-of select="$september-name"/></xsl:when>
+                    <xsl:when test="./@month = '10'"><xsl:copy-of select="$october-name"/></xsl:when>
+                    <xsl:when test="./@month = '11'"><xsl:copy-of select="$november-name"/></xsl:when>
+                    <xsl:when test="./@month = '12'"><xsl:copy-of select="$december-name"/></xsl:when>
                   </xsl:choose>
                   <xsl:text disable-output-escaping="yes">&nbsp;</xsl:text>
                   <xsl:value-of select="./@year"/>
@@ -220,7 +221,43 @@
           <!-- Date -->
           <fo:table-cell number-columns-spanned="5">
             <fo:block text-align="left" font-weight="bold">
-              <xsl:value-of select="$data/@val"/>
+              <!-- val like val='Thu 01 Oct 2026' -->
+              <!-- xsl:value-of select="$data/@val"/ -->
+              <!-- split date for translation -->
+              <!-- xsl:value-of select="substring($data/@val, 1, 3)"/ -->
+              <xsl:variable name="dow" select="substring($data/@val, 1, 3)"/>   <!-- Short day of week -->
+              <xsl:variable name="dom" select="substring($data/@val, 5, 2)"/>
+              <xsl:variable name="month" select="substring($data/@val, 8, 3)"/>  <!-- Short month -->
+              <xsl:variable name="year" select="substring($data/@val, 12, 4)"/>
+
+              <xsl:choose>
+                <xsl:when test="$dow = 'Mon'"><xsl:copy-of select="$monday-name"/></xsl:when>
+                <xsl:when test="$dow = 'Tue'"><xsl:copy-of select="$tuesday-name"/></xsl:when>
+                <xsl:when test="$dow = 'Wed'"><xsl:copy-of select="$wednesday-name"/></xsl:when>
+                <xsl:when test="$dow = 'Thu'"><xsl:copy-of select="$thursday-name"/></xsl:when>
+                <xsl:when test="$dow = 'Fri'"><xsl:copy-of select="$friday-name"/></xsl:when>
+                <xsl:when test="$dow = 'Sat'"><xsl:copy-of select="$saturday-name"/></xsl:when>
+                <xsl:when test="$dow = 'Sun'"><xsl:copy-of select="$sunday-name"/></xsl:when>
+                <xsl:otherwise><xsl:value-of select="$dow"/></xsl:otherwise>
+              </xsl:choose>
+              <xsl:value-of select="concat(' ', $dom, '  ')"/>
+              <xsl:choose>
+                <xsl:when test="$month = 'Jan'"><xsl:copy-of select="$january-name"/></xsl:when>
+                <xsl:when test="$month = 'Feb'"><xsl:copy-of select="$february-name"/></xsl:when>
+                <xsl:when test="$month = 'Mar'"><xsl:copy-of select="$march-name"/></xsl:when>
+                <xsl:when test="$month = 'Apr'"><xsl:copy-of select="$april-name"/></xsl:when>
+                <xsl:when test="$month = 'May'"><xsl:copy-of select="$may-name"/></xsl:when>
+                <xsl:when test="$month = 'Jun'"><xsl:copy-of select="$june-name"/></xsl:when>
+                <xsl:when test="$month = 'Jul'"><xsl:copy-of select="$july-name"/></xsl:when>
+                <xsl:when test="$month = 'Aug'"><xsl:copy-of select="$august-name"/></xsl:when>
+                <xsl:when test="$month = 'Sep'"><xsl:copy-of select="$september-name"/></xsl:when>
+                <xsl:when test="$month = 'Oct'"><xsl:copy-of select="$october-name"/></xsl:when>
+                <xsl:when test="$month = 'Nov'"><xsl:copy-of select="$november-name"/></xsl:when>
+                <xsl:when test="$month = 'Dec'"><xsl:copy-of select="$december-name"/></xsl:when>
+                <xsl:otherwise><xsl:value-of select="$dow"/></xsl:otherwise>
+              </xsl:choose>
+              <xsl:value-of select="concat(' ', $year)"/>
+
             </fo:block>
           </fo:table-cell>
         </fo:table-row>
@@ -228,13 +265,13 @@
           <!-- Sunrise, sunset -->
           <fo:table-cell number-columns-spanned="5">
             <fo:block text-align="left" font-weight="bold">
-              <xsl:value-of select="concat('Sun rise:', $data/@sun-rise, ', Sun set:', $data/@sun-set)"/>
+              <xsl:value-of select="concat($sun-name, ' ', $rise-name, ':', $data/@sun-rise, ', ', $set-name, ':', $data/@sun-set)"/>
             </fo:block>
             <fo:block text-align="left" font-weight="bold">
-              <xsl:value-of select="concat('  Z rise: ', $data/@sun-rise-Z, '°, Z set: ', $data/@sun-set-Z, '°')"/>
+              <xsl:value-of select="concat('  Z ', $rise-name, ': ', $data/@sun-rise-Z, '°, Z ', $set-name, ': ', $data/@sun-set-Z, '°')"/>
             </fo:block>
             <fo:block text-align="left" font-weight="bold">
-              <xsl:value-of select="concat(' Sun transit:', $data/@sun-transit, ' (El ', $data/@sun-elev-at-transit, '°)')"/>
+              <xsl:value-of select="concat(' ', $sun-name, ' ' , $transit-name, ':', $data/@sun-transit, ' (El ', $data/@sun-elev-at-transit, '°)')"/>
             </fo:block>
             <!--fo:block text-align="left" font-weight="bold">
               <xsl:value-of select="concat('Moon rise:', $data/@moon-rise, ', Moon set:', $data/@moon-set)"/>

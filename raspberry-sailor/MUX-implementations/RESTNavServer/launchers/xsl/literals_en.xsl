@@ -147,6 +147,32 @@
   <xsl:variable name="name">Name</xsl:variable>
   <xsl:variable name="sha">SHA</xsl:variable>
 
+  <xsl:variable name="january-name">January</xsl:variable>
+  <xsl:variable name="february-name">February</xsl:variable>
+  <xsl:variable name="march-name">March</xsl:variable>
+  <xsl:variable name="april-name">April</xsl:variable>
+  <xsl:variable name="may-name">May</xsl:variable>
+  <xsl:variable name="june-name">June</xsl:variable>
+  <xsl:variable name="july-name">July</xsl:variable>
+  <xsl:variable name="august-name">August</xsl:variable>
+  <xsl:variable name="september-name">September</xsl:variable>
+  <xsl:variable name="october-name">October</xsl:variable>
+  <xsl:variable name="november-name">November</xsl:variable>
+  <xsl:variable name="december-name">December</xsl:variable>
+
+  <xsl:variable name="monday-name">Monday</xsl:variable>
+  <xsl:variable name="tuesday-name">Tuesday</xsl:variable>
+  <xsl:variable name="wednesday-name">Wednesday</xsl:variable>
+  <xsl:variable name="thursday-name">Thursday</xsl:variable>
+  <xsl:variable name="friday-name">Friday</xsl:variable>
+  <xsl:variable name="saturday-name">Saturday</xsl:variable>
+  <xsl:variable name="sunday-name">Sunday</xsl:variable>
+
+  <xsl:variable name="sun-name">Sun</xsl:variable>
+  <xsl:variable name="rise-name">Rise</xsl:variable>
+  <xsl:variable name="set-name">Set</xsl:variable>
+  <xsl:variable name="transit-name">Transit</xsl:variable>
+
   <xsl:template name="date-fmt">
     <xsl:param name="year"/>
     <xsl:param name="month"/>

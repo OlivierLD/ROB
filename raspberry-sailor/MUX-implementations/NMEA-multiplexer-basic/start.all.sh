@@ -165,6 +165,7 @@ elif [[ "${OPTION}" == "NAV-SERVER" ]] || [[ "${OPTION}" == "TEST" ]]; then
   echo -e "${RED}In a browser: http://localhost:${SERVER_HTTP_PORT}/zip/index.html${NC}"
   echo -e "Also try: curl -X GET http://localhost:${SERVER_HTTP_PORT}/mux/cache | jq"
   echo -e "          curl -X GET http://localhost:${SERVER_HTTP_PORT}/oplist | jq"
+  echo -e "          curl -X GET http://localhost:${SERVER_HTTP_PORT}/oplist | jq '. | length'"
 else
   # This should have been taken care of previously
   echo -e ">> Unmanaged OPTION ${OPTION}"

@@ -27,10 +27,18 @@ export CP=${CP}:${HOME}/libs/xdo-0301.jar
 export XSL_STYLESHEET=./agenda2fop.xsl
 # Page Format?
 if [[ "${FORMAT}" == "" ]]; then
-  # TODO Manage that, interactively?...
-  # echo -en "Final document format: US Letter [1], A4 [2] > "
-  # read FORMAT  # Default Letter
-  FORMAT=1
+  # Manage that, interactively, or not...
+  if [[ -t 1 ]]; then
+    echo -e "Running from a Terminal"
+    echo -en "Final document format: US Letter [1], A4 [2] > "
+    read FORMAT  # Default Letter
+    if [[ "${FORMAT}" == "" ]]; then
+      FORMAT=1
+    fi
+  else
+    echo -e "Not-a-terminal, defaulting to US"
+    FORMAT=1
+  fi
 fi
 if [[ "${FORMAT}" == "2" || "${FORMAT}" == "A4" ]]; then
   echo -e "A4 selected"
@@ -40,7 +48,11 @@ else
   cp page_USLetter.xsl page.xsl
 fi
 #
-# TODO Language Option
+if [[ "${LANG}" == "FR" ]]; then # Language Option, mentioned in main stylesheet
+  cp literals_fr.xsl literals.xsl
+else
+  cp literals_en.xsl literals.xsl
+fi
 #
 echo Publishing
 java -Xms256m -Xmx1024m -classpath ${CP} oracle.apps.xdo.template.FOProcessor -xml ${RADICAL}.xml -xsl ${XSL_STYLESHEET} -pdf ${RADICAL}.pdf
