@@ -6,6 +6,10 @@ The "simplest" configuration would involve
 - A small Raspberry Pi - like the Raspberry Pi Zero W (or similar PCB - I need to test the Orange Pi...), it does not even need a screen.
 - A simple GPS, plugged into the Raspberry Pi with its USB socket.
 
+> _**Note**_: We limit here the connected devices to a simple USB GPS.  
+> More data can obviously obtained from the boat's electronic. ShipModul and other such
+> devices allow an `NMEA0183` flow to be read from the USB port of any computer.
+
 From such a configuration, we would be able to read the GPS data, like Position, Course Over Ground, Speed Over Ground, etc.  
 Those data can be logged, used for further computations, and/or forwarded to other consumers.  
 The Raspberry Pi is able to emit its own network (HotSpot), so other devices (laptops, tablets, cell-phone) can connect to it,
