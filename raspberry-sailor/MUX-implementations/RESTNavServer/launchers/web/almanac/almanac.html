@@ -39,6 +39,17 @@
 			font-size: 16pt;
 			font-weight: normal;
 		}
+
+		.blink_me {
+		  animation: blinker 1s linear infinite;
+		}
+
+		@keyframes blinker {
+		  50% {
+			opacity: 0;
+		  }
+		}
+
 	</style>
 	<script type="text/javascript">
 		window.onload = function() {
@@ -62,10 +73,15 @@
 			console.log('Received the file name %s', value);
 			messManager('Requested document ' + value + ' is ready.');
 			document.getElementById("doc-url").innerHTML = "<a href='" + "." + value + "' target='pdf'>here</a>!";
+			document.getElementById("doc-url").className = '';
+
 		};
 
 		let getStarted = function() {
-			document.getElementById("doc-url").innerText = '...';
+			document.getElementById("doc-url").innerText = // '...';
+				'in progress...';
+			// add class blink_me
+			document.getElementById("doc-url").className = 'blink_me';
 		};
 
 		let typeToPublish;
