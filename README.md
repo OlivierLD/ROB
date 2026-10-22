@@ -11,9 +11,11 @@ Aka just <b>ROB</b>.
 <h3>Using the Raspberry Pi, <u><i>at sea</i></u>.</h3>
 </td>
 <td valign="top" align="right">
-<img src="./wizard150.png" alt="Weather Wizard">
-<img src="./spinning.rpi.gif" alt="Spinning!">
-<!-- img src="./a.l.ouest.jpeg" width="50%" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California" -->
+<div style="display: grid; grid-template-columns: 50% 50%;">
+  <img src="./wizard150.png" alt="Weather Wizard">
+  <img src="./spinning.rpi.gif" alt="Spinning!">
+  <!-- img src="./a.l.ouest.jpeg" width="50%" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California" -->
+</div>
 </td>
   </tr>
 </table>
