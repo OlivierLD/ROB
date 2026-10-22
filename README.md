@@ -6,15 +6,14 @@ A.k.a. just **ROB**.
 ### Using the Raspberry Pi, _**<u>at sea</u>**_.
 This has been tested and used at sea, for real. And it works.
 
-<style>
+<!--style>
 table, tr, td, th {
    border: none!important;
 }
-</style>
+</style-->
 
-|                                           |                                                         |
-|:-----------------------------------------:|:-------------------------------------------------------:|
 | ![Spinning Raspberry](./spinning.rpi.gif) |           ![Weather Wizard](./wizard150.jpg)            |
+|:-----------------------------------------:|:-------------------------------------------------------:|
 
 ### Impatient ?
 [Get started](./GET_STARTED.md) now!
