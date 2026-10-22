@@ -1,24 +1,16 @@
-<table width="100%">
-  <tr>
-<td valign="top">
-<h1>
-<span title="Raspberry Pi">R</span>.<span title="On">O</span>.<span title="Board">B</span>.<span title="Embarked">E</span>.<span title="Research">R</span>.<span title="Technology">T</span>.
-</h1>
+# R</span>.<span title="On">O</span>.<span title="Board">B</span>.<span title="Embarked">E</span>.<span title="Research">R</span>.<span title="Technology">T</span>
+
 <b style="color: red;">R</b>aspberry-Pi <b style="color: red;">O</b>n <b style="color: red;">B</b>oard for <b style="color: red;">E</b>mbarked <b style="color: red;">R</b>esearch and <b style="color: red;">T</b>echnology.<br/>
-Aka just <b>ROB</b>.
-<br/>
-<img src="./paperboat.png" alt="PaperBoat">
-<h3>Using the Raspberry Pi, <u><i>at sea</i></u>.</h3>
-</td>
-<!--td valign="top" align="right">
-  <div style="display: grid; grid-template-columns: 50% 50%;">
-    <img src="./spinning.rpi.gif" alt="Spinning Raspberry">
-    <img src="./wizard150.png" alt="Weather Wizard">
-    <img src="./a.l.ouest.jpeg" width="50%" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California">
-  </div>
-</td-->
-  </tr>
-</table>
+A.k.a. just **ROB**.   
+![Paper Boat](./paperboat.png)
+### Using the Raspberry Pi, _**<u>at sea</u>**_.
+This has been tested and used at sea, for real. And it works.
+
+<style>
+table, tr, td, th {
+   border: none!important;
+}
+</style>
 
 |                                           |                                                         |
 |:-----------------------------------------:|:-------------------------------------------------------:|
