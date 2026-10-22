@@ -8,6 +8,7 @@ $ netstat -tunap
 $ ifconfig
 $ iwconfig
 $ sudo mntui
+$ nmcli ...
 $ sudo raspi-config
 $ wpa_cli
   > scan

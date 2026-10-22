@@ -7,6 +7,7 @@ Setup instructions:
 Docs to look at:
 - <https://github.com/PiSupply/PaPiRus#command-line>
 - <https://github.com/repaper/gratis>
+- <https://github.com/PiSupply/PaPiRus>
 
 ---
 

@@ -12,6 +12,7 @@ Aka just <b>ROB</b>.
 </td>
 <td valign="top" align="right">
 <img src="./wizard150.png" alt="Weather Wizard">
+<img src="./spinning.rpi.gif" alt="Spinning!">
 <!-- img src="./a.l.ouest.jpeg" width="50%" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California" -->
 </td>
   </tr>
