@@ -1,8 +1,12 @@
 # R</span>.<span title="On">O</span>.<span title="Board">B</span>.<span title="Embarked">E</span>.<span title="Research">R</span>.<span title="Technology">T</span>
 
-<b style="color: red;">R</b>aspberry-Pi <b style="color: red;">O</b>n <b style="color: red;">B</b>oard for <b style="color: red;">E</b>mbarked <b style="color: red;">R</b>esearch and <b style="color: red;">T</b>echnology.<br/>
-A.k.a. just **ROB**.   
+<div>
+<b style="color: red;">R</b>aspberry-Pi <b style="color: red;">O</b>n <b style="color: red;">B</b>oard for <b style="color: red;">E</b>mbarked <b style="color: red;">R</b>esearch and <b style="color: red;">T</b>echnology.
+</div>
+
+A.k.a. just **ROB**.     
 ![Paper Boat](./paperboat.png)
+
 ### Using the Raspberry Pi, _**<u>at sea</u>**_.
 This has been tested and used at sea, for real. And it works.
 
