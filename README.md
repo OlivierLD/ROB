@@ -12,7 +12,7 @@ Aka just <b>ROB</b>.
 </td>
 <td valign="top" align="right">
   <div style="display: grid; grid-template-columns: 50% 50%;">
-    <img src="./spinning.rpi.gif" alt="Spinning Raspberry"
+    <img src="./spinning.rpi.gif" alt="Spinning Raspberry">
     <img src="./wizard150.png" alt="Weather Wizard">
     <!-- img src="./a.l.ouest.jpeg" width="50%" alt="A l'ouest, Britanny, California" title="A l'ouest, Britanny, California" -->
   </div>
@@ -283,7 +283,7 @@ Each case is a particular case, there is no "one-size-fits-all" config here...
 We will see later if Docker could be a way to approach this problem, by preparing several Docker images, suitable for different hardware configurations. More to come.
 
 - WiP, look into [to.prod.sh](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/to.prod.sh), for now,
-and the [USE_CASE](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/USE_CASES.md#use-case-2) page.
+and the [USE_CASE](./raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/USE_CASES.md) page.
 
 Also, by using TCP and REST, all sensors and actuators using those protocols can be _distributed_, they do not have to be located on the same board.
 You can very well have the GPS and NMEA data read from one Raspberry Pi somewhere, the Magnetometer (like an LSM303) somewhere else, and all those guys
