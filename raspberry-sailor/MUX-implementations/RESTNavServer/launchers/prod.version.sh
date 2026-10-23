@@ -92,6 +92,7 @@ function openBrowser() {
 function displayHelp() {
   echo -e "--------------------------------"
   echo -e "PropFile $1, will open $2 (on demand)"
+  echo -e "--------------------------------"
   cat $1
   echo -e "" # CR-NL
   echo -e "--------------------------------"
@@ -100,6 +101,10 @@ function displayHelp() {
 echo -e "+------------------------------------------+"
 echo -e "| Starting NMEA Multiplexer, full version. |"
 echo -e "+------------------------------------------+"
+# cat banner.stby.txt
+cat banner.txt
+echo -e " "
+sleep 2
 #
 NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --http-port:${HTTP_PORT}"
 #
