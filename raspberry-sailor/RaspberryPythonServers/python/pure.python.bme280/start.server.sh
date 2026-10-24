@@ -1,11 +1,11 @@
 #!/bin/bash
 IP_ADDR=$(hostname -I | awk '{ print $1 }')
 #
-I2C_ADDR=0x76          # Can be 0x77 also.
+I2C_ADDR=0x76          # Can be 0x77 also...
 VERBOSE=false
 STORE_RESTORE=false
 LOG_DB=false            # Do check the DB_OPTION in the python code, and below!
-DB_OPTION=REST         # Applied if LOG_DB is true. REST, SQLITE, or BOTH.
+DB_OPTION=REST          # Applied if LOG_DB is true. REST, SQLITE, or BOTH.
 #
 echo -e "Starting server with I2C addr ${I2C_ADDR}, on ${IP_ADDR}, verbose=${VERBOSE}"
 #
@@ -17,3 +17,6 @@ nohup ${COMMAND} > bme.log 2>&1 &
 # nohup -u python3 REST_and_WEB_BME280_server.py --address:${I2C_ADDR} --verbose:${VERBOSE} --machine-name:${IP_ADDR} &
 PID=$!
 echo -e "Process [${PID}] on its way, on address ${IP_ADDR} !"
+echo -e "Default HTTP port: 8080"
+echo -e "Try curl -X GET http://${IP_ADDR}:8080/bme280/oplist"
+echo -e " or curl -X GET http://$(hostname).home:8080/bme280/oplist"
