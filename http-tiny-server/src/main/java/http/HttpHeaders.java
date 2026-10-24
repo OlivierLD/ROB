@@ -26,4 +26,6 @@ public class HttpHeaders {
     public final static String AUDIO_WAV = "audio/wav";
     public final static String APPLICATION_PDF = "application/pdf";
     public final static String APPLICATION_X_FONT_TTF = "application/x-font-ttf";
+    public final static String APPLICATION_MPEG = "audio/mpeg";
+    public final static String APPLICATION_OGG = "audio/ogg";
 }

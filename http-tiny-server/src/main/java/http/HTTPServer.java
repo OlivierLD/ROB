@@ -1248,6 +1248,10 @@ public class HTTPServer {
 			contentType = HttpHeaders.APPLICATION_JSON;
 		} else if (f.toLowerCase().endsWith(".ttf")) {
 			contentType = HttpHeaders.APPLICATION_X_FONT_TTF;
+		} else if (f.toLowerCase().endsWith(".mp3")) {
+			contentType = HttpHeaders.APPLICATION_MPEG;
+		} else if (f.toLowerCase().endsWith(".ogg")) {
+			contentType = HttpHeaders.APPLICATION_OGG;
 		} else {
 			System.out.printf("Unrecognized file type (content type) for [%s], you might want to add it to %s\n",
 					f,
