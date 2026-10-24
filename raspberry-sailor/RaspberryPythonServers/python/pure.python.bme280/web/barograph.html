@@ -102,8 +102,8 @@
 		// A "FULL" one to get to the long-term-storage (for barograph)
 		events.subscribe(EVENT_FULL, function(val) {
 			// TODO Do it
-			const PRMSL_KEY = "pressure-map";  // As in the computer (long-trem-storage), see yaml.
-			const AIR_TEMP_KEY = "temperature-map"; // As in the computer (long-trem-storage), see yaml.
+			const PRMSL_KEY = "pressure-map";  // As in the computer (long-term-storage), see yaml.
+			const AIR_TEMP_KEY = "temperature-map"; // As in the computer (long-term-storage), see yaml.
 			let theMap = val[PRMSL_KEY];
 			if (theMap) {
 				if (VERBOSE) {
@@ -746,6 +746,9 @@
 							<div style="display: grid; grid-template-areas: 'left right'; grid-template-columns: 50% 50%;">
 								<div id="raw-data-prmsl" style="grid-area: left; max-height: 100px; overflow: scroll; border: 1px solid cyan; border-radius: 5px;" title="PRMSL Data">
 									<pre>Empty</pre>
+								</div>
+								<div id="raw-data-air-tremp" style="grid-area: right; max-height: 100px; overflow: scroll; border: 1px solid cyan; border-radius: 5px;" title="Air Temp Data">
+									<pre>No temperature data</pre>
 								</div>
 							</div>
 						</td>

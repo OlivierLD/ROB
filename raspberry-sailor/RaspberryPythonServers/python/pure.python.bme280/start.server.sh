@@ -6,17 +6,18 @@ VERBOSE=false
 STORE_RESTORE=false
 LOG_DB=false            # Do check the DB_OPTION in the python code, and below!
 DB_OPTION=REST          # Applied if LOG_DB is true. REST, SQLITE, or BOTH.
+HTTP_PORT=8080
 #
 echo -e "Starting server with I2C addr ${I2C_ADDR}, on ${IP_ADDR}, verbose=${VERBOSE}"
 #
 # Do not omit the '-u' to get the output in the log file !!
 #
-COMMAND="python3 -u REST_and_WEB_BME280_server.py --address:${I2C_ADDR} --verbose:${VERBOSE} --machine-name:${IP_ADDR} --store-restore:${STORE_RESTORE} --log-db:${LOG_DB} --db-option:${DB_OPTION}"
+COMMAND="python3 -u REST_and_WEB_BME280_server.py --address:${I2C_ADDR} --verbose:${VERBOSE} --machine-name:${IP_ADDR} --port:${HTTP_PORT} --store-restore:${STORE_RESTORE} --log-db:${LOG_DB} --db-option:${DB_OPTION}"
 echo "Executing: ${COMMAND}"
 nohup ${COMMAND} > bme.log 2>&1 &
 # nohup -u python3 REST_and_WEB_BME280_server.py --address:${I2C_ADDR} --verbose:${VERBOSE} --machine-name:${IP_ADDR} &
 PID=$!
 echo -e "Process [${PID}] on its way, on address ${IP_ADDR} !"
-echo -e "Default HTTP port: 8080"
-echo -e "Try curl -X GET http://${IP_ADDR}:8080/bme280/oplist"
-echo -e " or curl -X GET http://$(hostname).home:8080/bme280/oplist"
+echo -e "HTTP port: ${HTTP_PORT}"
+echo -e "Try curl -X GET http://${IP_ADDR}:${HTTP_PORT}/bme280/oplist"
+echo -e " or curl -X GET http://$(hostname).home:${HTTP_PORT}/bme280/oplist"

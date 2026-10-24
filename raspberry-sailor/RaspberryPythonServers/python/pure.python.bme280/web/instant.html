@@ -152,8 +152,8 @@
 		// A "FULL" one to get to the long-term-storage (for barograph)
 		events.subscribe(EVENT_FULL, function(val) {
 			// TODO Do it
-			const PRMSL_KEY = "pressure-map";  // As in the computer (long-trem-storage), see yaml.
-			const AIR_TEMP_KEY = "temperature-map"; // As in the computer (long-trem-storage), see yaml.
+			const PRMSL_KEY = "pressure-map";  // As in the computer (long-term-storage), see yaml.
+			const AIR_TEMP_KEY = "temperature-map"; // As in the computer (long-term-storage), see yaml.
 			let theMap = val[PRMSL_KEY];
 			if (theMap) {
 				if (VERBOSE) {
