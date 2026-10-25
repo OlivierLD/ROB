@@ -266,8 +266,8 @@ canvas {
 <body>
 
 <audio controls autoplay>
-    <source src="horse.ogg" type="audio/ogg">
     <source src="Star.Wars.mp3" type="audio/mpeg">
+    <!--source src="horse.ogg" type="audio/ogg"-->
     Your browser does not support the audio element.
 </audio>
 
@@ -402,6 +402,11 @@ canvas {
         <br/>
         <br/>
         <h2>Multiplexor NMEA</h2>
+        <!--div>
+            Spanish special characters: <br/>
+            &iexcl; &#161; &#xa1;<br/>
+            &iquest; &#191; &#xBF;
+        </div-->
         <h3>¡Bienvenido!</h3>
 
         <p>
@@ -454,6 +459,7 @@ let getQSPrm = (prm) => {
 	return value;
 };
 
+// Menu, et contenu
 let switchToFrench = () => {
   document.getElementById('fr-version').style.display = 'block';
   document.getElementById('en-version').style.display = 'none';
@@ -466,6 +472,7 @@ let switchToFrench = () => {
   document.getElementById('de-menu').style.display = 'none';
 };
 
+// Menú y contenido
 let switchToSpanish = () => {
   document.getElementById('fr-version').style.display = 'none';
   document.getElementById('en-version').style.display = 'none';
@@ -478,6 +485,7 @@ let switchToSpanish = () => {
   document.getElementById('de-menu').style.display = 'none';
 };
 
+// Menu, and content
 let switchToEnglish = () => {
   document.getElementById('fr-version').style.display = 'none';
   document.getElementById('en-version').style.display = 'block';
@@ -490,6 +498,7 @@ let switchToEnglish = () => {
   document.getElementById('de-menu').style.display = 'none';
 };
 
+// Menü und Inhalt
 let switchToGerman = () => {
   document.getElementById('fr-version').style.display = 'none';
   document.getElementById('en-version').style.display = 'none';
