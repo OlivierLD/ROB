@@ -28,6 +28,25 @@
 	<script type="text/javascript">
 
 	const VERBOSE = false;  // For debug...
+	let LANG = 'en'; // Default language
+
+	function getQSPrm(prm) {
+		let loc = document.location.toString();
+		if (loc.indexOf("?") > -1) {
+			let qs = loc.substring(loc.indexOf("?") + 1);
+			let prms = qs.split('&');
+			for (let i=0; i<prms.length; i++) {
+				let nv = prms[i].split('=');
+				if (nv.length === 2) {
+					if (nv[0] === prm) {
+						return nv[1];
+					}
+				}
+			}
+		}
+		return null;
+	}
+
 
 	let status = 'tick';
 
@@ -70,7 +89,8 @@
 		return `${year}-${month}-${day} ${time} UTC`;
 	};
 
-	const WEEK_DAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+	const WEEK_DAYS_EN = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+	const WEEK_DAYS_FR = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
 
 	function updateCalendar() {
 		// let d = document.getElementById('calendar-day-01').value;
@@ -81,12 +101,57 @@
 		let m = date.getMonth() + 1;
 		let d = date.getDate();
 
-		document.getElementById('calendar-01').value = d + '-' + m + '-' + y + '-' + WEEK_DAYS[date.getDay()];
+		document.getElementById('calendar-01').value = d + '-' + m + '-' + y + '-' + (LANG === 'fr' ? WEEK_DAYS_FR[date.getDay()] : WEEK_DAYS_EN[date.getDay()]);
 		document.getElementById('calendar-01').repaint();
 	}
 
+	function switchToFrench () {
+		LANG = 'fr';
+		document.getElementById('calendar-01').lang = 'fr';
+		document.getElementById('calendar-01').value = '01-01-1970-jeudi';
+		updateCalendar();
+		document.getElementById('big-title').innerText = 'Barographe';
+		document.getElementById('small-title').innerHTML = 'Cliquer sur le bouton <code style="color: orange;">Update Now</code> pour rafra&icirc;chir le graphique.';
+
+		document.getElementById('barograph-01').label = 'Barographe';
+	}
+
+	function switchToEnglish () {
+		LANG = 'en';
+		document.getElementById('calendar-01').lang = 'en';
+		document.getElementById('calendar-01').value = '01-01-1970-thursday';
+		updateCalendar();
+		document.getElementById('big-title').innerText = 'Barograph';
+		document.getElementById('small-title').innerHTML = 'Click the <code style="color: orange;">Update Now</code> button to refresh the graph.';
+
+		document.getElementById('barograph-01').label = 'Barograph';
+	}
 
 	window.onload = function() {
+
+		// 1 - lang QS parameter or browser language.
+		let userLang = getQSPrm('lang');
+		if (!userLang) {
+			let browserUserLang = navigator.language || navigator.userLanguage;
+			console.log("The browser's language is: " + browserUserLang);
+			if (browserUserLang) {
+				if (browserUserLang.substring(0, 2).toUpperCase() === 'FR') {
+					userLang = 'fr';
+					console.log("On va parler français.");
+				} else {
+					userLang = 'en';
+					console.log("We'll speak english");
+				}
+			}
+		}
+		if (userLang && userLang === 'fr') {
+			console.log('Switching to French');
+			switchToFrench();
+		} else {
+			console.log('Switching to English');
+			switchToEnglish();
+		}
+
 		// initAjax(false); // Continuously pings, a fetch() every 1 sec
 
 		// Subscribers here
@@ -686,10 +751,10 @@
 
 	<div style="margin-bottom: 10px; display: grid; grid-template-areas: 'left right'; grid-template-columns: 50% 50%; vertical-align: middle;">
 		<div id="left-01" style="display: flex; grid-area: left; float: left; place-items: center;">
-			<h1>Barograph</h1>
+			<h1 id="big-title">Barograph</h1>
 		</div>
 		<div id="right-01" style="grid-area: right; display: flex; justify-content: right; align-items: center;">
-			<span>Click the <code style="color: orange;">Update Now</code> button to refresh the graph.</span>
+			<span id="small-title">Click the <code style="color: orange;">Update Now</code> button to refresh the graph.</span>
 		</div>
 	</div>
 
@@ -702,7 +767,13 @@
 									  title="Last update"
 									  width="105"
 									  height="126"
-									  value="01-01-1970-thursday"></calendar-display>
+									  lang="en"
+									  value="01-01-1970-thursday">
+						<!--
+							lang="fr"
+							value="01-01-1970-jeudi"
+						-->
+					</calendar-display>
 
 					<table style="margin: auto; border: 1px solid silver; border-radius: 5px;">
 						<tr>

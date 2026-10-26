@@ -12,11 +12,17 @@ const calendarDefaultColorConfig = {
 	valueFont: 'Arial'
 };
 
-const MONTH_NAMES = [
+const MONTH_NAMES_EN = [
 	"January", "February", "March",
 	"April", "May", "June",
 	"July", "August", "September",
 	"October", "November", "December"
+];
+const MONTH_NAMES_FR = [
+	"janvier", "février", "mars",
+	"avril", "mai", "juin",
+	"juillet", "août", "septembre",
+	"octobre", "novembre", "décembre"
 ];
 
 /* global HTMLElement */
@@ -26,7 +32,8 @@ class CalendarDisplay extends HTMLElement {
 		return [
 			"width",        // Integer. Canvas width
 			"height",       // Integer. Canvas height
-			"value"         // String, DD-MM-YYYY
+			"value",        // String, DD-MM-YYYY
+			"lang"		    // String, language code for month names (default: en)
 		];
 	}
 
@@ -41,6 +48,7 @@ class CalendarDisplay extends HTMLElement {
 		this._value       = '01-01-2018';
 		this._width       = 150;
 		this._height      = 180;
+		this._lang        = 'en';
 
 		this._previousClassName = "";
 		this.calendarColorConfig = calendarDefaultColorConfig;
@@ -79,6 +87,9 @@ class CalendarDisplay extends HTMLElement {
 				break;
 			case "height":
 				this._height = parseInt(newVal);
+				break;
+			case "lang":
+				this._lang = newVal;
 				break;
 			default:
 				break;
@@ -241,7 +252,7 @@ class CalendarDisplay extends HTMLElement {
 		let month = parseInt(dateElem[1]) - 1;
 		context.fillStyle = this.calendarColorConfig.monthYearColor;
 		context.font = "bold " + Math.round(scale * 20) + "px " + this.calendarColorConfig.valueFont;
-		let monthVal = MONTH_NAMES[month];
+		let monthVal = (this._lang === 'fr') ? MONTH_NAMES_FR[month] : MONTH_NAMES_EN[month];
 		metrics = context.measureText(monthVal);
 		len = metrics.width;
 		context.fillText(monthVal, (this.canvas.width / 2) - (len / 2), this.canvas.height - (scale * 15));
