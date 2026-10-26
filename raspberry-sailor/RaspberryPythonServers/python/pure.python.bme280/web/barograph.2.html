@@ -398,6 +398,34 @@
 				return "";
 			}
         });
+
+        barograph.setHGridLabelsCallback(val => {
+            console.log(`HGridLabel: ${val}`);
+            // 0 to max, step 96
+			if (false && (val - startIdx) % 96 === 0) {
+				let i = (((val - startIdx) / 96) + firstWeekDayIdx) % 7;
+				let retVal = DAYS[i];
+				if (currentData) {
+					let keys = Object.keys(currentData);
+					if (keys.length > val) {
+						let theKey = keys[val];
+						if (theKey !== undefined) { // it's like "2023-11-12T05:37:48"
+							let month = parseInt(theKey.substring(5, 7)) - 1;
+							let day = theKey.substring(8, 10);
+							retVal = `${DAYS[i]} ${SHORT_MONTHS[month]} ${day}`;
+						} else {
+							console.log(`(Baro) startIdx: ${startIdx}, val: ${val}, keys: ${keys.length} => theKey is undefined.`);
+						}
+					} else {
+						// val beyond length. Managed.
+					}
+				}
+				return retVal;
+			} else {
+				return "";
+			}
+        });
+
 		// MouseMove on the graph
 		barograph.addEventListener('mousemove', evt => {
 			let theGraph = evt.target;
