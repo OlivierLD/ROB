@@ -1,5 +1,13 @@
 # Some use-cases
 
+> _**Note**_: We will be talking here about Raspberry Pi - and similar boards.  
+> The advantage(s) of the Raspberry Pi is that it just need a 5v power supply, and runs a clone of Linux (Debian, RasPiOS or so),
+> which is an OpenSource software.  
+> ---
+> _**BUT**_: If you have an "old laptop", that can run on a 12v adapter, and on which you can install
+> a Linux OS, the software presented here would work smoothly on a boat!  
+> Linux is not the only OS the software can run on, but this is out of the scope of this document. 
+
 The goal here is to present several use-cases, from the simplest (and cheapest) one, to more elaborated (and expensive) configurations.
 
 The "simplest" configuration would involve
@@ -55,5 +63,8 @@ machine-a [NMEA-multiplexer] $ ../../gradlew shadowJar -x :astro-computer:AstroC
 - A stronger configuration. Raspberry Pi 4B, GPS, screen, keyboard.... In a separate document, [here](./use_cases/USE_CASES_5.md).
 - This list is not closed - nor closeable.  
   Also see [here](https://hocus-blogus.blogspot.com/2021/01/several-configurations-for-raspberry-pi.html), several RPi configs...
+
+# 3D-printed enclosures
+Some are available from another [git repo](https://github.com/OlivierLD/3DPrinting/blob/master/OpenSCAD/RPiA%2BLogger/README.md) (open source again), and more!
 
 ---

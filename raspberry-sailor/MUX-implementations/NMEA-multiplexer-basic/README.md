@@ -147,6 +147,18 @@ To run it:
 $ ./to.prod.sh
 ```
 
+Several options are possible:
+```
+$ ./to.prod.sh --help
++----------------------------------------------------------------------------------------------------+
+|                          P A C K A G E   f o r   D I S T R I B U T I O N                           |
+| CLI options:                                                                                       |
+|    --help                                                                                          |
+|    --basic (default)                                                                               |
+| or --big                                                                                           |
++----------------------------------------------------------------------------------------------------+
+```
+
 Explanations on how to deploy the generated archive are given interactively by the script.  
 ⚠️ _**DO READ THEM !!!**_ ⚠️   
 And _do not hesitate_ to mess with the code !! 🪠
