@@ -361,6 +361,14 @@ public class StringParsersTest {
             }
         }
 
+        str = "$PYXDR,H,60.5,P,0,C,17.8,C,1,C,10.1,C,DEWP,H,9.2,P,ABS-HUM,P,1013.0044,B,4*50";
+        System.out.println("[" + str + "] is " + (StringParsers.validCheckSum(str) ? "" : "not ") + "valid.");
+        List<StringGenerator.XDRElement> xdrList = StringParsers.parseXDR(str);
+        for (StringGenerator.XDRElement x : xdrList) {
+            System.out.println(" => " + x.toString());
+        }
+
+
         // Invalid?
         str = "$WIXDR,C,008.0,C,,*5A"; // Returned by a ShipModul.
         System.out.println("[" + str + "] is " + (StringParsers.validCheckSum(str) ? "" : "not ") + "valid.");

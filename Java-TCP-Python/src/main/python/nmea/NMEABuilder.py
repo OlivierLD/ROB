@@ -225,3 +225,17 @@ if __name__ == '__main__':
     print(f"Generated HDM: {build_HDM(195.6)}")
 
     print(f"Generated HDG: {build_HDG(195.6)}")
+
+    air_temperature: float = 17.8197265625
+    rel_humidity: float = 60.510751612051756
+    pressure: float = 1013.0043840935177
+    dew_point: float = 10.089237308646501
+    abs_humidity: float = 9.19191312185008
+
+    print(f"Generated XDR: {xdr_sentence}")
+    xdr_sentence: str = build_XDR({"value": rel_humidity, "type": "HUMIDITY"},
+                                              {"value": air_temperature, "type": "TEMPERATURE"},
+                                              {"value": dew_point, "type": "TEMPERATURE", "extra": "DEWP"},
+                                              {"value": abs_humidity, "type": "HUMIDITY", "extra": "ABS-HUM"},
+                                              {"value": pressure, "type": "PRESSURE_B"})
+    print(f"Generated XDR: {xdr_sentence}")

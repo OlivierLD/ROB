@@ -29,9 +29,14 @@
 # Note: Default I2C address for a BME280 is 0x77 (one the sensor is connected, do a "sudo i2cdetect -y 1")
 # From some vendors (like AliBaba), it can sometime be 0x76, hence the --address: CLI parameter (see below).
 #
+import sys
+# Redundant with PYTHONPATH...
+sys.path.insert(0, "../../../../Java-TCP-Python/src/main/python/nmea")  # add Java-TCP-Python/src/main/python/nmea path to search list
+
+
 import json
 import signal
-import sys
+# import sys
 import os
 import traceback
 import time
