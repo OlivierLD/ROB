@@ -10,6 +10,8 @@ HTTP_PORT=8080
 #
 echo -e "Starting server with I2C addr ${I2C_ADDR}, on ${IP_ADDR}, verbose=${VERBOSE}"
 #
+export PYTHONPATH="../../Java-TCP-Python/src/main/python/nmea"
+#
 # Do not omit the '-u' to get the output in the log file !!
 #
 COMMAND="python3 -u REST_and_WEB_BME280_server.py --address:${I2C_ADDR} --verbose:${VERBOSE} --machine-name:${IP_ADDR} --port:${HTTP_PORT} --store-restore:${STORE_RESTORE} --log-db:${LOG_DB} --db-option:${DB_OPTION}"

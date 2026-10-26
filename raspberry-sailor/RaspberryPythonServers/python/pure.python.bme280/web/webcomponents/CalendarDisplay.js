@@ -297,4 +297,4 @@ class CalendarDisplay extends HTMLElement {
 }
 
 // Associate the tag and the class
-window.customElements.define(CALENDAR_TAG_NAME, CalendarDisplay);
+window.customElements.define(CALENDAR_TAG_NAME, CalendarDisplay);  // This is the end.

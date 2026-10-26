@@ -46,6 +46,7 @@ import busio
 from adafruit_bme280 import basic as adafruit_bme280   # pip3 install adafruit-circuitpython-bme280
 import sqlite3
 import requests
+import NMEABuilder # local script. See PYTHONPATH
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
@@ -229,6 +230,45 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     print("Error when sending error back to client (GET {}): {}".format(path, exception2))
             if oops:
                 print("After error, end of GET /data")
+        elif path == PATH_PREFIX + "/nmea-data":
+            oops: bool = False
+            if verbose:
+                print("NMEA Value request")
+            try:
+                air_temperature: float = instant_data["temperature"]
+                rel_humidity: float = instant_data["humidity"]
+                pressure: float = instant_data["pressure"]
+                dew_point: float = instant_data["dew-point"]
+                abs_humidity: float = instant_data["abs-hum"]
+
+                print(f"Generated XDR: {xdr_sentence}")
+                xdr_sentence: str = NMEABuilder.build_XDR({"value": rel_humidity, "type": "HUMIDITY"},
+                                        {"value": air_temperature, "type": "TEMPERATURE"},
+                                        {"value": dew_point, "type": "TEMPERATURE", "extra": "DEWP"},
+                                        {"value": abs_humidity, "type": "HUMIDITY", "extra": "ABS-HUM"},
+                                        {"value": pressure, "type": "PRESSURE_B"})
+                print(f"Generated XDR: {xdr_sentence}")
+                nmea_data: str = xdr_sentence
+
+                # defining all the headers
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/plain')
+                # self.send_header('Content-Type', 'application/json')
+                content_len = len(nmea_data)
+                self.send_header('Content-Length', str(content_len))
+                self.end_headers()
+                self.wfile.write(nmea_data.encode())
+            except Exception as exception:
+                error = {"message": "{}".format(exception)}
+                oops = True
+                try:
+                    self.wfile.write(json.dumps(error).encode())
+                    self.send_response(500)
+                except Exception as exception2:
+                    oops = True
+                    print("Error when sending error back to client (GET {}): {}".format(path, exception2))
+            if oops:
+                print("After error, end of GET /nmea-data")
         elif path == PATH_PREFIX + "/verbose":
             response = {
                 "verbose": verbose
@@ -263,6 +303,10 @@ class ServiceHandler(BaseHTTPRequestHandler):
                         "path": PATH_PREFIX + "/data",
                         "verb": "GET",
                         "description": "Get the JSON data, in JSON format."
+                    }, {
+                        "path": PATH_PREFIX + "/nmea-data",
+                        "verb": "GET",
+                        "description": "Get the pressure, rel humidity, dew-point, abs humidity data, in NMEA format."
                     }, {
                         "path": PATH_PREFIX + "/write",
                         "verb": "PUT",
