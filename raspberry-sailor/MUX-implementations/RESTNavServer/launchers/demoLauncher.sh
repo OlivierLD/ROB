@@ -116,6 +116,7 @@ URL_OPTION_15="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 # URL_OPTION_16="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_16="http://localhost:${HTTP_PORT}/web/ais/ais.102.html"
 URL_OPTION_16b="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
+URL_OPTION_17="http://localhost:${HTTP_PORT}/web/basic.html"
 #
 function openBrowser() {
   if [[ $(uname -s) == *Linux* ]]; then
@@ -223,6 +224,7 @@ while [[ "${GO}" == "true" ]]; do
     echo -e "|                                                                                         | ${RED}15${NC}. Retour Portugal, replay.                                                            |"
     echo -e "| ${RED}16${NC}. AIS Data and REST cache feeder (for simulator)                                      |                                                                                         |"
     echo -e "| ${RED}16b${NC}. Replay logged AIS Data and REST cache feeder (for simulator)                       |                                                                                         |"
+    echo -e "| ${RED}17${NC}. Reads data from a Python BME280 server                                              |                                                                                         |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
@@ -435,6 +437,11 @@ while [[ "${GO}" == "true" ]]; do
 	        PROP_FILE=mux-configs/nmea.mux.replay.ais.rest.yaml
 	        echo -e "For simulator"
 	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_16b}
+	        ;;
+	      "17")
+	        PROP_FILE=mux-configs/nmea.mux.rest.get.yaml
+	        echo -e "Reads BME280 data"
+	      	displayHelp ${HELP_ON} ${PROP_FILE} ${URL_OPTION_17}
 	        ;;
 	      "20")
 	      	echo -e "Uses a 'curl' to display the current data cache, using REST"
@@ -1314,6 +1321,35 @@ while [[ "${GO}" == "true" ]]; do
 		    echo -e ">>> Waiting for the server to start..."
 		    sleep 5 # Wait for the server to be operational
 		    openBrowser ${URL_OPTION_16b}
+		  else
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
+	    fi
+	    echo -e "Also use, ${RED}curl -ivX POST http://localhost:${HTTP_PORT}/mux/nmea-sentence -d \"\$XXRMC,...\"  ${NC} to feed the cache..."
+	    echo -e "Also check out http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
+	    echo -e "Ready for the simulator... See http://localhost:${HTTP_PORT}/web/simulator/simulator.html"
+	    GO=false
+	    ;;
+	  "17")
+	    # A way to define default position.
+	    DEFAULT_POS="-Ddefault.mux.latitude=37.75 -Ddefault.mux.longitude=-122.30" # San Francisco Bay
+	    export DEFAULT_POS
+  	  PROP_FILE=mux-configs/nmea.mux.rest.get.yaml
+	    echo -e "Launching Nav Server with ${PROP_FILE}"
+      # Ask to launch a browser in interactive mode (and not provided already)
+      # echo -e ">> Options: INTERACTIVE=[${INTERACTIVE}], LAUNCH_BROWSER=[${LAUNCH_BROWSER}], LNCH_BRWSR_PROVIDED=[${LNCH_BRWSR_PROVIDED}]"
+      if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LNCH_BRWSR_PROVIDED}" == "N" ]]; then
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+      fi
+	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
+	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
+		    echo -e ">>> Waiting for the server to start..."
+		    sleep 5 # Wait for the server to be operational
+		    openBrowser ${URL_OPTION_17}
 		  else
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi

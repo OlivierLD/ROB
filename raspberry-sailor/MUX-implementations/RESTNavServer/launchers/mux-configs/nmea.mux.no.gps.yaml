@@ -6,7 +6,7 @@
 #
 name: "No GPS, using ZDA"
 description:
-  - Can be used for tests
+  - Can be used for tests or demo
   - Requires python REST_BasicCacheForwarder_server.py --machine-name:localhost --port:1234 --verbose:true
   - Can test several kinds of channels, forwarders, and computers...
 context:
@@ -32,7 +32,7 @@ channels:
     description: "This is a REST consumer (aka channel)"
     active: false  # Not Active
     verbose: false
-  - class: nmea.consumers.client.RandomMTWClient   # This is for debugging. Random Water Temperature and others
+  - class: nmea.consumers.client.RandomMTWClient   # This is for demo and debugging. Random Water Temperature and others
     reader: nmea.consumers.reader.RandomMTWReader
     verbose: false
     active: true
