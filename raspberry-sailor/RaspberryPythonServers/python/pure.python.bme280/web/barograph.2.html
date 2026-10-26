@@ -256,7 +256,8 @@
 				// 2 - Prepare the data, in their expected shape
 				// For day names, look for setVGridLabelsCallback
 
-				let mini = graphMini, maxi = graphMaxi;
+				let mini = graphMini,
+				    maxi = graphMaxi;
 
 				let valLabel = // "0:45"; // One label every 45 points
 							// `${startIdx}:96`;  // "0:96"; // One label every 96 point (24 * 4 = 96 : every day). See setVGridLabelsCallback function.
@@ -327,7 +328,7 @@
 
 				datagraph.data = {
 					withGrid: true,
-					withXLabels: false,
+					withXLabels: true, // false,
 					withYLabels: true,
 					thickX: thickX,
 					thickY: 0,
@@ -349,7 +350,7 @@
 				datagraph.value = 'null';
 
 				datagraph.data.withXLabels = true;
-				datagraph.data.withYLabels = false;
+				datagraph.data.withYLabels = true; // false;
 				datagraph.vgrid = valLabel;
 				datagraph.label = graphLabel + minMaxLabel;
 				if (nbPts > 0) {
@@ -372,7 +373,7 @@
 		};
 
 		let barograph = document.getElementById('barograph-01');
-		barograph.setVGridLabelsCallback(val => {
+		barograph.setVGridLabelsCallback(val => {   // Date
             // console.log(`VGridLabel: ${val}`);
             // 0 to max, step 96
 			if ((val - startIdx) % 96 === 0) {
@@ -399,27 +400,11 @@
 			}
         });
 
-        barograph.setHGridLabelsCallback(val => {
+        barograph.setHGridLabelsCallback(val => {  // hPa
             console.log(`HGridLabel: ${val}`);
             // 0 to max, step 96
-			if (false && (val - startIdx) % 96 === 0) {
-				let i = (((val - startIdx) / 96) + firstWeekDayIdx) % 7;
-				let retVal = DAYS[i];
-				if (currentData) {
-					let keys = Object.keys(currentData);
-					if (keys.length > val) {
-						let theKey = keys[val];
-						if (theKey !== undefined) { // it's like "2023-11-12T05:37:48"
-							let month = parseInt(theKey.substring(5, 7)) - 1;
-							let day = theKey.substring(8, 10);
-							retVal = `${DAYS[i]} ${SHORT_MONTHS[month]} ${day}`;
-						} else {
-							console.log(`(Baro) startIdx: ${startIdx}, val: ${val}, keys: ${keys.length} => theKey is undefined.`);
-						}
-					} else {
-						// val beyond length. Managed.
-					}
-				}
+			if (true) {
+				retVal = `${val} hPa`;
 				return retVal;
 			} else {
 				return "";
