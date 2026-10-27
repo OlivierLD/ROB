@@ -20,7 +20,7 @@ channels:
   - type: rest           # Pings the Python REST Server. Verb is GET.
     protocol: http
     # machine-name: localhost
-    machine-name: 192.168.1.15
+    machine-name: 192.168.1.22
     http-port: 8080
     query-path: /bme280/data  # This will be a GET on the python server mentioned above.
     # query-string:      # Would include the ?, and subsequent &...

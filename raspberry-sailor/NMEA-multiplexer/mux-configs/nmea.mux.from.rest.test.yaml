@@ -4,7 +4,7 @@
 name: "Test for the REST Consumer."
 description:
   - Requires the Python server to be running
-  - python3 src/main/python/REST_BME280_server.py --port:8080 --host:192.168.1.105
+  - python3 src/main/python/REST_BME280_server.py --port:8080 --host:192.168.1.22
 context:
   with.http.server: true
   http.port: 9991
@@ -15,7 +15,7 @@ channels:
 #  - type: zda
   - type: rest           # A test of the rest consumer.
     protocol: http
-    machine-name: 192.168.1.105
+    machine-name: 192.168.1.22
     http-port: 8080
     query-path: /bme280/nmea-data
     # query-string:      # Would include the ?, and subsequent &...
