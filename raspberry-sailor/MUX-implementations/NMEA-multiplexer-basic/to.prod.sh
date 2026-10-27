@@ -7,9 +7,9 @@
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e "|                          P A C K A G E   f o r   D I S T R I B U T I O N                           |"
 echo -e "| CLI options:                                                                                       |"
-echo -e "|    --help                                                                                          |"
-echo -e "|    --basic (default)                                                                               |"
-echo -e "| or --big                                                                                           |"
+echo -e "|    --help  (guess what)                                                                            |"
+echo -e "|    --basic (default, just Nav Server)                                                              |"
+echo -e "| or --big   (all REST Services, including tide, astro, etc. But no Almanac publication)             |"
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e "| This is an EXAMPLE showing how to generate a 'production' version, without having the full github  |"
 echo -e "| repo on the destination machine. We will deploy only what is needed to run the NMEA Multiplexer,   |"
@@ -40,19 +40,26 @@ if [[ $# -gt 0 ]]; then
       echo -e "Unmanaged CLI parameter ${1}"
     fi
     echo -e "Managed parameters are:"
-    echo -e "$0 --basic (default)"
-    echo -e "$0 --big"
-    echo -e "$0 --help"
+    echo -e "$0 --basic (default, just Nav Server)"
+    echo -e "$0 --big   (all REST Services, including tide, astro, etc. But no Almanac publication)"
+    echo -e "$0 --help  (guess what)"
     exit 1
   fi
 else
-  echo -e "+-----------------------+"
-  echo -e "| CLI options:          |"
-  echo -e "|    --help             |"
-  echo -e "|    --basic (default)  |"
-  echo -e "| or --big              |"
-  echo -e "+------------------------"
+  if [[ 1 == 0 ]]; then
+    echo -e "+----------------------------------------------------------------------------------------+"
+    echo -e "| CLI options:                                                                           |"
+    echo -e "|    --help  (guess what)                                                                |"
+    echo -e "|    --basic (default, just Nav Server)                                                  |"
+    echo -e "| or --big   (all REST Services, including tide, astro, etc. But no Almanac publication) |"
+    echo -e "+----------------------------------------------------------------------------------------+"
+    echo -e "We will you ${OPTION}."
+    echo -e "------------------------------------"
+  fi
 fi
+#
+echo -e "We will you ${OPTION}."
+echo -e "------------------------------------"
 #
 # 1 - Build
 #
