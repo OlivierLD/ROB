@@ -246,7 +246,6 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 dew_point: float = instant_data["dew-point"]
                 abs_humidity: float = instant_data["abs-hum"]
 
-                print(f"Generated XDR: {xdr_sentence}")
                 xdr_sentence: str = NMEABuilder.build_XDR({"value": rel_humidity, "type": "HUMIDITY"},
                                         {"value": air_temperature, "type": "TEMPERATURE"},
                                         {"value": dew_point, "type": "TEMPERATURE", "extra": "DEWP"},
