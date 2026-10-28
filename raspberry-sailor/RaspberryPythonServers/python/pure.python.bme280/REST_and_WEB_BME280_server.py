@@ -51,7 +51,7 @@ import busio
 from adafruit_bme280 import basic as adafruit_bme280   # pip3 install adafruit-circuitpython-bme280
 import sqlite3
 import requests
-import NMEABuilder # local script. See PYTHONPATH
+import NMEABuilder       # local script. See PYTHONPATH..., or sys.path.insert above.
 
 __version__ = "0.0.1"
 __repo__ = "https://github.com/OlivierLD/ROB"
@@ -97,25 +97,25 @@ sample_data: Dict[str, str] = {  # Used for VIEW (and non-implemented) operation
     "4": "Fourth"
 }
 
-BINARY = "application/octet-stream"
-TEXT_PLAIN = "text/plain"
-TEXT_PLAIN_UTF8 = "text/plain; charset=utf-8"
-TEXT_PLAIN_ISO_8859 = "text/plain; charset=ISO-8859-1"
-TEXT_HTML = "text/html"
-TEXT_XML = "text/xml"
-APPLICATION_JSON = "application/json"
-TEXT_JAVASCRIPT = "text/javascript"
-TEXT_CSS = "text/css"
-IMAGE_X_ICON = "image/x-icon"
-IMAGE_PNG = "image/png"
-IMAGE_GIF = "image/gif"
-IMAGE_JPEG = "image/jpeg"
-IMAGE_SVG_XML = "image/svg+xml"
-APPLICATION_X_FONT_WOFF = "application/x-font-woff"
-AUDIO_WAV = "audio/wav"
-APPLICATION_PDF = "application/pdf"
-APPLICATION_X_FONT_TTF = "application/x-font-ttf"
-# ... and more to come!
+BINARY: str = "application/octet-stream"
+TEXT_PLAIN: str = "text/plain"
+TEXT_PLAIN_UTF8: str = "text/plain; charset=utf-8"
+TEXT_PLAIN_ISO_8859: str = "text/plain; charset=ISO-8859-1"
+TEXT_HTML: str = "text/html"
+TEXT_XML: str = "text/xml"
+APPLICATION_JSON: str = "application/json"
+TEXT_JAVASCRIPT: str = "text/javascript"
+TEXT_CSS: str = "text/css"
+IMAGE_X_ICON: str = "image/x-icon"
+IMAGE_PNG: str = "image/png"
+IMAGE_GIF: str = "image/gif"
+IMAGE_JPEG: str = "image/jpeg"
+IMAGE_SVG_XML: str = "image/svg+xml"
+APPLICATION_X_FONT_WOFF: str = "application/x-font-woff"
+AUDIO_WAV: str = "audio/wav"
+APPLICATION_PDF: str = "application/pdf"
+APPLICATION_X_FONT_TTF: str = "application/x-font-ttf"
+# ... and more to come, as needed!
 
 
 def get_file_extension_os(url: str) -> str:
@@ -168,7 +168,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
     # sets basic headers for the server
     def _set_headers(self):
         self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
+        self.send_header('Content-Type', APPLICATION_JSON)
         # reads the length of the Headers
         length = int(self.headers['Content-Length'])
         # reads the contents of the request
@@ -218,8 +218,8 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 json_data: str = json.dumps(full_data)
                 # defining all the headers
                 self.send_response(200)
-                # self.send_header('Content-Type', 'text/plain')
-                self.send_header('Content-Type', 'application/json')
+                # self.send_header('Content-Type', TEXT_PLAIN)
+                self.send_header('Content-Type', APPLICATION_JSON)
                 content_len = len(json_data)
                 self.send_header('Content-Length', str(content_len))
                 self.end_headers()
@@ -246,18 +246,18 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 dew_point: float = instant_data["dew-point"]
                 abs_humidity: float = instant_data["abs-hum"]
 
-                xdr_sentence: str = NMEABuilder.build_XDR({"value": rel_humidity, "type": "HUMIDITY"},
-                                        {"value": air_temperature, "type": "TEMPERATURE"},
-                                        {"value": dew_point, "type": "TEMPERATURE", "extra": "DEWP"},
-                                        {"value": abs_humidity, "type": "HUMIDITY", "extra": "ABS-HUM"},
-                                        {"value": pressure, "type": "PRESSURE_B"}) + NMEABuilder.NMEA_EOS
+                xdr_sentence: str = NMEABuilder.build_XDR({"value": rel_humidity,     "type": "HUMIDITY"},
+                                                          {"value": air_temperature,  "type": "TEMPERATURE"},
+                                                          {"value": dew_point,        "type": "TEMPERATURE", "extra": "DEWP"},
+                                                          {"value": abs_humidity,     "type": "HUMIDITY",    "extra": "ABS-HUM"},
+                                                          {"value": pressure / 1_000, "type": "PRESSURE_B"}) + NMEABuilder.NMEA_EOS
                 print(f"Generated XDR: {xdr_sentence}")
                 nmea_data: str = xdr_sentence
 
                 # defining all the headers
                 self.send_response(200)
-                self.send_header('Content-Type', 'text/plain')
-                # self.send_header('Content-Type', 'application/json')
+                self.send_header('Content-Type', TEXT_PLAIN)
+                # self.send_header('Content-Type', APPLICATION_JSON)
                 content_len = len(nmea_data)
                 self.send_header('Content-Length', str(content_len))
                 self.end_headers()
@@ -286,10 +286,10 @@ class ServiceHandler(BaseHTTPRequestHandler):
 
                 nmea_mta: str = NMEABuilder.build_MTA(air_temperature) + NMEABuilder.NMEA_EOS
                 nmea_mmb: str = NMEABuilder.build_MMB(pressure) + NMEABuilder.NMEA_EOS
-                nmea_xdr: str = NMEABuilder.build_XDR({"value": rel_humidity, "type": "HUMIDITY"},
-                                                      {"value": air_temperature, "type": "TEMPERATURE"},
-                                                      {"value": dew_point, "type": "TEMPERATURE", "extra": "DEWP"},
-                                                      {"value": pressure * 100, "type": "PRESSURE_P"},
+                nmea_xdr: str = NMEABuilder.build_XDR({"value": rel_humidity,     "type": "HUMIDITY"},
+                                                      {"value": air_temperature,  "type": "TEMPERATURE"},
+                                                      {"value": dew_point,        "type": "TEMPERATURE", "extra": "DEWP"},
+                                                      {"value": pressure * 100,   "type": "PRESSURE_P"},
                                                       {"value": pressure / 1_000, "type": "PRESSURE_B"}) + NMEABuilder.NMEA_EOS
                 json_nmea_data: Dict[str, str] = {
                     "01": nmea_mta,
@@ -299,8 +299,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 nmea_data = json.dumps(json_nmea_data)
                 # defining all the headers
                 self.send_response(200)
-                self.send_header('Content-Type', 'text/plain')
-                # self.send_header('Content-Type', 'application/json')
+                self.send_header('Content-Type', APPLICATION_JSON)
                 content_len = len(nmea_data)
                 self.send_header('Content-Length', str(content_len))
                 self.end_headers()
@@ -323,7 +322,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             response_content = json.dumps(response).encode()
             self.send_response(200)
             # defining the response headers
-            self.send_header('Content-Type', 'application/json')
+            self.send_header('Content-Type', APPLICATION_JSON)
             content_len = len(response_content)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -362,13 +361,13 @@ class ServiceHandler(BaseHTTPRequestHandler):
                     }, {
                         "path": PATH_PREFIX + "/write",
                         "verb": "PUT",
-                        "description": "Write the JSON data to files, in JSON format."
+                        "description": "Write the JSON maps to files, in JSON format. 'pressure.json' and 'temperature.json'"
                     }]
             }
             response_content = json.dumps(response).encode()
             self.send_response(200)
             # defining the response headers
-            self.send_header('Content-Type', 'application/json')
+            self.send_header('Content-Type', APPLICATION_JSON)
             content_len = len(response_content)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -393,7 +392,6 @@ class ServiceHandler(BaseHTTPRequestHandler):
             if verbose:
                 origin: str = "web.zip" if from_archive else "web folder"
                 print(f"Loading static resource [{static_resource}] from {origin}, binary: {binary}")
-
 
             # Content type based on file extension
             if not from_archive:
@@ -431,7 +429,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 print("GET on {} not managed".format(self.path))
             error = "NOT FOUND!"
             self.send_response(400)
-            self.send_header('Content-Type', 'text/plain')
+            self.send_header('Content-Type', TEXT_PLAIN)
             content_len = len(error)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -451,7 +449,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
         else:
             error = "{} Not found in sample_data\n".format(temp)
             self.send_response(404)
-            self.send_header('Content-Type', 'text/plain')
+            self.send_header('Content-Type', TEXT_PLAIN)
             content_len = len(error)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -471,7 +469,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             response = {"status": "OK"}
             response_content = json.dumps(response).encode()
             self.send_response(201)
-            self.send_header('Content-Type', 'application/json')
+            self.send_header('Content-Type', APPLICATION_JSON)
             content_len = len(response_content)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -483,9 +481,9 @@ class ServiceHandler(BaseHTTPRequestHandler):
             print(">>>>> Server received POST /verbose")
             # Find true or false
             full_path: str = self.path
-            status: str = 'true'
+            status: str = 'true'  # Default value
             two_parts: list = full_path.split("?")
-            if len(two_parts) > 1: # is if there is query string
+            if len(two_parts) > 1: # ie if there is query string
                 query_string = two_parts[1]
                 # print(f"Full QueryString: {query_string}")
                 qs_params: list = query_string.split('&')
@@ -510,7 +508,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             response = {"status": "OK"}
             response_content = json.dumps(response).encode()
             self.send_response(201)
-            self.send_header('Content-Type', 'application/json')
+            self.send_header('Content-Type', APPLICATION_JSON)
             content_len = len(response_content)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -519,7 +517,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             print("POST on {} not managed".format(self.path))
             error = "NOT FOUND!"
             self.send_response(404)
-            self.send_header('Content-Type', 'text/plain')
+            self.send_header('Content-Type', TEXT_PLAIN)
             content_len = len(error)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -540,7 +538,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 response = {"status": "OK"}
                 response_content = json.dumps(response).encode()
                 self.send_response(201)
-                self.send_header('Content-Type', 'application/json')
+                self.send_header('Content-Type', APPLICATION_JSON)
                 content_len = len(response_content)
                 self.send_header('Content-Length', str(content_len))
                 self.end_headers()
@@ -549,7 +547,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
                 response = {"status": "{}".format(exception)}
                 response_content = json.dumps(response).encode()
                 self.send_response(401)
-                self.send_header('Content-Type', 'application/json')
+                self.send_header('Content-Type', APPLICATION_JSON)
                 content_len = len(response_content)
                 self.send_header('Content-Length', str(content_len))
                 self.end_headers()
@@ -558,7 +556,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             print("PUT on {} not managed".format(self.path))
             error = "NOT FOUND!"
             self.send_response(404)
-            self.send_header('Content-Type', 'text/plain')
+            self.send_header('Content-Type', TEXT_PLAIN)
             content_len = len(error)
             self.send_header('Content-Length', str(content_len))
             self.end_headers()
@@ -571,7 +569,7 @@ class ServiceHandler(BaseHTTPRequestHandler):
             print("DELETE on {} not managed".format(self.path))
         error = "NOT FOUND!"
         self.send_response(400)
-        self.send_header('Content-Type', 'text/plain')
+        self.send_header('Content-Type', TEXT_PLAIN)
         content_len = len(error)
         self.send_header('Content-Length', str(content_len))
         self.end_headers()
