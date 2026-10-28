@@ -11,6 +11,8 @@ CYAN="\033[1;36m"                  # Cyan and bold
 BOLD_GREEN_BLINK='\033[0;32;1;5m'  # Green, bold, blink.
 NC='\033[0m'                       # Back to No Color
 #
+HOME_DIR=~/nmea-dist
+#
 display_help ( ) {
   echo -e "--------- H E L P -----------------------------------------------------"
   echo -e "Managed CLI parameters for ${0} are:"
@@ -47,7 +49,7 @@ display_usage ( ) {
 }
 #
 echo -e "${RED}Warning !! Make sure this is matching the one in rc.local !!${NC}"
-echo -e "           Assuming we're working from ~pi/nmea-dist"
+echo -e "           Assuming we're working from ${HOME_DIR}"
 #
 # Can be EINK2-13, SSD1306, or BME280-SSD (BME280 + SSD1306), NAV-SERVER, or TEST
 OPTION=EINK2-13        # Default value
@@ -86,21 +88,21 @@ echo -e "Step 1 - Starting the Python server(s), on ${MACHINE_NAME}"
 if [[ "${OPTION}" == "BME280-SSD" ]]; then
   # Start the REST Server for BME280
   echo -e "1 - Starting the BME280 REST server, port 9876, log is bme280.python.log"
-  ~pi/nmea-dist/python/scripts/start.BME280.REST.server.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:9876 --verbose:false > ~pi/nmea-dist/bme280.python.log 2>&1
+  ${HOME_DIR}/python/scripts/start.BME280.REST.server.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:9876 --verbose:false > ${HOME_DIR}/bme280.python.log 2>&1
   sleep 10
   # Start the REST Server for SSD1306 (v2)
   echo -e "2 - Starting the SSD1306 (v2) REST server, port 8080, log is ssd1306.python.log"
-  ~pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,ATM,ATP,PRM,HUM,NET,COG_G --screen-saver:on --delay:60 --rotate:false > ~pi/nmea-dist/ssd1306.python.log 2>&1
+  ${HOME_DIR}/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,ATM,ATP,PRM,HUM,NET,COG_G --screen-saver:on --delay:60 --rotate:false > ${HOME_DIR}/ssd1306.python.log 2>&1
   sleep 10
 elif [[ "${OPTION}" == "EINK2-13" ]]; then
   # Start the REST Server for EINK2-13
   echo -e "1 - Starting the EINK2-13 REST server, port 8080, log is eink2-13.python.log"
-  ~pi/nmea-dist/python/scripts/start.EINK2-13.REST.server.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --data:NAV,POS,SOG,COG --screen-saver:on > ~pi/nmea-dist/eink2-13.python.log 2>&1
+  ${HOME_DIR}/python/scripts/start.EINK2-13.REST.server.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --data:NAV,POS,SOG,COG --screen-saver:on > ${HOME_DIR}/eink2-13.python.log 2>&1
   sleep 10
 elif [[ "${OPTION}" == "SSD1306" ]]; then
   # Start the REST Server for SSD1306 (v2)
   echo -e "1 - Starting the SSD1306 (v2) REST server, port 8080, log is ssd1306.python.log"
-  ~pi/nmea-dist/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,NET,COG_G --screen-saver:on --delay:60 --rotate:true > ~pi/nmea-dist/ssd1306.python.log 2>&1
+  ${HOME_DIR}/python/scripts/start.SSD1306.REST.server.v2.sh --interactive:false  --machine-name:${MACHINE_NAME} --port:8080 --verbose:false --verbose-2:false --height:64 --wiring:SPI --data:NAV,POS,SOG,COG,NET,COG_G --screen-saver:on --delay:60 --rotate:true > ${HOME_DIR}/ssd1306.python.log 2>&1
   sleep 10
 elif [[ "${OPTION}" == "NAV-SERVER" ]]; then
   echo -e "No python server to be started for NAV-SERVER option"
@@ -113,8 +115,9 @@ else
   exit 1
 fi
 # Start the MUX
-echo -e "Step 2 - Starting the MUX, from ~pi/nmea-dist"
-cd ~pi/nmea-dist
+echo -e "Step 2 - Starting the MUX, from ${HOME_DIR}"
+# cd ~pi/nmea-dist
+cd ${HOME_DIR}
 rm nohup.out 2> /dev/null
 
 # TODO An interactive option ?
