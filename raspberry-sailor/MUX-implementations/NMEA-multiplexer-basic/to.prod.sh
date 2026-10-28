@@ -58,7 +58,7 @@ else
   fi
 fi
 #
-echo -e "We will you ${OPTION}."
+echo -e "We will use ${OPTION}."
 echo -e "------------------------------------"
 #
 # 1 - Build
@@ -199,6 +199,9 @@ if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
   rm -rf ${distdir}
 else
   echo -e "OK. This will be your responsibility to clean it up."
+  echo -e "To test the distrib, from ${distdir}, you can run:"
+  echo -e "./mux.sh nmea.mux.basics.yaml "
+  echo -e "- Use Ctrl+C to stop it."
 fi
 #
 # 5 - Ready!
