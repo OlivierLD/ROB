@@ -33,7 +33,6 @@ import sys
 # Redundant with PYTHONPATH...
 sys.path.insert(0, "../../../../Java-TCP-Python/src/main/python/nmea")  # add Java-TCP-Python/src/main/python/nmea path to search list
 
-
 import json
 import signal
 # import sys

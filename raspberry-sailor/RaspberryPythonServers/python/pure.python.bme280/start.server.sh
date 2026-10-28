@@ -3,7 +3,7 @@ IP_ADDR=$(hostname -I | awk '{ print $1 }')
 #
 I2C_ADDR=0x76          # Can be 0x77 also...
 VERBOSE=false
-STORE_RESTORE=false
+STORE_RESTORE=true      # true, for dev...
 LOG_DB=false            # Do check the DB_OPTION in the python code, and below!
 DB_OPTION=REST          # Applied if LOG_DB is true. REST, SQLITE, or BOTH.
 HTTP_PORT=8080

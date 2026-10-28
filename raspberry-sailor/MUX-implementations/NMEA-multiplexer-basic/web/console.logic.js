@@ -692,6 +692,236 @@ function getLHA(gha, longitude) {
 let sunAltitude = -90;
 let moonSunData = [];
 
+// XMLNS Required.
+const XMLNS = "http://www.w3.org/2000/svg";
+
+/**
+ * Draw an arrow, using SVG
+ *
+ * @param divId ID of the div to draw the arrow in
+ * @param dir Direction to represent in degrees, number [0..360], or object { value: number, label: 'string' }.
+ *            label would be like "ENE" when dir is 67.5, for example.
+ * @param force Optional. Used for wind (Beaufort)
+ * @returns {{svgContent: SVGSVGElement, x: number, y: number}} if divId is undefined.
+ */
+let drawArrow = (divId, dir, body) => {
+    let label = '';
+    let fillColor = 'white';
+    let direction;  // = dir; //  + 180;
+    if (typeof(dir) === 'number') {
+        direction = dir - 180;
+        label += `${body} Z: ${dir.toFixed(1)}°`
+    } else {
+        try {
+            direction = dir.value;
+            label += dir.label;
+        } catch (oops) {
+            console.log('Akeu what?')
+            direction = 0;
+        }
+    }
+    let title = null;
+    direction = -direction;
+
+    let parent = (divId !== null) ? document.getElementById(divId) : null;
+    if (title !== null && parent !== null) {
+        parent.setAttribute('title', title);
+
+    }
+    let svg = document.createElementNS(XMLNS, 'svg');
+    // svg.setAttribute('xmlns', xmlns);
+    svg.setAttributeNS(null, 'width', FRAME_WIDTH.toString());
+    svg.setAttributeNS(null, 'height', FRAME_HEIGHT.toString());
+    svg.setAttribute('style', 'background-color: transparent; border-radius: 10px; border: 2px solid rgba(128, 128, 128, 0.25);');
+
+    if (parent !== null) {
+        parent.appendChild(svg);
+    }
+
+    let circle = document.createElementNS(XMLNS, 'circle');
+    circle.setAttributeNS(null, 'cx', (FRAME_WIDTH / 2).toString());
+    circle.setAttributeNS(null, 'cy', (FRAME_HEIGHT / 2).toString());
+    circle.setAttributeNS(null, 'r', '40');
+    circle.setAttributeNS(null, 'stroke', 'rgba(255, 255, 2550, 0.35)');
+    circle.setAttributeNS(null, 'stroke-width', '4');
+    circle.setAttributeNS(null, 'fill', 'rgba(0, 0, 128, 0.15)');
+    svg.appendChild(circle);
+
+    let polygon = document.createElementNS(XMLNS, 'polygon');
+    polygon.setAttribute('style', `fill: ${fillColor}; stroke: rgba(0, 0, 0, 0.35); stroke-width: 2;`);
+
+    let headX = (FRAME_WIDTH / 2) + (60 * Math.sin(Math.toRadians(direction)));
+    let headY = (FRAME_HEIGHT / 2) + (60 * Math.cos(Math.toRadians(direction)));
+    let arrow = [{
+        // head
+        x: headX,
+        y: headY
+    }, {
+        // tail - left
+        x: (FRAME_WIDTH / 2) - (60 * Math.sin(Math.toRadians(direction + 10))),
+        y: (FRAME_HEIGHT / 2) - (60 * Math.cos(Math.toRadians(direction + 10)))
+    }, {
+        // tail - center
+        x: (FRAME_WIDTH / 2) - (55 * Math.sin(Math.toRadians(direction))),
+        y: (FRAME_HEIGHT / 2) - (55 * Math.cos(Math.toRadians(direction)))
+    }, {
+        // tail - right
+        x: (FRAME_WIDTH / 2) - (60 * Math.sin(Math.toRadians(direction - 10))),
+        y: (FRAME_HEIGHT / 2) - (60 * Math.cos(Math.toRadians(direction - 10)))
+    }];
+    // Draw polygon points here
+    let points = ""; // `${head.x.toFixed(0)},${head.y.toFixed(0)} ${tailRight.x.toFixed(0)},${tailRight.y.toFixed(0)} ${tail.x.toFixed(0)},${tail.y.toFixed(0)} ${tailLeft.x.toFixed(0)},${tailLeft.y.toFixed(0)}`;
+    arrow.forEach(pt => {
+        points += `${pt.x.toFixed(0)},${pt.y.toFixed(0)} `;
+    });
+    // console.log('Points:' + points.trim());
+    try {
+        polygon.setAttributeNS(null, 'points', points.trim());
+        svg.appendChild(polygon);
+    } catch (err) {
+        console.log(`Oops: ${JSON.stringify(err)}`);
+    }
+
+    let text = document.createElementNS(XMLNS, 'text');
+    text.setAttributeNS(null, 'x', '10');
+    text.setAttributeNS(null, 'y', '25');
+    text.setAttributeNS(null, 'font-size', '16');
+    text.setAttributeNS(null, 'font-weight', 'bold');
+    text.setAttributeNS(null, 'font-family', "'Helvetica Neue', 'Lato', Verdana, Helvetica, Geneva, sans-serif;");
+    text.setAttributeNS(null, 'fill', 'rgba(255, 244, 255, 0.75)');
+    text.appendChild(document.createTextNode(`${label}`));
+    svg.appendChild(text);
+
+    if (parent !== null && DEBUG) {
+        console.log(parent.innerHTML);
+    }
+    //debugger;
+    let svgContent = {x: headX, y: headY, svgContent: svg};
+    if (divId !== undefined) {
+        let svgDiv = document.getElementById(divId);
+        // It's a replace, remove first.
+        let content = svgDiv.firstElementChild;
+        if (content !== null && content !== undefined) {
+            svgDiv.removeChild(content);
+        }
+        svgDiv.appendChild(svg);
+    } else {
+        return svgContent;
+    }
+};
+
+// SVG widget for the Sun's altitude.
+let drawElevation = (divId, elev, color, circleColor) => { // colors in hex, like #ffff00
+    // console.log(`Sun Elevation: ${elev.toFixed(2)}`);
+    // document.getElementById(divId).innerHTML = `Sun Elevation: ${elev.toFixed(2)}&deg;`;
+    let fillColor = 'rgba(255, 255, 255, 0.5)';
+    let parent = (divId !== null) ? document.getElementById(divId) : null;
+
+    let svg = document.createElementNS(XMLNS, 'svg');
+    // svg.setAttribute('xmlns', xmlns);
+    svg.setAttributeNS(null, 'width', FRAME_WIDTH.toString());
+    svg.setAttributeNS(null, 'height', FRAME_HEIGHT.toString());
+    svg.setAttribute('style', 'background-color: transparent; border-radius: 10px; border: 2px solid rgba(128, 128, 128, 0.25);');
+
+    if (parent !== null) {
+        parent.appendChild(svg);
+    }
+
+    // Arc
+    /*
+    <path d="M150 0 L75 200 L225 200 Z" />
+        */
+    let path = document.createElementNS(XMLNS, 'path');
+    path.setAttribute('style', `fill: ${fillColor}; stroke: rgba(128, 128, 128, 0.5); stroke-width: 2;`);
+    let pathDef = `M5,10 A30,30 0 0,1 5,${FRAME_HEIGHT - 10}`;
+    //              |                 |
+    //              |                 To 5,XX
+    //              From 5,10
+    path.setAttribute('d', pathDef);
+    svg.appendChild(path);
+
+    // Horizontal
+    let horizon = document.createElementNS(XMLNS, 'path');
+    horizon.setAttribute('style', `fill: ${fillColor}; stroke: rgba(255, 255, 255, 0.35); stroke-width: 1;`);
+    let horizonDef = `M5,${FRAME_HEIGHT / 2} L${FRAME_WIDTH - 5},${FRAME_HEIGHT / 2}`;
+    horizon.setAttribute('d', horizonDef);
+    svg.appendChild(horizon);
+
+    // To the Body (Sun, Moon, ...)
+    let radius = FRAME_HEIGHT / 2;
+    let x = radius * Math.cos(Math.toRadians(elev));
+    let y = radius * Math.sin(Math.toRadians(elev));
+    let toSun = document.createElementNS(XMLNS, 'path');
+    toSun.setAttribute('style', `fill: ${fillColor}; stroke: rgba(0, 0, 0, 0.35); stroke-width: 1;`);
+    let toSunDef = `M5,${FRAME_HEIGHT / 2} L${x},${(FRAME_HEIGHT / 2) - y}`;
+    toSun.setAttribute('d', toSunDef);
+    svg.appendChild(toSun);
+
+    // The body circle
+    /*
+    <circle cx="40" cy="40" r="24" style="stroke:#006600; fill:#00cc00"/>
+        */
+    let sun = document.createElementNS(XMLNS, 'circle');
+    sun.setAttribute('style', `stroke:${circleColor !== undefined ? circleColor : '#ff0000'}; fill:${color !== undefined ? color : '#ffff00'};`);
+    sun.setAttribute('cx', `${x}`);
+    sun.setAttribute('cy', `${(FRAME_HEIGHT / 2) - y}`);
+    sun.setAttribute('r', '6');
+    svg.appendChild(sun);
+
+    // Text
+    /*
+    <text x="20" y="40">Example SVG text 1</text>
+     */
+    let absVal = Math.abs(elev);
+    let intValue = Math.floor(absVal);
+    let dec = absVal - intValue;
+    dec *= 60;
+    let min = dec.toFixed(1);
+    let label = `Elev:${elev < 0 ? "-" : ""}${intValue}°${min}'`;
+    let text = document.createElementNS(XMLNS, 'text');
+    let fontSize = 10;
+    text.setAttribute('x', 5);
+    text.setAttribute('y', `${(FRAME_HEIGHT / 2) + (fontSize / 2) - 2}`);
+    text.setAttributeNS(null, 'font-size', fontSize);
+    text.setAttributeNS(null, 'font-weight', 'bold');
+    text.setAttributeNS(null, 'font-family', "'Helvetica Neue', 'Lato', Verdana, Helvetica, Geneva, sans-serif;");
+    text.setAttributeNS(null, 'fill', 'lime'); // 'rgba(0, 0, 0, 0.75)');
+
+    text.appendChild(document.createTextNode(`${label}`));
+    svg.appendChild(text);
+
+    if (parent !== null) {
+        parent.title = `${label}`;
+    }
+    // A bigger label, top right
+    let label2 = `${elev < 0 ? "-" : ""}${intValue}°${min}'`;
+    let text2 = document.createElementNS(XMLNS, 'text');
+    let fontSize2 = 16;
+    text2.setAttribute('x', FRAME_WIDTH - (label2.length * fontSize2 * 0.8)); // right. TODO Find a way to use measureText...
+    // console.log(`==> label2.length=${label2.length}, x=${FRAME_WIDTH - (label2.length * fontSize2 * 1.0)}`);
+    text2.setAttribute('y', `${(0) + (fontSize2 / 1) + 2}`); // top
+    text2.setAttributeNS(null, 'font-size', fontSize2);
+    text2.setAttributeNS(null, 'font-weight', 'bold');
+    text2.setAttributeNS(null, 'font-family', "'Helvetica Neue', 'Lato', Verdana, Helvetica, Geneva, sans-serif;");
+    text2.setAttributeNS(null, 'fill', 'rgba(255, 244, 255, 0.75)'); // 'rgba(0, 0, 0, 0.75)');
+
+    text2.appendChild(document.createTextNode(`${label2}`));
+    svg.appendChild(text2);
+
+    let svgContent = {svgContent: svg};
+    if (divId !== undefined) {
+        let svgDiv = document.getElementById(divId);
+        // It's a replace, remove first.
+        let content = svgDiv.firstElementChild;
+        if (content !== null && content !== undefined) {
+            svgDiv.removeChild(content);
+        }
+        svgDiv.appendChild(svg);
+    } else {
+        return svgContent;
+    }
+};
+
 function calculateMoonTilt(moonSunData) {
 
     if (false) { // Verbose here
@@ -861,6 +1091,21 @@ function astroCallback(data) {
   }).fromPos.observed.z
 
 	 */
+
+	// Sun & Moon Z and Alt
+	if (!isNaN(data.sunObs.z)) {
+		drawArrow('sun-azimuth', data.sunObs.z, 'Sun');
+	}
+	if (!isNaN(data.sunObs.alt)) {
+		drawElevation('sun-elevation', data.sunObs.alt);
+	}
+	if (!isNaN(data.moonObs.z)) {
+		drawArrow('moon-azimuth', data.moonObs.z, 'Moon');
+	}
+	if (!isNaN(data.moonObs.alt)) {
+		drawElevation('moon-elevation', data.moonObs.alt, '#ffffff', '#808080');
+	}
+
 
 	let dataTable =
 			'<table border="1" class="raw-table">' + '<tr><th>Body</th><th>D</th><th>GHA</th><th>LHA</th><th>Elev</th><th>Z</th></tr>' +
