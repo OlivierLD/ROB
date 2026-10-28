@@ -1115,28 +1115,27 @@ function astroCallback(data) {
 			'<tr><td align="left">' + bodyName("sun") + '</td><td>' + worldMap.decToSex(data.sun.decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.sun.gha) + '</td><td align="right">' + worldMap.decToSex(sunLHA) + '</td><td align="right">' +	worldMap.decToSex(data.sunObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.sunObs.z) + '</td></tr>' +
 			'<tr><td align="left">' + bodyName("moon") + '</td><td>' + worldMap.decToSex(data.moon.decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.moon.gha) + '</td><td align="right">' + worldMap.decToSex(moonLHA) + '</td><td align="right">' +	worldMap.decToSex(data.moonObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.moonObs.z) + '</td></tr>';
 
-        // Bonus: Update Sun Decl on the graph
-        try {
-            document.getElementById('decl-graph-01').value = worldMap.decToSex(data.sun.decl, "NS");
-            document.getElementById('decl-graph-02').value = worldMap.decToSex(data.moon.decl, "NS");
-        } catch (err) {
-            // Absorb
-        }
-
-        if (data.wanderingBodies) {
-            for (let i=0; i<data.wanderingBodies.length; i++) {
-                if (data.wanderingBodies[i].name !== "aries") {
-                    dataTable +=
-                    '<tr><td align="left">' + bodyName(data.wanderingBodies[i].name) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].gha) + '</td><td>' + worldMap.decToSex(getLHA(data.wanderingBodies[i].gha, data.from.longitude)) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].fromPos.observed.alt) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].fromPos.observed.z) + '</td></tr>';
-                }
-            }
-        }
-
-        dataTable +=
-                '<tr><td align="left">Aries &gamma;</td><td></td><td align="right">' + worldMap.decToSex(data.ghaAries) + '</td><td align="right">' + worldMap.decToSex(lhaAries) + '</td><td align="right">' + worldMap.decToSex(data.ariesObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.ariesObs.z) + '</td></tr></table>';
-
-        document.getElementById("sun-moon-data").innerHTML = dataTable;
+	// Bonus: Update Sun Decl on the graph
+	try {
+		document.getElementById('decl-graph-01').value = worldMap.decToSex(data.sun.decl, "NS");
+		document.getElementById('decl-graph-02').value = worldMap.decToSex(data.moon.decl, "NS");
+	} catch (err) {
+		// Absorb
 	}
+
+	if (data.wanderingBodies) {
+		for (let i=0; i<data.wanderingBodies.length; i++) {
+			if (data.wanderingBodies[i].name !== "aries") {
+				dataTable +=
+				'<tr><td align="left">' + bodyName(data.wanderingBodies[i].name) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].gha) + '</td><td>' + worldMap.decToSex(getLHA(data.wanderingBodies[i].gha, data.from.longitude)) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].fromPos.observed.alt) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].fromPos.observed.z) + '</td></tr>';
+			}
+		}
+	}
+
+	dataTable +=
+			'<tr><td align="left">Aries &gamma;</td><td></td><td align="right">' + worldMap.decToSex(data.ghaAries) + '</td><td align="right">' + worldMap.decToSex(lhaAries) + '</td><td align="right">' + worldMap.decToSex(data.ariesObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.ariesObs.z) + '</td></tr></table>';
+
+	document.getElementById("sun-moon-data").innerHTML = dataTable;
 
 	// Display solar date & time
 	let solarDate = new Date(data.solarDate.year, data.solarDate.month - 1, data.solarDate.day, data.solarDate.hour, data.solarDate.min, data.solarDate.sec);
