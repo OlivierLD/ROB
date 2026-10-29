@@ -1418,7 +1418,7 @@ while [[ "${GO}" == "true" ]]; do
 	    ;;
 	  "22")
 	    echo -e "------------------------------------------------------------------"
-	    echo -en " ==> Enter the name of the yaml file to use (prefixed with its directory, like mux-configs): "
+	    echo -en " ==> Enter the name of the yaml file to use (prefixed by its directory, like mux-configs): "
 	    # PROP_FILE=mux-configs/nmea.mux.rest.get.yaml
       read PROP_FILE
       #
@@ -1437,8 +1437,8 @@ while [[ "${GO}" == "true" ]]; do
 	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
 	    fi
 	    GO=false
-      echo -e "\nHit [Return]"
-      read resp
+      # echo -e "\nHit [Return]"
+      # read resp
 	    ;;
 	# Others...
 	    # ;;

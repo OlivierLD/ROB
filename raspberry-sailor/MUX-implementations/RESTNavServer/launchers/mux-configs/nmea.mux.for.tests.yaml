@@ -1,0 +1,42 @@
+#
+# MUX definition.
+#
+name: "With a GPS, filtered (or not), -> TCP:7002"
+description:
+  - Reads the GPS (serial or file)
+  - Forward on TCP:7002 (if active)
+  - To be used with option 22 in the demo launcher
+context:
+  with.http.server: true
+  http.port: 8888
+  init.cache: true
+  deviation.file.name: dp_2011_04_15.csv
+  markers.list:
+    - markers: mux-configs/markers/markers.biscay.yaml
+    - markers: mux-configs/markers/markers.iberica.west.yaml
+channels:
+#  - type: serial
+#    port: /dev/ttyS80
+#    baudrate: 4800
+#    sentence.filters: RMC,GLL
+#    active: true
+#    verbose: true
+#    description: "Requires an apt install librxtx-java. See below..."
+  - type: file
+    filename: /dev/ttyACM0
+    # sentence.filters: ~GGA,~GSV,~GSA
+    active: true
+    verbose: false
+    description: "Requires an stty -F /dev/ttyACM0 raw 4800 cs8 clocal. Used it with JDK 17... LibRxtx might be a problem."
+forwarders:
+  - type: file
+    # filename: data.nmea
+    # flush: true
+    active: true
+    verbose: false
+    description: "File logging."
+  - type: "tcp"
+    port: 7002
+    active: false
+    verbose: false
+    description: "TCP:7002, wow!"
