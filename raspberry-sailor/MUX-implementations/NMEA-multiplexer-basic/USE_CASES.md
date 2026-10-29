@@ -1,7 +1,7 @@
 # Some use-cases
 
 > _**Note**_: We will be talking here about Raspberry Pi - and similar boards.  
-> The advantage(s) of the Raspberry Pi is that it just need a 5v power supply, and runs a clone of Linux (Debian, RasPiOS or so),
+> The advantage(s) of the Raspberry Pi is that it just needs a 5v power supply, and runs a clone of Linux (Debian, RasPiOS or so),
 > which is an OpenSource software.  
 > 
 > ---
