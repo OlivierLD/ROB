@@ -1,8 +1,7 @@
 #!/bin/bash
-# Interactive script to launch the RESTNavServer in several configurations.
-# For demo and examples purpose.
-# Describes different scenarios.
+# Close to demoLauncher.sh, but with no choice from a menu.
 # Uses runNavServer.sh
+# Hard-coded PROP_FILE=mux-configs/nmea.mux.no.gps.yaml in the script.
 # 
 # For parameters --no-rmc-time --no-date : see in runNavServer.sh
 #
