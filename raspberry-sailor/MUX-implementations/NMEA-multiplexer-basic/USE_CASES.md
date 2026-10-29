@@ -25,6 +25,9 @@ and use - for example - a web browser to display the data we're interested in. T
 Many protocols are supported, like HTML, REST, TCP, UDP, GPSd, WebSockets, and more.  
 All this is supported by a server entirely written for the occasion, and designed to be as small as possible, and consuming as few energy as possible (see details in this repo).  
 
+Here is the high-level welcome page:  
+![Welcome Screen](./web/images/starwars.png)
+
 The core server is written in Java, so it can be ported to several machines and OSs without having to be re-built.
 
 We present here several Raspberry Pis, but other machines can fit too. If you have - let's say - an old laptop that can be 
