@@ -117,6 +117,7 @@ URL_OPTION_15="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_16="http://localhost:${HTTP_PORT}/web/ais/ais.102.html"
 URL_OPTION_16b="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_17="http://localhost:${HTTP_PORT}/web/basic.html"
+URL_OPTION_22="http://localhost:${HTTP_PORT}/web/index.html"
 #
 function openBrowser() {
   if [[ $(uname -s) == *Linux* ]]; then
@@ -228,8 +229,9 @@ while [[ "${GO}" == "true" ]]; do
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "| ${RED}20${NC}.  Get Data Cache (curl)                                                              | ${RED}20b${NC}. Get REST operations list (curl)                                                    |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
-    # echo -e "| ${RED}21${NC}. Sample Python TCP Client                                                            |                                                                                         |"
-    # echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
+    echo -e "| ${RED}21${NC}. Sample Python TCP Client                                                                                                                                                      |"
+    echo -e "| ${RED}22${NC}. Will prompt you to enter the name of the config file (yaml). Not user friendly, but very flexible.                                                                            |"
+    echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
     echo -e "|  ${RED}S${NC}. Show NavServer process(es)                                                          | ${RED}SP${NC}. Show proxy process(es)                                                              |"
     echo -e "|  ${RED}K${NC}. Kill all running Multiplexers                                                       |                                                                                         |"
     echo -e "+-----------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------+"
@@ -460,6 +462,11 @@ while [[ "${GO}" == "true" ]]; do
 	        echo -e "Requires a MUX to be running, "
 	        echo -e "Starts a Python sample client."
 	        echo -e "--------------------------------"
+	        ;;
+	      "22")
+	        echo -e "---------------------------------------------------------"
+	        echo -e "Will prompt you for the yaml file to use to start the MUX"
+	        echo -e "---------------------------------------------------------"
 	        ;;
 	      *)
 	        echo -e "No help implemented (yet) for option ${HELP_ON}"
@@ -1406,6 +1413,30 @@ while [[ "${GO}" == "true" ]]; do
         COMMAND="python3 tcp_mux_client.py --machine-name:${MACHINE_NAME} --port:${TCP_PORT} --verbose:${VERBOSE}"
         ${COMMAND}
       popd
+      echo -e "\nHit [Return]"
+      read resp
+	    ;;
+	  "22")
+	    echo -e "------------------------------------------------------------------"
+	    echo -en " ==> Enter the name of the yaml file to use (prefixed with its directory, like mux-configs): "
+	    # PROP_FILE=mux-configs/nmea.mux.rest.get.yaml
+      read PROP_FILE
+      #
+      echo -en "Launch a browser ? y|[n] > "
+      read REPLY
+      if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+        LAUNCH_BROWSER=Y
+        echo -e ">> Will launch a browser"
+      fi
+	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
+	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
+		    echo -e ">>> Waiting for the server to start..."
+		    sleep 5 # Wait for the server to be operational
+		    openBrowser ${URL_OPTION_22}
+		  else
+	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
+	    fi
+	    GO=false
       echo -e "\nHit [Return]"
       read resp
 	    ;;

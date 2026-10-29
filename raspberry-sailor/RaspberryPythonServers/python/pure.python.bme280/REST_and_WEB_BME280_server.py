@@ -608,7 +608,7 @@ def long_storage_data(dummy_prm: str) -> None:
     global keep_reading_bme280
     global between_loops
     global verbose
-    global DATA_ARRAY
+    # global DATA_ARRAY
     global MAP_MAX_LENGTH
 
     print(f"Long Storage thread")
@@ -832,7 +832,7 @@ except:
     sensor = None
 
 if STORE_RESTORE:  # Read previous maps from the file system
-    print("Loading previous data")
+    print("Loading previous data...")
     try:
         # Pressure
         f = open('pressure.json')
