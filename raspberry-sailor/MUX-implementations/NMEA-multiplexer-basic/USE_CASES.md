@@ -3,6 +3,7 @@
 > _**Note**_: We will be talking here about Raspberry Pi - and similar boards.  
 > The advantage(s) of the Raspberry Pi is that it just need a 5v power supply, and runs a clone of Linux (Debian, RasPiOS or so),
 > which is an OpenSource software.  
+> 
 > ---
 > _**BUT**_: If you have an "old laptop", that can run on a 12v adapter, and on which you can install
 > a Linux OS, the software presented here would work smoothly on a boat!  
