@@ -1474,7 +1474,7 @@ while [[ "${GO}" == "true" ]]; do
 	    read ret
 	    ;;
 	  "K" | "k")
-	    ./killns.sh
+	    ./kill.ns.sh
 	    #
 	    sleep 5  # Wait for the kill to be completed.
 	    #
