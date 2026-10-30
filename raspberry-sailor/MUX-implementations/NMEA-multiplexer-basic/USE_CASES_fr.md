@@ -53,18 +53,18 @@ machine-a [NMEA-multiplexer] $ ../../gradlew shadowJar -x :astro-computer:AstroC
 # Sommaire
 - Déploiement en production : [Raspberry Pi et GPS]
   Exemple générique illustrant comment déployer _votre_ configuration en production.
-  Disponible dans un document séparé, [ici](./use_cases/USE_CASES_1.md).
+  Disponible dans un document séparé, [ici](./use_cases/USE_CASES_1_fr.md).
 - Raspberry Pi A+ avec GPS, capteur BME280, écran SSD1306 (128x64, via SPI) et boutons-poussoirs.
   Configuration d'un Raspberry Pi A+ équipé d'un GPS, d'un capteur BME280, d'un écran SSD1306 (128x64) et de deux boutons-poussoirs.
-  Disponible dans un document séparé, [ici](./use_cases/USE_CASES_2.md).
+  Disponible dans un document séparé, [ici](./use_cases/USE_CASES_2_fr.md).
 - Déploiement en production : [Raspberry Pi, GPS, BME280, SSD1306, boutons-poussoirs]
   Déploiement de la configuration ci-dessus en environnement de production.
-  Disponible dans un document séparé, [ici](./use_cases/USE_CASES_3.md).
+  Disponible dans un document séparé, [ici](./use_cases/USE_CASES_3_fr.md).
 - Enregistreur de données basique (mais fonctionnel) – déploiement en production : [Raspberry Pi, BMP180]
   Un barographe (enregistreur de pression atmosphérique).
-  Disponible dans un document séparé, [ici](./use_cases/USE_CASES_4.md). - La station de navigation la plus petite (et la moins coûteuse). Raspberry Pi Zero W, GPS, écran à encre électronique (e-ink) en option. Détails dans un document séparé, [ici](./HOWTO.md).
-- Une configuration plus robuste. Raspberry Pi 4B, GPS, écran, clavier... Détails dans un document séparé, [ici](./use_cases/USE_CASES_5.md).
-- Cette liste n'est pas exhaustive — et ne saurait l'être.
+  Disponible dans un document séparé, [ici](./use_cases/USE_CASES_4_fr.md). - La station de navigation la plus petite (et la moins coûteuse). Raspberry Pi Zero W, GPS, écran à encre électronique (e-ink) en option. Détails dans un document séparé, [ici](./HOWTO.md).
+- Une configuration plus robuste. Raspberry Pi 4B, GPS, écran, clavier... Détails dans un document séparé, [ici](./use_cases/USE_CASES_5_fr.md).
+- Cette liste n'est pas exhaustive — et ne saurait l'être.  
   Voir également [ici](https://hocus-blogus.blogspot.com/2021/01/several-configurations-for-raspberry-pi.html) pour d'autres configurations basées sur Raspberry Pi...
 
 # Boîtiers imprimés en 3D
