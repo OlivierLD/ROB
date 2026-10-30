@@ -21,9 +21,14 @@ The "simplest" configuration would involve
 
 From such a configuration, we would be able to read the GPS data, like Position, Course Over Ground, Speed Over Ground, etc.  
 Those data can be logged, used for further computations, and/or forwarded to other consumers.  
-The Raspberry Pi is able to emit its own network (HotSpot), so other devices (laptops, tablets, cell-phone) can connect to it,
-and use - for example - a web browser to display the data we're interested in. The web interface does _**not**_ require any external libraries, it's 100% autonomous, and does _**not**_ need an Internet connection.  
-Many protocols are supported, like HTML, REST, TCP, UDP, GPSd, WebSockets, and more.  
+The Raspberry Pi is able to emit its own network (HotSpot), so other devices (laptops, tablets, cell-phones) can connect to it,
+and use - for example - a web browser to display the data we're interested in. <span style="color: orange;">The web interface does _**not**_ require any external libraries, it's 100% autonomous, and does _**not**_ need an Internet connection</span>.  
+> **_ALL_** graphical user interfaces are designed using HTML5, CSS3, ES6, and other _standards_
+> defined by the [W3C](https://www.w3.org/).
+
+Many protocols are supported, like HTML, REST, TCP, UDP, GPSd, WebSockets, and more. This allows a smooth communication between the Multiplexer and other programs.
+
+
 All this is supported by a server entirely written for the occasion, and designed to be as small as possible, and consuming as few energy as possible (see details in this repo).  
 
 Here is the high-level welcome page:  
