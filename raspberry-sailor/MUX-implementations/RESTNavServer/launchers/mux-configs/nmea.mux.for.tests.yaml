@@ -15,6 +15,10 @@ context:
     - markers: mux-configs/markers/markers.biscay.yaml
     - markers: mux-configs/markers/markers.iberica.west.yaml
 channels:
+  - type: zda
+    description: "ZDA Generator, GP prefix."
+    active: true
+    verbose: false
 #  - type: serial
 #    port: /dev/ttyS80
 #    baudrate: 4800
@@ -25,7 +29,7 @@ channels:
   - type: file
     filename: /dev/ttyACM0
     # sentence.filters: ~GGA,~GSV,~GSA
-    active: true
+    active: false
     verbose: false
     description: "Requires an stty -F /dev/ttyACM0 raw 4800 cs8 clocal. Used it with JDK 17... LibRxtx might be a problem."
 forwarders:

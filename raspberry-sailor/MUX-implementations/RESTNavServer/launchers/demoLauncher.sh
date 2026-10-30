@@ -117,7 +117,7 @@ URL_OPTION_15="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_16="http://localhost:${HTTP_PORT}/web/ais/ais.102.html"
 URL_OPTION_16b="http://localhost:${HTTP_PORT}/web/chartless.world.data.html"
 URL_OPTION_17="http://localhost:${HTTP_PORT}/web/basic.html"
-URL_OPTION_22="http://localhost:${HTTP_PORT}/web/index.html"
+URL_OPTION_22="http://localhost:${HTTP_PORT}/web/index.html"   # Not used, actually. See below.
 #
 function openBrowser() {
   if [[ $(uname -s) == *Linux* ]]; then
@@ -1421,24 +1421,37 @@ while [[ "${GO}" == "true" ]]; do
 	    echo -en " ==> Enter the name of the yaml file to use (prefixed by its directory, like mux-configs): "
 	    # PROP_FILE=mux-configs/nmea.mux.rest.get.yaml
       read PROP_FILE
-      #
-      echo -en "Launch a browser ? y|[n] > "
-      read REPLY
-      if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
-        LAUNCH_BROWSER=Y
-        echo -e ">> Will launch a browser"
+      PROCEED=true
+      if [[ ! -f "${PROP_FILE}" ]]; then
+        echo -e "${RED}${PROP_FILE} was not found from $(pwd) ...${NC}"
+        PROCEED=false
       fi
-	    ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
-	    if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
-		    echo -e ">>> Waiting for the server to start..."
-		    sleep 5 # Wait for the server to be operational
-		    openBrowser ${URL_OPTION_22}
-		  else
-	    	echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
-	    fi
-	    GO=false
-      # echo -e "\nHit [Return]"
-      # read resp
+      #
+      if [[ "${PROCEED}" == "true" ]]; then
+        HTTP_PORT=$(cat ${PROP_FILE} | grep http.port: | awk '{ print $2 }')
+        echo -e "From ${PROP_FILE}, http port: ${HTTP_PORT} ..."
+        #
+        echo -en "Launch a browser ? y|[n] > "
+        read REPLY
+        if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+          LAUNCH_BROWSER=Y
+          echo -e ">> Will launch a browser"
+        fi
+        echo -e "Launching nav server, with ${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS}"
+        ./runNavServer.sh --mux:${PROP_FILE} --no-date ${NAV_SERVER_EXTRA_OPTIONS} &
+        if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
+          echo -e ">>> Waiting for the server to start..."
+          echo -e "${RED}Opening http://localhost:${HTTP_PORT}/web/index.html...${NC}"
+          sleep 5 # Wait for the server to be operational
+          openBrowser http://localhost:${HTTP_PORT}/web/index.html
+        else
+          echo -e "${RED}In a browser: http://localhost:${HTTP_PORT}/web/index.html${NC}"
+        fi
+        GO=false
+	    else
+        echo -e "\nHit [Return]"
+        read resp
+      fi
 	    ;;
 	# Others...
 	    # ;;
