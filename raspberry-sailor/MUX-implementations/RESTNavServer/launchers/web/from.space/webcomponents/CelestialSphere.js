@@ -922,13 +922,12 @@ class CelestialSphere extends HTMLElement {
 
         let headingOffset = 0.0;
         if (! this._north_up) {
-            console.log("Will set the bow UP.");
+            // console.log("Will set the bow UP.");
             headingOffset = this._heading;
         }
 
 		if (true) { // this._type === MapType.STARFINDER_TYPE) { // OPTION StarFinder
 			context.save();
-			// TODO manage northUp
 			// Major ticks
 			context.lineWidth = 2;
 			context.beginPath();

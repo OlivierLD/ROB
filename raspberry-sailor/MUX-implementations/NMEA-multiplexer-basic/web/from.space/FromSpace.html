@@ -1555,7 +1555,8 @@ let toggleForeground = () => {
                                           latitude="35"
                                           longitude="-3"
                                           heading="0"
-                                          use-heading="false"/>
+                                          use-heading="false"
+                                          north-up="true"/>
                     </div>
                     <div>
                         <button onclick="zoomIn('celestial-sphere-01');" title="Zoom In">+</button>
@@ -1574,6 +1575,7 @@ let toggleForeground = () => {
                         <span><input type="checkbox" id="cscb-08" onchange="setEquatorGridCS('celestial-sphere-01', this);">With Equatorial Grid.</span>
 
                         <span><input type="checkbox" id="cscb-09" onchange="setUseBoatHeadingCS('celestial-sphere-01', this); showHide('boat-shapes', this);">Show Boat Heading.</span>
+                        <span title="North or bow up"><input type="checkbox" id="cscb-10" onchange="setNorthUpCS('celestial-sphere-01', this);" checked>North Up.</span>
 
                         <!--span>
                             <select onchange="setBoatShape('celestial-sphere-01', this);" style="padding: 5px; border-radius: 5px;">

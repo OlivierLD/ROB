@@ -1005,6 +1005,11 @@ function setUseBoatHeadingCS(id, cb) {
     document.getElementById(id).repaint();
 }
 
+function setNorthUpCS(id, cb) {
+    document.getElementById(id).northUp = cb.checked;
+    document.getElementById(id).repaint();
+}
+
 function setCelestialEquatorCS(id, cb) {
     document.getElementById(id).celestialEquator = cb.checked;
     document.getElementById(id).repaint();
