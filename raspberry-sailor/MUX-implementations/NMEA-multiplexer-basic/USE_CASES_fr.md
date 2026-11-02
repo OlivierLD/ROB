@@ -1,4 +1,5 @@
 # Quelques options
+<a href="./USE_CASES.md"><img src="web/images/us_uk_flag.png" width="60" title="In English"></a>
 
 > _**Note**_ : Nous parlerons ici du Raspberry Pi — et de cartes similaires.
 > L'un des avantages du Raspberry Pi est qu'il ne nécessite qu'une alimentation 5 V et qu'il fait fonctionner un système dérivé de Linux (Debian, RasPiOS, etc.),
