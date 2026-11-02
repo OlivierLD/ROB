@@ -11,7 +11,7 @@ CYAN="\033[1;36m"                  # Cyan and bold
 BOLD_GREEN_BLINK='\033[0;32;1;5m'  # Green, bold, blink.
 NC='\033[0m'                       # Back to No Color
 #
-HOME_DIR=~/nmea-dist
+HOME_DIR=~pi/nmea-dist  # User pi is required, if launched from rc.local...
 #
 display_help ( ) {
   echo -e "--------- H E L P -----------------------------------------------------"
