@@ -2,8 +2,12 @@
 <a href="./USE_CASES.md"><img src="web/images/us_uk_flag.png" width="60" title="In English"></a>
 
 > _**Note**_ : Nous parlerons ici du Raspberry Pi — et de cartes similaires.
-> L'un des avantages du Raspberry Pi est qu'il ne nécessite qu'une alimentation 5 V et qu'il fait fonctionner un système dérivé de Linux (Debian, RasPiOS, etc.),
-> qui est un logiciel libre (Open Source).
+> L'un des avantages du Raspberry Pi est qu'il ne nécessite qu'une alimentation 5 V et qu'il tourne sur un système dérivé de Linux (Debian, RasPiOS, etc.),
+> qui est un logiciel libre (Open Source).  
+> Encore une fois, on tient ici à minimiser :
+> - Les prix
+> - La consommation d'énergie
+> - La place occupée sur le disque
 >
 > ---
 > _**MAIS**_ : Si vous disposez d'un « vieil ordinateur portable » fonctionnant avec un adaptateur 12 V, sur lequel vous pouvez installer
