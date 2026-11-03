@@ -120,7 +120,9 @@ JAVA_OPTS="${JAVA_OPTS} -Dais.verbose=${AIS_VERBOSE}"
 JAVA_OPTS="${JAVA_OPTS} -Drest.verbose=${HTTP_VERBOSE}"  # Was REST_VERBOSE
 JAVA_OPTS="${JAVA_OPTS} -Dmemory.gauge=${MEMORY_GAUGE}"
 JAVA_OPTS="${JAVA_OPTS} -Dmem.polling.interval=${MEM_POLLING_INTERVAL}"
-
+#
+echo -e "-->> Memory Gauge is set to ${MEMORY_GAUGE}"
+#
 # Hard-coded ones:
 # JAVA_OPTS="${JAVA_OPTS} -Drest.nav.verbose=true"
 # JAVA_OPTS="${JAVA_OPTS} -Dnmea.utils.verbose=true"

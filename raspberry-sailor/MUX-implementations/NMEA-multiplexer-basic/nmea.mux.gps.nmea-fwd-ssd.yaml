@@ -42,8 +42,18 @@ forwarders:
   - type: file
     verbose: false
     active: true
-    # zipped: true
+    description: "Log NMEA data in file, splitted, or not, see below."
+    #  Option 1
+#    filename: ./data.nmea  # Warning, this may grow big !
+#    flush: true
+    # Option 2
+    timebase.filename: true
+    filename.suffix: _LOG
     log.dir: logged
-    sentence.filters: ~GGA,~GSV,~GSA
+    split: hour
+    # End of options
+    device.filters: GP,~AE
+    # sentence.filters: ~GGA,~GSV,~GSA
+    sentence.filters: RMC
   - type: tcp
     port: 7001
