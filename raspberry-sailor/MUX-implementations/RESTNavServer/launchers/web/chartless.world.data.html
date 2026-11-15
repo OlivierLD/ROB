@@ -387,7 +387,7 @@ events.subscribe(POS, val => {
 		if (VERBOSE) {
 			console.log(`Got position: ${strLat} / ${strLng}`);
 		}
-		document.getElementById('gps-position').innerHTML = `${strLat} / ${strLng}`;
+		document.getElementById('gps-position').innerHTML = `${strLat} <br/> ${strLng}`;
 		pos = val;
 		trackBuffer.push(val);
 		while (trackBuffer.length > maxBufferLength) {
@@ -1448,7 +1448,7 @@ window.onload = () => {
 					<tr>
 						<td colspan="2">
 							<!-- Show-hide SatPlotter -->
-							<input type="checkbox" id="sp-cb" checked onchange="showHide(this, 'sp-01');"> Show Satellites plotter
+							<input type="checkbox" id="sp-cb" onchange="showHide(this, 'sp-01');"> Show Satellites plotter
 						</td>
 					</tr>
 					<tr>
@@ -1485,6 +1485,7 @@ window.onload = () => {
 						</td>
 						<td width="33%" align="center">
 							<satellite-plotter class="sat-plot-03"
+											   style="display: none;"
 											   title="GPS Satellites in view"
 											   id="sp-01"
 											   width="200"

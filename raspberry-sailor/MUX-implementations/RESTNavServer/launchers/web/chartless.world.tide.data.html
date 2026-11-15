@@ -497,7 +497,7 @@ events.subscribe(POS, val => {
 		if (VERBOSE) {
 			console.log(`Got position: ${strLat} / ${strLng}`);
 		}
-		document.getElementById('gps-position').innerHTML = `${strLat} / ${strLng}`;
+		document.getElementById('gps-position').innerHTML = `${strLat} <br/> ${strLng}`;
 		pos = val;
 		trackBuffer.push(val);
 		while (trackBuffer.length > maxBufferLength) {
@@ -1894,9 +1894,9 @@ window.onload = () => {
 					<tr>
 						<td valign="top" colspan="2">
 							<div id="curr-pos" style="min-height: 40px; text-align: right;"></div>
-							<small>Choose your tide station, or <button onclick="findClosestStation();" title="Find Closest Station">Find Closest One</button>, and hit a button</small>
+							<small>Choose, or search your tide station,<br/>or <button onclick="findClosestStation();" title="Find Closest Station">Find Closest One</button>, and hit a button</small>
 							<div id="station-list-div" style="margin-top: 10px;">
-								<select id="station-list" class="custom-select" style="max-width: 400px;"></select>
+								<select id="station-list" class="custom-select" style="width: 300px; max-width: 500px;"></select>
 							</div>
 							<div style="margin-top: 5px;">
 								<button onclick="go();" title="Click to pan">Go</button>
