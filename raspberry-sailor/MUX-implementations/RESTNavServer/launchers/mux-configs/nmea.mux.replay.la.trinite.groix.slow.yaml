@@ -20,14 +20,18 @@ context:
     - markers: mux-configs/markers/markers.etel.gx.stphil.yaml
     - markers: mux-configs/markers/markers.lorient.blavet.yaml
     - markers: mux-configs/markers/markers.03.yaml
-    # - markers: mux-configs/markers/markers.rade.de.brest.yaml
+    - markers: mux-configs/markers/markers.rade.de.brest.yaml
     - markers: mux-configs/markers/markers.houat.hoedic.belle-ile.yaml
-    # - markers: mux-configs/markers/markers.couregant.la.plate.yaml
-    # - markers: mux-configs/markers/markers.glenan.yaml
+    - markers: mux-configs/markers/markers.couregant.la.plate.yaml
+    - markers: mux-configs/markers/markers.glenan.yaml
     # - markers: mux-configs/markers/markers.uk.yaml
     # - markers: mux-configs/markers/markers.bretagne.bumper.yaml
     # - markers: mux-configs/markers/markers.san.juan.yaml
     - markers: mux-configs/waypoints/waypoints.yaml
+    - markers: mux-configs/markers/markers.pte.du.talud.ste.marine.yaml
+    - markers: mux-configs/markers/markers.port-navalo.vilaine.yaml
+    - markers: mux-configs/markers/markers.toulinguet.la.plate.yaml
+
   next-waypoint: TEIGNOUSE
 channels:
   - type: file

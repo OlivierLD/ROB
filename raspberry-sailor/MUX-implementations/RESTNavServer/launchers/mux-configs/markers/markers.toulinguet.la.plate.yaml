@@ -1,0 +1,57 @@
+#
+# Toulinguet - La Plate
+#
+description:
+  Du Toulinguet à La Plate, Mer d'Iroise
+borders:
+  - border-name: "Du Toulinguet a la Plate"
+    type: "open"
+    border-elements:
+      - rank: 1
+        latitude: 48.28022277841604
+        longitude: -4.63176727294922
+      - rank: 2
+        latitude: 48.27176842305618
+        longitude: -4.61528778076172
+      - rank: 3
+        latitude: 48.24639696279072
+        longitude: -4.634857177734376
+      - rank: 4
+        latitude: 48.26125565204099
+        longitude: -4.611167907714845
+      - rank: 5
+        latitude: 48.25119793455411
+        longitude: -4.598121643066407
+      - rank: 6
+        latitude: 48.25782710699542
+        longitude: -4.557952880859376
+      - rank: 7
+        latitude: 48.24045227805898
+        longitude: -4.54662322998047
+      - rank: 8
+        latitude: 48.23496426354398
+        longitude: -4.573059082031251
+      - rank: 9
+        latitude: 48.167688304496714
+        longitude: -4.555206298828126
+      - rank: 10
+        latitude: 48.21941169202879
+        longitude: -4.494094848632813
+      - rank: 11
+        latitude: 48.233134794548846
+        longitude: -4.493751525878907
+      - rank: 12
+        latitude: 48.19630282562303
+        longitude: -4.319000244140626
+      - rank: 13
+        latitude: 48.09734324406965
+        longitude: -4.298400878906251
+      - rank: 14
+        latitude: 48.06339653776214
+        longitude: -4.714508056640625
+      - rank: 15
+        latitude: 48.039528693690585
+        longitude: -4.71038818359375
+      - rank: 16
+        latitude: 48.03861047876283
+        longitude: -4.746093750000001
