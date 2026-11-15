@@ -21,8 +21,7 @@ import java.util.Map;
  * Nice AIS git repo: https://github.com/tbsalling/aismessages
  * https://www.navcen.uscg.gov/sites/default/files/pdf/AIS/AISGuide.pdf
  *
- * The main method is here for tests, look at it. TODO a main ?
- *
+ * TODO a main ?
  * TODO Other Talker IDs, VDO chain
  */
 public class AISParser {
@@ -40,19 +39,19 @@ public class AISParser {
    * NMEA Message type, for AIS
    */
 
-	// NOTE: VDO not supported yet...
+	// NOTE: VDO not supported (yet)...
 	public final static String[] SENTENCE_LIST = new String[] {
 			"VDM", "VDO"
 	};
 
 	public static Map<Integer, String> messageTypeDescription = new HashMap<>();
 	static {
-		messageTypeDescription.put(1, "Position Report (A)");
-		messageTypeDescription.put(2, "Position Report (A)");
-		messageTypeDescription.put(3, "Position Report (A)");
-		messageTypeDescription.put(4, "Base Station");
-		messageTypeDescription.put(5, "Voyage Related Data");
-		messageTypeDescription.put(8, "Broadcast Message");
+		messageTypeDescription.put(1,  "Position Report (A)");
+		messageTypeDescription.put(2,  "Position Report (A)");
+		messageTypeDescription.put(3,  "Position Report (A)");
+		messageTypeDescription.put(4,  "Base Station");
+		messageTypeDescription.put(5,  "Voyage Related Data");
+		messageTypeDescription.put(8,  "Broadcast Message");
 		messageTypeDescription.put(15, "Interrogation");
 		messageTypeDescription.put(18, "Position Report (B)");
 		messageTypeDescription.put(20, "Data Link Mgmt");

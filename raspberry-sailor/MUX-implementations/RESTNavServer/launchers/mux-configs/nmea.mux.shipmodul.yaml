@@ -1,8 +1,7 @@
 #
 # MUX definition.
-# Astronomical data can be rendered at http://localhost:9999/web/webcomponents/console.gps.html?style=orange&bg=black&border=n&boat-data=n
 #
-name: "With a Shipmodul"
+name: "With a ShipModul"
 context:
   with.http.server: true
   http.port: 9999
@@ -11,16 +10,24 @@ channels:
   - type: serial
     port: /dev/ttyS80
     baudrate: 4800
-    verbose: false
     active: false
-    description: "Reads the GPS dongle"
-  - type: serial
-    port: /dev/ttyUSB0
-    baudrate: 460800  # Wow! ShipModul
-    device.filters: II, GP, HC, YX, AI
     verbose: false
-    active: false
-    description: "Reads a ShipModul. Notice the BaudRate..."
+    description: "Reads the GPS Dongle"
+  # - type: serial
+  #   port: /dev/ttyUSB0
+  #   baudrate: 460800  # Wow! ShipModul
+  #   device.filters: II, GP, HC, YX, AI
+  #   verbose: false
+  #   active: true
+  #   description: "Reads a ShipModul. Notice the BaudRate... Wow!"
+  #
+  # Requires a "stty -F /dev/ttyUSB0 raw 460800 cs8 clocal"
+  - type: file
+    filename: /dev/ttyUSB0
+    # sentence.filters: ~GGA,~GSV,~GSA
+    active: true
+    verbose: false
+    description: "Reads a ShipModul. Requires a 'stty -F /dev/ttyUSB0 raw 460800 cs8 clocal'"
 forwarders:
   - type: "tcp"
     port: 7002
@@ -30,8 +37,10 @@ forwarders:
     # filename: ./data.nmea
     flush: true
     timebase.filename: true
-    filename.suffix: _LOG
+    filename.suffix: _SHPMDL  # SHiPMoDuL
     log.dir: logged
     split: hour   # |hour|day|week|month|year
     active: true
-    description: "File System logging"
+    verbose: false
+    description: "File System data logging"
+# Et c'est tout.

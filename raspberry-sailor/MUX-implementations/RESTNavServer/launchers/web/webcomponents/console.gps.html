@@ -1304,6 +1304,7 @@
 <table width="100%">
     <tr>
         <td><h2 style="text-shadow: 1px 1px 2px black, 0 0 25px white, 0 0 5px silver;">Web Components NMEA/GPS Console</h2></td>
+        <td>Guaranteed 0% external libraries.</td>
     </tr>
 </table>
 <hr/>
@@ -1517,6 +1518,7 @@
     <button class="tablinks" onclick="openTab(event, 3);">Sun Path</button>
     <button class="tablinks" onclick="openTab(event, 4);" style="display: none;" id="boat-data-button">Boat Data</button>
     <button class="tablinks" onclick="openTab(event, 5);" title="Raw NMEA Data&#13;and subscribed events">NMEA/Events</button>
+    <!--button class="tablinks" onclick="openTab(event, 6);" title="Tides">Tides</button-->
 
     <div class="mess" style="vertical-align: middle;">With Boat Data</div>
     <label class="rocker rocker-tiny">
@@ -1532,7 +1534,7 @@
         <span class="switch-right">No</span>
     </label>
 
-    <div class="mess">Guaranteed 0% external libraries.</div>
+    <!--div class="mess">Guaranteed 0% external libraries.</div-->
 </div>
 
 <!-- The NMEA widgets. The 50px columns are here for the perspective, they are pads on the left and right -->
@@ -2990,6 +2992,21 @@
 
     </div>
 </div> <!-- End of Tab 6 -->
+
+<div id="seven" style="display: none;">
+    <div id="tide-data"
+         style="/*display: grid; grid-template-columns: var(--padding) auto var(--padding);*/ padding: 10px; text-align: center;">
+        <!--h1>Tides</h1-->
+        <!--iframe src="../chartless.world.tide.data.html"
+                id="tide-frame"
+                frameborder="0"
+                name="iframe_tide"
+                style="width: 100%; height: 95%; overflow: hidden; position:absolute; top: 210px; left: 0px; right: 0px; bottom: 0px;"
+                height="100%"
+                width="100%"></iframe-->
+
+    </div>
+</div> <!-- End of Tab 7 -->
 
 <div id="raw-data-div"> <!-- Raw Astro Data placeholder --> </div>
 

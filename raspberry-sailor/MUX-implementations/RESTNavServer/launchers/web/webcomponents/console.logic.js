@@ -4,7 +4,7 @@ if (Math.toDegrees === undefined) {
 	}
 }
 
-const TABS = ['one', 'two', 'three', 'four', 'five', 'six'];
+const TABS = ['one', 'two', 'three', 'four', 'five', 'six', 'seven'];
 
 function openTab(evt, tabNum) {
 	let tabLinks = document.getElementsByClassName("tablinks");

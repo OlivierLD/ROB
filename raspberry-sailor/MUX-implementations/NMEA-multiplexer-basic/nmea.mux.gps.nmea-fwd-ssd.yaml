@@ -9,7 +9,7 @@ name: "Real world scenario."
 description:
   - Reads GPS
   - Forward data to "NMEA Cache forwarder" (on SSD1306, port 8080)
-  - Log data in a file (data.nmea)
+  - Log data in a file (data.nmea, see below)
   - Forward to TCP as well
 context:
   with.http.server: true
