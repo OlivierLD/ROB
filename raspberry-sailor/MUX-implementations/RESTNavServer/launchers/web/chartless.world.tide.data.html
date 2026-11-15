@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <!--
- | Chartless. WiP.
+ | Chartless Map & Tides. WiP.
  | With World Data
  +-->
 <html>
 <head>
     <meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Chartless Map with Tides</title>
+	<title>With Tides</title>
     <link rel="icon" type="image/ico" href="./icons/hammerhead.02.ico">
 	<style type="text/css">
 html {
@@ -68,8 +68,12 @@ select, input {
   height: 0;
 }
 .zoom-button {
+  border-radius: 50%;
+  background-color: rgba(255, 165, 0, 0.5);
+
   padding: 4px 6px;
   min-width: 32px;
+  margin: 2px;
 }
 compass-display .green {
 	--bg-color: transparent;
@@ -329,14 +333,16 @@ import * as tideEngine from './tide/tideEngine.js'; // this one itself imports t
 // Adding features to the Date object.
 import * as dateFmt from './js/date.module.js';
 
-const THE_YEAR = new Date().getYear() + 1900;
-const VERBOSE = false;
+const THE_YEAR = new Date().getYear() + 1900; // Argh ! Current (system) year.
+const VERBOSE = true;
 
 let before = 0.0;
 let after = 0.0;
 
+before = Date.now();
 let tideStations = tideEngine.default.getStations(); // ["stations"];
-let mess = `We have ${Object.keys(tideStations).length} stations. ${ VERBOSE ? `retrieved in ${after - before} ms.)` : '' }`;
+after = Date.now();
+let mess = `We have ${Object.keys(tideStations).length} stations ${ VERBOSE ? `(retrieved in ${after - before} ms)` : '' }.`;
 console.log(mess);
 
 // Spit out station list, sorted, if needed.
@@ -772,7 +778,7 @@ events.subscribe(COG, val => {
 	document.getElementById('cog').value = val;
 	cog = val;
 });
-// For debug, mainly.
+// For debug, mainly, tossion.
 if (false) {
 	events.subscribe(FULL, val => {
 		console.log(JSON.stringify(val, null, 2));
@@ -1765,29 +1771,29 @@ window.onload = () => {
 
 	<h3>With tides</h3>
 
-<dialog id="generated-curve-dialog">
-    <div class="dialog-header">
-        <span>Tide Curve</span>
-        <span class="dialog-header-close" onclick="closeGeneratedDialog();">&times</span>
-    </div>
-    <div style="text-align: left; max-height: 300px; overflow-y: scroll;">
-        <div id="generated-graph">
-            <div id="station-name">Tide Graph</div>
-            <graph-display id="tide-graph-01"
-                           tabindex="-1"
-                           class=""
-                           width="450"
-                           height="200"
-                           padding="5"
-                           hgrid="0:1"
-                           vgrid="0:3"
-                           value="null"
-                           label="Tide Curve"
-                           title="Tide Curve"></graph-display>
-            <div id="tide-table" style="max-height: 80px; overflow-y: scroll;"></div>
-        </div>
-    </div>
-</dialog>
+	<dialog id="generated-curve-dialog">
+		<div class="dialog-header">
+			<span>Tide Curve</span>
+			<span class="dialog-header-close" onclick="closeGeneratedDialog();">&times</span>
+		</div>
+		<div style="text-align: left; max-height: 300px; overflow-y: scroll;">
+			<div id="generated-graph">
+				<div id="station-name">Tide Graph</div>
+				<graph-display id="tide-graph-01"
+							tabindex="-1"
+							class=""
+							width="450"
+							height="200"
+							padding="5"
+							hgrid="0:1"
+							vgrid="0:3"
+							value="null"
+							label="Tide Curve"
+							title="Tide Curve"></graph-display>
+				<div id="tide-table" style="max-height: 80px; overflow-y: scroll;"></div>
+			</div>
+		</div>
+	</dialog>
 
 	<!--h1>GPS, AIS, Markers, Borders, Waypoints, Tides</h1-->
     <table>
@@ -1933,6 +1939,5 @@ window.onload = () => {
 		</tr>
     </table>
 
-	<!--button onclick="loadWorldData();">Load World Data</button-->
 </body>
 </html>
