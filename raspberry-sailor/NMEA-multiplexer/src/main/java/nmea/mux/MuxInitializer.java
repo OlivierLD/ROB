@@ -149,6 +149,8 @@ public class MuxInitializer {
                     String desc = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)), "");
                     boolean active = "true".equals(muxProps.getProperty(String.format("mux.%s.active", MUX_IDX_FMT.format(muxIdx)), "true"));
 
+                    System.out.printf("");
+
                     if (verbose) {
                         spitOutSentenceFilters(sentenceFilters);
                         System.out.printf("Instantiation of class %s, desc is [%s]\n", clss, desc);
@@ -226,9 +228,9 @@ public class MuxInitializer {
                     // Make this generic, not specific like it was below.
                     String deviceFilters = muxProps.getProperty(String.format("mux.%s.device.filters", MUX_IDX_FMT.format(muxIdx)), "");
                     String sentenceFilters = muxProps.getProperty(String.format("mux.%s.sentence.filters", MUX_IDX_FMT.format(muxIdx)), "");
-                    String consumerActive = muxProps.getProperty(String.format("mux.%s.active", MUX_IDX_FMT.format(muxIdx)));
-                    String consumerVerbose = muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)));
-                    String consumerDescription = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)));
+                    String consumerActive = muxProps.getProperty(String.format("mux.%s.active", MUX_IDX_FMT.format(muxIdx)), "true");
+                    String consumerVerbose = muxProps.getProperty(String.format("mux.%s.verbose", MUX_IDX_FMT.format(muxIdx)), "false");
+                    String consumerDescription = muxProps.getProperty(String.format("mux.%s.description", MUX_IDX_FMT.format(muxIdx)), "-");
                     if (verbose) {
                         spitOutSentenceFilters(sentenceFilters);
                     }
