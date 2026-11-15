@@ -1290,6 +1290,7 @@ let setStyle = (opt) => {
 	let map = document.getElementById('chartless-map-01');
 	let cog = document.getElementById('cog');
 	let sog = document.getElementById('sog');
+	let anchors = document.getElementsByTagName('a');
 
 	document.getElementById('chartless-map-01').className = opt.value;
 
@@ -1308,6 +1309,10 @@ let setStyle = (opt) => {
 			sog.classList.remove('analogdisplay-flat-gray');
 			sog.classList.add('analogdisplay-monochrome-green');
 			sog.classList.remove('analogdisplay-monochrome-orange');
+
+			for (let i=0; i<anchors.length; i++) {
+				anchors[i].style.color = 'white';
+			}
 			break;
 		case 'chartless-map-02':
 			// markerAndTrackColor = 'cyan';
@@ -1323,6 +1328,10 @@ let setStyle = (opt) => {
 			sog.classList.remove('analogdisplay-flat-gray');
 			sog.classList.remove('analogdisplay-monochrome-green');
 			sog.classList.add('analogdisplay-monochrome-orange');
+
+			for (let i=0; i<anchors.length; i++) {
+				anchors[i].style.color = 'cyan';
+			}
 			break;
 		case 'chartless-map-01':
 		default:
@@ -1339,6 +1348,10 @@ let setStyle = (opt) => {
 			sog.classList.add('analogdisplay-flat-gray');
 			sog.classList.remove('analogdisplay-monochrome-green');
 			sog.classList.remove('analogdisplay-monochrome-orange');
+
+			for (let i=0; i<anchors.length; i++) {
+				anchors[i].style.color = 'blue';
+			}
 			break;
 	}
 };
