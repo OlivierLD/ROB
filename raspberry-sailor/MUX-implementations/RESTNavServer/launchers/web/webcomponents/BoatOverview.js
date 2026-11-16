@@ -297,8 +297,10 @@ class BoatOverview extends HTMLElement {
 		this._width = 600;
 		this._height = 500;
 
+		this._northUp = true;
+
 		this._bsp = 0; // Boat Speed
-		this._hdg = 0; // True Heading
+		this._hdg; // = 0; // True Heading
 		this._aws = 0; // App Wind Speed
 		this._awa = 0; // App Wind Angle
 		this._tws = 0; // True Wind Speed
@@ -456,6 +458,9 @@ class BoatOverview extends HTMLElement {
 			case "wp-name":
 				this._wpName = newVal;
 				break;
+			case "north-up":
+				this._northUp = (newVal === 'true');
+				break;
 			default:
 				break;
 		}
@@ -590,6 +595,11 @@ class BoatOverview extends HTMLElement {
 		this.setAttribute("boat-shape", val);
 	}
 
+	set northUp(val) {
+		this.setAttribute("north-up", val ? "true" : "false");
+		this._northUp = val;
+	}
+
 	set shadowRoot(val) {
 		this._shadowRoot = val;
 	}
@@ -715,6 +725,10 @@ class BoatOverview extends HTMLElement {
 		return this._boatShape;
 	}
 
+	get northUp() {
+		return this._northUp;
+	}
+
 	get shadowRoot() {
 		return this._shadowRoot;
 	}
@@ -824,6 +838,10 @@ class BoatOverview extends HTMLElement {
 		let cHeight = this._height;
 
 		let _twd = Math.toRadians(this._twd);
+		if (!this._northUp) {
+			_twd = Math.toRadians(this._twd - this._hdg);
+		}
+
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
@@ -857,6 +875,10 @@ class BoatOverview extends HTMLElement {
 			wd -= 360;
 		}
 		let _awd = Math.toRadians(wd);
+		if (!this._northUp) {
+			_awd = Math.toRadians(wd - this._hdg);
+		}
+
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
@@ -890,6 +912,9 @@ class BoatOverview extends HTMLElement {
 		let cHeight = this._height;
 
 		let _hdg = Math.toRadians(this._hdg);
+		if (!this._northUp) {
+			_hdg = 0;
+		}
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
@@ -924,6 +949,9 @@ class BoatOverview extends HTMLElement {
 		let cHeight = this._height;
 
 		let _hdg = Math.toRadians(this._cmg);
+		if (!this._northUp) {
+			_hdg = Math.toRadians(this._cmg - this._hdg);
+		}
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
@@ -966,13 +994,30 @@ class BoatOverview extends HTMLElement {
 		}
 
 		let _magNorth = Math.toRadians(magNorth);
+		if (!this._northUp) {
+			_magNorth = Math.toRadians(magNorth - this._hdg);
+		}
+		let _compassNorth = Math.toRadians(compassNorth);
+		if (!this._northUp) {
+			_compassNorth = Math.toRadians(compassNorth - this._hdg);
+		}
+
+		console.log((this._northUp ? "North Up"	: "Head Up") + ", HDG:" + this._hdg + "°, Mag North: " + Math.toDegrees(_magNorth).toFixed(2) + "°, Compass North: " + Math.toDegrees(_compassNorth).toFixed(2) + "°");
+
 		let center = this.getCanvasCenter();
 		let x = center.x;
 		let y = center.y;
 
 		let bspLength = this._zoom * this._bsp * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
+
 		// True North first
-		let line = new Line(x, y, x, y - (bspLength * 1.1));
+		let toX = x;
+		let toY = y - (bspLength * 1.1);
+		if (!this._northUp) {
+			toX = x - (bspLength * 1.1) * Math.sin(Math.toRadians(this._hdg));;
+			toY = y - (bspLength * 1.1) * Math.cos(Math.toRadians(this._hdg));;
+		}
+		let line = new Line(x, y, toX, toY);
 		context.beginPath();
 		context.strokeStyle = this.boatOverviewColorConfig.dDWArrowColor;
 		context.fillStyle   = this.boatOverviewColorConfig.dDWArrowColor;
@@ -982,9 +1027,9 @@ class BoatOverview extends HTMLElement {
 		if (this._withLabels) {
 			context.font= "12px Arial";
 			context.fillStyle = this.boatOverviewColorConfig.dDWDataDisplayColor;
-			context.fillText("N", x, y  - (bspLength * 1.1));
+			context.fillText("N", toX, toY);
 		}
-
+		// Magnetic North
 		context.beginPath();
 		let dX = bspLength * Math.sin(_magNorth);
 		let dY = - bspLength * Math.cos(_magNorth);
@@ -999,7 +1044,7 @@ class BoatOverview extends HTMLElement {
 			context.fillStyle = this.boatOverviewColorConfig.dDWDataDisplayColor;
 			context.fillText("Mag N:" + magNorth.toFixed(0) + "°", x + dX, y + dY);
 		}
-		let _compassNorth = Math.toRadians(compassNorth);
+		// Compass North
 		context.beginPath();
 
 		dX = bspLength * 0.8 * Math.sin(_compassNorth);
@@ -1018,6 +1063,7 @@ class BoatOverview extends HTMLElement {
 			context.fillText("Compass N:" + compassNorth.toFixed(0) + "°", x + dX, y + dY);
 		}
 	}
+
 	drawSOG(context) {
 		if (this._sog === 0) {
 			return;
@@ -1027,6 +1073,9 @@ class BoatOverview extends HTMLElement {
 		let cHeight = this._height;
 
 		let _hdg = Math.toRadians(this._cog);
+		if (!this._northUp) {
+			_hdg = Math.toRadians(this._cog - this._hdg);
+		}
 		context.beginPath();
 		let center = this.getCanvasCenter();
 		let x = center.x;
@@ -1064,8 +1113,14 @@ class BoatOverview extends HTMLElement {
 
 		if (this.vmgOnWind) {
 			_hdg = Math.toRadians(this._twd);
+			if (!this._northUp) {
+				_hdg = Math.toRadians(this._twd - this._hdg);
+			}
 		} else {
 			_hdg = Math.toRadians(this._b2wp);
+			if (!this._northUp) {
+				_hdg = Math.toRadians(this._b2wp - this._hdg);
+			}
 			// Display WP direction
 			context.strokeStyle = this.boatOverviewColorConfig.vmgArrowColor;
 			context.fillStyle   = this.boatOverviewColorConfig.vmgArrowColor;
@@ -1100,6 +1155,9 @@ class BoatOverview extends HTMLElement {
 			context.setLineDash([5]);
 			context.moveTo(x + dX, y + dY);
 			let _cog = Math.toRadians(this._cog);
+			if (!this._northUp) {
+				_cog = Math.toRadians(this._cog - this._hdg);
+			}
 			let sogLength = this._zoom * this._sog * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 			dX = sogLength * Math.sin(_cog);
 			dY = - sogLength * Math.cos(_cog);
@@ -1124,11 +1182,17 @@ class BoatOverview extends HTMLElement {
 		let y = center.y;
 
 		let _cmg = Math.toRadians(this._cmg);
+		if (!this._northUp) {
+			_cmg = Math.toRadians(this._cmg - this._hdg);
+		}
 		let bspLength = this._zoom * this._bsp * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXcmg = bspLength * Math.sin(_cmg);
 		let dYcmg = - bspLength * Math.cos(_cmg);
 
 		let _cog = Math.toRadians(this._cog);
+		if (!this._northUp) {
+			_cog = Math.toRadians(this._cog - this._hdg);
+		}
 		let sogLength = this._zoom * this._sog * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXcog = sogLength * Math.sin(_cog);
 		let dYcog = - sogLength * Math.cos(_cog);
@@ -1175,12 +1239,18 @@ class BoatOverview extends HTMLElement {
 			wd -= 360;
 		}
 		let _awd = Math.toRadians(wd);
+		if (!this._northUp) {
+			_awd = Math.toRadians(wd - this._hdg);
+		}
 		context.beginPath();
 		let awLength = this._zoom * this._aws * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXaw = awLength * Math.sin(_awd);
 		let dYaw = - awLength * Math.cos(_awd);
 
 		let _twd = Math.toRadians(this._twd);
+		if (!this._northUp) {
+			_twd = Math.toRadians(this._twd - this._hdg);
+		}
 		let twLength = this._zoom * this._tws * ((Math.min(cHeight, cWidth) / 2) / this.speedScale);
 		let dXtw = twLength * Math.sin(_twd);
 		let dYtw = - twLength * Math.cos(_twd);
@@ -1388,9 +1458,15 @@ class BoatOverview extends HTMLElement {
 		let ptX = center.x;
 		let ptY = center.y;
 
+		let headingToDisplay = trueHeading;
+
+		if (!this._northUp) {
+			headingToDisplay = 0;
+		}
+
 		for (let i=0; i<x.length; i++) { // Rotation
-			let dx = x[i] * Math.cos(Math.toRadians(trueHeading)) + (y[i] * (-Math.sin(Math.toRadians(trueHeading))));
-			let dy = x[i] * Math.sin(Math.toRadians(trueHeading)) + (y[i] *   Math.cos(Math.toRadians(trueHeading)));
+			let dx = x[i] * Math.cos(Math.toRadians(headingToDisplay)) + (y[i] * (-Math.sin(Math.toRadians(headingToDisplay))));
+			let dy = x[i] * Math.sin(Math.toRadians(headingToDisplay)) + (y[i] *   Math.cos(Math.toRadians(headingToDisplay)));
 			xPoints.push(Math.round(ptX + dx));
 			yPoints.push(Math.round(ptY + dy));
 		}
@@ -1474,7 +1550,11 @@ class BoatOverview extends HTMLElement {
 			context.stroke();
 		}
 
-		this.drawBoat(context, this._hdg);
+		if (this._hdg === undefined || this._hdg === null) {
+			this.drawBoat(context, this._cog);
+		} else {
+			this.drawBoat(context, this._hdg);
+		}
 		if (this._withWind && this._withTrueWind) {
 			if (this._withGPS) {
 				this.drawTrueWind(context);
@@ -1509,7 +1589,11 @@ class BoatOverview extends HTMLElement {
 		context.fillText(this._bsp + " kts", col2, txtY);
 		txtY += space;
 		context.fillText("HDG", col1, txtY);
-		context.fillText(this._hdg.toFixed(0) + "° True", col2, txtY);
+		if (this._hdg === undefined || this._hdg === null) {
+			context.fillText("-", col2, txtY);
+		} else {
+			context.fillText(this._hdg.toFixed(0) + "° True", col2, txtY);
+		}
 		if (this._withWind) {
 			txtY += space;
 			context.fillText("AWS", col1, txtY);

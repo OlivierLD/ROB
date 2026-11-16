@@ -733,197 +733,207 @@ let drawArrow = (divId, dir, body) => {
 
     }
     let svg = document.createElementNS(XMLNS, 'svg');
-    // svg.setAttribute('xmlns', xmlns);
-    svg.setAttributeNS(null, 'width', FRAME_WIDTH.toString());
-    svg.setAttributeNS(null, 'height', FRAME_HEIGHT.toString());
-    svg.setAttribute('style', 'background-color: transparent; border-radius: 10px; border: 2px solid rgba(128, 128, 128, 0.25);');
 
-    if (parent !== null) {
-        parent.appendChild(svg);
-    }
+	try {
+		// svg.setAttribute('xmlns', xmlns);
+		svg.setAttributeNS(null, 'width', FRAME_WIDTH.toString());
+		svg.setAttributeNS(null, 'height', FRAME_HEIGHT.toString());
+		svg.setAttribute('style', 'background-color: transparent; border-radius: 10px; border: 2px solid rgba(128, 128, 128, 0.25);');
 
-    let circle = document.createElementNS(XMLNS, 'circle');
-    circle.setAttributeNS(null, 'cx', (FRAME_WIDTH / 2).toString());
-    circle.setAttributeNS(null, 'cy', (FRAME_HEIGHT / 2).toString());
-    circle.setAttributeNS(null, 'r', '40');
-    circle.setAttributeNS(null, 'stroke', 'rgba(255, 255, 2550, 0.35)');
-    circle.setAttributeNS(null, 'stroke-width', '4');
-    circle.setAttributeNS(null, 'fill', 'rgba(0, 0, 128, 0.15)');
-    svg.appendChild(circle);
+		if (parent !== null) {
+			parent.appendChild(svg);
+		}
 
-    let polygon = document.createElementNS(XMLNS, 'polygon');
-    polygon.setAttribute('style', `fill: ${fillColor}; stroke: rgba(0, 0, 0, 0.35); stroke-width: 2;`);
+		let circle = document.createElementNS(XMLNS, 'circle');
+		circle.setAttributeNS(null, 'cx', (FRAME_WIDTH / 2).toString());
+		circle.setAttributeNS(null, 'cy', (FRAME_HEIGHT / 2).toString());
+		circle.setAttributeNS(null, 'r', '40');
+		circle.setAttributeNS(null, 'stroke', 'rgba(255, 255, 2550, 0.35)');
+		circle.setAttributeNS(null, 'stroke-width', '4');
+		circle.setAttributeNS(null, 'fill', 'rgba(0, 0, 128, 0.15)');
+		svg.appendChild(circle);
 
-    let headX = (FRAME_WIDTH / 2) + (60 * Math.sin(Math.toRadians(direction)));
-    let headY = (FRAME_HEIGHT / 2) + (60 * Math.cos(Math.toRadians(direction)));
-    let arrow = [{
-        // head
-        x: headX,
-        y: headY
-    }, {
-        // tail - left
-        x: (FRAME_WIDTH / 2) - (60 * Math.sin(Math.toRadians(direction + 10))),
-        y: (FRAME_HEIGHT / 2) - (60 * Math.cos(Math.toRadians(direction + 10)))
-    }, {
-        // tail - center
-        x: (FRAME_WIDTH / 2) - (55 * Math.sin(Math.toRadians(direction))),
-        y: (FRAME_HEIGHT / 2) - (55 * Math.cos(Math.toRadians(direction)))
-    }, {
-        // tail - right
-        x: (FRAME_WIDTH / 2) - (60 * Math.sin(Math.toRadians(direction - 10))),
-        y: (FRAME_HEIGHT / 2) - (60 * Math.cos(Math.toRadians(direction - 10)))
-    }];
-    // Draw polygon points here
-    let points = ""; // `${head.x.toFixed(0)},${head.y.toFixed(0)} ${tailRight.x.toFixed(0)},${tailRight.y.toFixed(0)} ${tail.x.toFixed(0)},${tail.y.toFixed(0)} ${tailLeft.x.toFixed(0)},${tailLeft.y.toFixed(0)}`;
-    arrow.forEach(pt => {
-        points += `${pt.x.toFixed(0)},${pt.y.toFixed(0)} `;
-    });
-    // console.log('Points:' + points.trim());
-    try {
-        polygon.setAttributeNS(null, 'points', points.trim());
-        svg.appendChild(polygon);
-    } catch (err) {
-        console.log(`Oops: ${JSON.stringify(err)}`);
-    }
+		let polygon = document.createElementNS(XMLNS, 'polygon');
+		polygon.setAttribute('style', `fill: ${fillColor}; stroke: rgba(0, 0, 0, 0.35); stroke-width: 2;`);
 
-    let text = document.createElementNS(XMLNS, 'text');
-    text.setAttributeNS(null, 'x', '10');
-    text.setAttributeNS(null, 'y', '25');
-    text.setAttributeNS(null, 'font-size', '16');
-    text.setAttributeNS(null, 'font-weight', 'bold');
-    text.setAttributeNS(null, 'font-family', "'Helvetica Neue', 'Lato', Verdana, Helvetica, Geneva, sans-serif;");
-    text.setAttributeNS(null, 'fill', 'rgba(255, 244, 255, 0.75)');
-    text.appendChild(document.createTextNode(`${label}`));
-    svg.appendChild(text);
+		let headX = (FRAME_WIDTH / 2) + (60 * Math.sin(Math.toRadians(direction)));
+		let headY = (FRAME_HEIGHT / 2) + (60 * Math.cos(Math.toRadians(direction)));
+		let arrow = [{
+			// head
+			x: headX,
+			y: headY
+		}, {
+			// tail - left
+			x: (FRAME_WIDTH / 2) - (60 * Math.sin(Math.toRadians(direction + 10))),
+			y: (FRAME_HEIGHT / 2) - (60 * Math.cos(Math.toRadians(direction + 10)))
+		}, {
+			// tail - center
+			x: (FRAME_WIDTH / 2) - (55 * Math.sin(Math.toRadians(direction))),
+			y: (FRAME_HEIGHT / 2) - (55 * Math.cos(Math.toRadians(direction)))
+		}, {
+			// tail - right
+			x: (FRAME_WIDTH / 2) - (60 * Math.sin(Math.toRadians(direction - 10))),
+			y: (FRAME_HEIGHT / 2) - (60 * Math.cos(Math.toRadians(direction - 10)))
+		}];
+		// Draw polygon points here
+		let points = ""; // `${head.x.toFixed(0)},${head.y.toFixed(0)} ${tailRight.x.toFixed(0)},${tailRight.y.toFixed(0)} ${tail.x.toFixed(0)},${tail.y.toFixed(0)} ${tailLeft.x.toFixed(0)},${tailLeft.y.toFixed(0)}`;
+		arrow.forEach(pt => {
+			points += `${pt.x.toFixed(0)},${pt.y.toFixed(0)} `;
+		});
+		// console.log('Points:' + points.trim());
+		try {
+			polygon.setAttributeNS(null, 'points', points.trim());
+			svg.appendChild(polygon);
+		} catch (err) {
+			console.log(`Oops: ${JSON.stringify(err)}`);
+		}
 
-    if (parent !== null && DEBUG) {
-        console.log(parent.innerHTML);
-    }
-    //debugger;
-    let svgContent = {x: headX, y: headY, svgContent: svg};
-    if (divId !== undefined) {
-        let svgDiv = document.getElementById(divId);
-        // It's a replace, remove first.
-        let content = svgDiv.firstElementChild;
-        if (content !== null && content !== undefined) {
-            svgDiv.removeChild(content);
-        }
-        svgDiv.appendChild(svg);
-    } else {
-        return svgContent;
-    }
+		let text = document.createElementNS(XMLNS, 'text');
+		text.setAttributeNS(null, 'x', '10');
+		text.setAttributeNS(null, 'y', '25');
+		text.setAttributeNS(null, 'font-size', '16');
+		text.setAttributeNS(null, 'font-weight', 'bold');
+		text.setAttributeNS(null, 'font-family', "'Helvetica Neue', 'Lato', Verdana, Helvetica, Geneva, sans-serif;");
+		text.setAttributeNS(null, 'fill', 'rgba(255, 244, 255, 0.75)');
+		text.appendChild(document.createTextNode(`${label}`));
+		svg.appendChild(text);
+
+		if (parent !== null && DEBUG) {
+			console.log(parent.innerHTML);
+		}
+		//debugger;
+		let svgContent = {x: headX, y: headY, svgContent: svg};
+		if (divId !== undefined) {
+			let svgDiv = document.getElementById(divId);
+			// It's a replace, remove first.
+			let content = svgDiv.firstElementChild;
+			if (content !== null && content !== undefined) {
+				svgDiv.removeChild(content);
+			}
+			svgDiv.appendChild(svg);
+		} else {
+			return svgContent;
+		}
+	} catch (err) {
+		console.log(`Oops: ${JSON.stringify(err)}`);
+	}
+
 };
 
 // SVG widget for the Sun's altitude.
 let drawElevation = (divId, elev, color, circleColor) => { // colors in hex, like #ffff00
     // console.log(`Sun Elevation: ${elev.toFixed(2)}`);
     // document.getElementById(divId).innerHTML = `Sun Elevation: ${elev.toFixed(2)}&deg;`;
-    let fillColor = 'rgba(255, 255, 255, 0.5)';
-    let parent = (divId !== null) ? document.getElementById(divId) : null;
+	try {
+		let fillColor = 'rgba(255, 255, 255, 0.5)';
+		let parent = (divId !== null) ? document.getElementById(divId) : null;
 
-    let svg = document.createElementNS(XMLNS, 'svg');
-    // svg.setAttribute('xmlns', xmlns);
-    svg.setAttributeNS(null, 'width', FRAME_WIDTH.toString());
-    svg.setAttributeNS(null, 'height', FRAME_HEIGHT.toString());
-    svg.setAttribute('style', 'background-color: transparent; border-radius: 10px; border: 2px solid rgba(128, 128, 128, 0.25);');
+		let svg = document.createElementNS(XMLNS, 'svg');
+		// svg.setAttribute('xmlns', xmlns);
+		svg.setAttributeNS(null, 'width', FRAME_WIDTH.toString());
+		svg.setAttributeNS(null, 'height', FRAME_HEIGHT.toString());
+		svg.setAttribute('style', 'background-color: transparent; border-radius: 10px; border: 2px solid rgba(128, 128, 128, 0.25);');
 
-    if (parent !== null) {
-        parent.appendChild(svg);
-    }
+		if (parent !== null) {
+			parent.appendChild(svg);
+		}
 
-    // Arc
-    /*
-    <path d="M150 0 L75 200 L225 200 Z" />
-        */
-    let path = document.createElementNS(XMLNS, 'path');
-    path.setAttribute('style', `fill: ${fillColor}; stroke: rgba(128, 128, 128, 0.5); stroke-width: 2;`);
-    let pathDef = `M5,10 A30,30 0 0,1 5,${FRAME_HEIGHT - 10}`;
-    //              |                 |
-    //              |                 To 5,XX
-    //              From 5,10
-    path.setAttribute('d', pathDef);
-    svg.appendChild(path);
+		// Arc
+		/*
+		<path d="M150 0 L75 200 L225 200 Z" />
+			*/
+		let path = document.createElementNS(XMLNS, 'path');
+		path.setAttribute('style', `fill: ${fillColor}; stroke: rgba(128, 128, 128, 0.5); stroke-width: 2;`);
+		let pathDef = `M5,10 A30,30 0 0,1 5,${FRAME_HEIGHT - 10}`;
+		//              |                 |
+		//              |                 To 5,XX
+		//              From 5,10
+		path.setAttribute('d', pathDef);
+		svg.appendChild(path);
 
-    // Horizontal
-    let horizon = document.createElementNS(XMLNS, 'path');
-    horizon.setAttribute('style', `fill: ${fillColor}; stroke: rgba(255, 255, 255, 0.35); stroke-width: 1;`);
-    let horizonDef = `M5,${FRAME_HEIGHT / 2} L${FRAME_WIDTH - 5},${FRAME_HEIGHT / 2}`;
-    horizon.setAttribute('d', horizonDef);
-    svg.appendChild(horizon);
+		// Horizontal
+		let horizon = document.createElementNS(XMLNS, 'path');
+		horizon.setAttribute('style', `fill: ${fillColor}; stroke: rgba(255, 255, 255, 0.35); stroke-width: 1;`);
+		let horizonDef = `M5,${FRAME_HEIGHT / 2} L${FRAME_WIDTH - 5},${FRAME_HEIGHT / 2}`;
+		horizon.setAttribute('d', horizonDef);
+		svg.appendChild(horizon);
 
-    // To the Body (Sun, Moon, ...)
-    let radius = FRAME_HEIGHT / 2;
-    let x = radius * Math.cos(Math.toRadians(elev));
-    let y = radius * Math.sin(Math.toRadians(elev));
-    let toSun = document.createElementNS(XMLNS, 'path');
-    toSun.setAttribute('style', `fill: ${fillColor}; stroke: rgba(0, 0, 0, 0.35); stroke-width: 1;`);
-    let toSunDef = `M5,${FRAME_HEIGHT / 2} L${x},${(FRAME_HEIGHT / 2) - y}`;
-    toSun.setAttribute('d', toSunDef);
-    svg.appendChild(toSun);
+		// To the Body (Sun, Moon, ...)
+		let radius = FRAME_HEIGHT / 2;
+		let x = radius * Math.cos(Math.toRadians(elev));
+		let y = radius * Math.sin(Math.toRadians(elev));
+		let toSun = document.createElementNS(XMLNS, 'path');
+		toSun.setAttribute('style', `fill: ${fillColor}; stroke: rgba(0, 0, 0, 0.35); stroke-width: 1;`);
+		let toSunDef = `M5,${FRAME_HEIGHT / 2} L${x},${(FRAME_HEIGHT / 2) - y}`;
+		toSun.setAttribute('d', toSunDef);
+		svg.appendChild(toSun);
 
-    // The body circle
-    /*
-    <circle cx="40" cy="40" r="24" style="stroke:#006600; fill:#00cc00"/>
-        */
-    let sun = document.createElementNS(XMLNS, 'circle');
-    sun.setAttribute('style', `stroke:${circleColor !== undefined ? circleColor : '#ff0000'}; fill:${color !== undefined ? color : '#ffff00'};`);
-    sun.setAttribute('cx', `${x}`);
-    sun.setAttribute('cy', `${(FRAME_HEIGHT / 2) - y}`);
-    sun.setAttribute('r', '6');
-    svg.appendChild(sun);
+		// The body circle
+		/*
+		<circle cx="40" cy="40" r="24" style="stroke:#006600; fill:#00cc00"/>
+			*/
+		let sun = document.createElementNS(XMLNS, 'circle');
+		sun.setAttribute('style', `stroke:${circleColor !== undefined ? circleColor : '#ff0000'}; fill:${color !== undefined ? color : '#ffff00'};`);
+		sun.setAttribute('cx', `${x}`);
+		sun.setAttribute('cy', `${(FRAME_HEIGHT / 2) - y}`);
+		sun.setAttribute('r', '6');
+		svg.appendChild(sun);
 
-    // Text
-    /*
-    <text x="20" y="40">Example SVG text 1</text>
-     */
-    let absVal = Math.abs(elev);
-    let intValue = Math.floor(absVal);
-    let dec = absVal - intValue;
-    dec *= 60;
-    let min = dec.toFixed(1);
-    let label = `Elev:${elev < 0 ? "-" : ""}${intValue}°${min}'`;
-    let text = document.createElementNS(XMLNS, 'text');
-    let fontSize = 10;
-    text.setAttribute('x', 5);
-    text.setAttribute('y', `${(FRAME_HEIGHT / 2) + (fontSize / 2) - 2}`);
-    text.setAttributeNS(null, 'font-size', fontSize);
-    text.setAttributeNS(null, 'font-weight', 'bold');
-    text.setAttributeNS(null, 'font-family', "'Helvetica Neue', 'Lato', Verdana, Helvetica, Geneva, sans-serif;");
-    text.setAttributeNS(null, 'fill', 'lime'); // 'rgba(0, 0, 0, 0.75)');
+		// Text
+		/*
+		<text x="20" y="40">Example SVG text 1</text>
+		*/
+		let absVal = Math.abs(elev);
+		let intValue = Math.floor(absVal);
+		let dec = absVal - intValue;
+		dec *= 60;
+		let min = dec.toFixed(1);
+		let label = `Elev:${elev < 0 ? "-" : ""}${intValue}°${min}'`;
+		let text = document.createElementNS(XMLNS, 'text');
+		let fontSize = 10;
+		text.setAttribute('x', 5);
+		text.setAttribute('y', `${(FRAME_HEIGHT / 2) + (fontSize / 2) - 2}`);
+		text.setAttributeNS(null, 'font-size', fontSize);
+		text.setAttributeNS(null, 'font-weight', 'bold');
+		text.setAttributeNS(null, 'font-family', "'Helvetica Neue', 'Lato', Verdana, Helvetica, Geneva, sans-serif;");
+		text.setAttributeNS(null, 'fill', 'lime'); // 'rgba(0, 0, 0, 0.75)');
 
-    text.appendChild(document.createTextNode(`${label}`));
-    svg.appendChild(text);
+		text.appendChild(document.createTextNode(`${label}`));
+		svg.appendChild(text);
 
-    if (parent !== null) {
-        parent.title = `${label}`;
-    }
-    // A bigger label, top right
-    let label2 = `${elev < 0 ? "-" : ""}${intValue}°${min}'`;
-    let text2 = document.createElementNS(XMLNS, 'text');
-    let fontSize2 = 16;
-    text2.setAttribute('x', FRAME_WIDTH - (label2.length * fontSize2 * 0.8)); // right. TODO Find a way to use measureText...
-    // console.log(`==> label2.length=${label2.length}, x=${FRAME_WIDTH - (label2.length * fontSize2 * 1.0)}`);
-    text2.setAttribute('y', `${(0) + (fontSize2 / 1) + 2}`); // top
-    text2.setAttributeNS(null, 'font-size', fontSize2);
-    text2.setAttributeNS(null, 'font-weight', 'bold');
-    text2.setAttributeNS(null, 'font-family', "'Helvetica Neue', 'Lato', Verdana, Helvetica, Geneva, sans-serif;");
-    text2.setAttributeNS(null, 'fill', 'rgba(255, 244, 255, 0.75)'); // 'rgba(0, 0, 0, 0.75)');
+		if (parent !== null) {
+			parent.title = `${label}`;
+		}
+		// A bigger label, top right
+		let label2 = `${elev < 0 ? "-" : ""}${intValue}°${min}'`;
+		let text2 = document.createElementNS(XMLNS, 'text');
+		let fontSize2 = 16;
+		text2.setAttribute('x', FRAME_WIDTH - (label2.length * fontSize2 * 0.8)); // right. TODO Find a way to use measureText...
+		// console.log(`==> label2.length=${label2.length}, x=${FRAME_WIDTH - (label2.length * fontSize2 * 1.0)}`);
+		text2.setAttribute('y', `${(0) + (fontSize2 / 1) + 2}`); // top
+		text2.setAttributeNS(null, 'font-size', fontSize2);
+		text2.setAttributeNS(null, 'font-weight', 'bold');
+		text2.setAttributeNS(null, 'font-family', "'Helvetica Neue', 'Lato', Verdana, Helvetica, Geneva, sans-serif;");
+		text2.setAttributeNS(null, 'fill', 'rgba(255, 244, 255, 0.75)'); // 'rgba(0, 0, 0, 0.75)');
 
-    text2.appendChild(document.createTextNode(`${label2}`));
-    svg.appendChild(text2);
+		text2.appendChild(document.createTextNode(`${label2}`));
+		svg.appendChild(text2);
 
-    let svgContent = {svgContent: svg};
-    if (divId !== undefined) {
-        let svgDiv = document.getElementById(divId);
-        // It's a replace, remove first.
-        let content = svgDiv.firstElementChild;
-        if (content !== null && content !== undefined) {
-            svgDiv.removeChild(content);
-        }
-        svgDiv.appendChild(svg);
-    } else {
-        return svgContent;
-    }
+		let svgContent = {svgContent: svg};
+		if (divId !== undefined) {
+			let svgDiv = document.getElementById(divId);
+			// It's a replace, remove first.
+			let content = svgDiv.firstElementChild;
+			if (content !== null && content !== undefined) {
+				svgDiv.removeChild(content);
+			}
+			svgDiv.appendChild(svg);
+		} else {
+			return svgContent;
+		}
+	} catch (err) {
+		console.log(`Oops: ${JSON.stringify(err)}`);
+	}
 };
 
 function calculateMoonTilt(moonSunData) {
@@ -1110,111 +1120,115 @@ function astroCallback(data) {
 		drawElevation('moon-elevation', data.moonObs.alt, '#ffffff', '#808080');
 	}
 
-	let dataTable =
-			'<table border="1" class="raw-table">' + '<tr><th>Body</th><th>D</th><th>GHA</th><th>LHA</th><th>Elev</th><th>Z</th></tr>' +
-			'<tr><td align="left">' + bodyName("sun") + '</td><td>' + worldMap.decToSex(data.sun.decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.sun.gha) + '</td><td align="right">' + worldMap.decToSex(sunLHA) + '</td><td align="right">' +	worldMap.decToSex(data.sunObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.sunObs.z) + '</td></tr>' +
-			'<tr><td align="left">' + bodyName("moon") + '</td><td>' + worldMap.decToSex(data.moon.decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.moon.gha) + '</td><td align="right">' + worldMap.decToSex(moonLHA) + '</td><td align="right">' +	worldMap.decToSex(data.moonObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.moonObs.z) + '</td></tr>';
-
-	// Bonus: Update Sun Decl on the graph
 	try {
-		document.getElementById('decl-graph-01').value = worldMap.decToSex(data.sun.decl, "NS");
-		document.getElementById('decl-graph-02').value = worldMap.decToSex(data.moon.decl, "NS");
-	} catch (err) {
-		// Absorb
-	}
+		let dataTable =
+				'<table border="1" class="raw-table">' + '<tr><th>Body</th><th>D</th><th>GHA</th><th>LHA</th><th>Elev</th><th>Z</th></tr>' +
+				'<tr><td align="left">' + bodyName("sun") + '</td><td>' + worldMap.decToSex(data.sun.decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.sun.gha) + '</td><td align="right">' + worldMap.decToSex(sunLHA) + '</td><td align="right">' +	worldMap.decToSex(data.sunObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.sunObs.z) + '</td></tr>' +
+				'<tr><td align="left">' + bodyName("moon") + '</td><td>' + worldMap.decToSex(data.moon.decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.moon.gha) + '</td><td align="right">' + worldMap.decToSex(moonLHA) + '</td><td align="right">' +	worldMap.decToSex(data.moonObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.moonObs.z) + '</td></tr>';
 
-	if (data.wanderingBodies) {
-		for (let i=0; i<data.wanderingBodies.length; i++) {
-			if (data.wanderingBodies[i].name !== "aries") {
-				dataTable +=
-				'<tr><td align="left">' + bodyName(data.wanderingBodies[i].name) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].gha) + '</td><td>' + worldMap.decToSex(getLHA(data.wanderingBodies[i].gha, data.from.longitude)) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].fromPos.observed.alt) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].fromPos.observed.z) + '</td></tr>';
+		// Bonus: Update Sun Decl on the graph
+		try {
+			document.getElementById('decl-graph-01').value = worldMap.decToSex(data.sun.decl, "NS");
+			document.getElementById('decl-graph-02').value = worldMap.decToSex(data.moon.decl, "NS");
+		} catch (err) {
+			// Absorb
+		}
+
+		if (data.wanderingBodies) {
+			for (let i=0; i<data.wanderingBodies.length; i++) {
+				if (data.wanderingBodies[i].name !== "aries") {
+					dataTable +=
+					'<tr><td align="left">' + bodyName(data.wanderingBodies[i].name) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].decl, "NS") + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].gha) + '</td><td>' + worldMap.decToSex(getLHA(data.wanderingBodies[i].gha, data.from.longitude)) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].fromPos.observed.alt) + '</td><td align="right">' + worldMap.decToSex(data.wanderingBodies[i].fromPos.observed.z) + '</td></tr>';
+				}
 			}
 		}
-	}
 
-	dataTable +=
-			'<tr><td align="left">Aries &gamma;</td><td></td><td align="right">' + worldMap.decToSex(data.ghaAries) + '</td><td align="right">' + worldMap.decToSex(lhaAries) + '</td><td align="right">' + worldMap.decToSex(data.ariesObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.ariesObs.z) + '</td></tr></table>';
+		dataTable +=
+				'<tr><td align="left">Aries &gamma;</td><td></td><td align="right">' + worldMap.decToSex(data.ghaAries) + '</td><td align="right">' + worldMap.decToSex(lhaAries) + '</td><td align="right">' + worldMap.decToSex(data.ariesObs.alt) + '</td><td align="right">' + worldMap.decToSex(data.ariesObs.z) + '</td></tr></table>';
 
-	document.getElementById("sun-moon-data").innerHTML = dataTable;
+		document.getElementById("sun-moon-data").innerHTML = dataTable;
 
-	// Display solar date & time
-	let solarDate = new Date(data.solarDate.year, data.solarDate.month - 1, data.solarDate.day, data.solarDate.hour, data.solarDate.min, data.solarDate.sec);
-	let time = solarDate.format("H:i:s");
-	setData('analog-watch-02', time);
-	let date = solarDate.format("d-m-Y-l");
-	setData('calendar-02', date);
+		// Display solar date & time
+		let solarDate = new Date(data.solarDate.year, data.solarDate.month - 1, data.solarDate.day, data.solarDate.hour, data.solarDate.min, data.solarDate.sec);
+		let time = solarDate.format("H:i:s");
+		setData('analog-watch-02', time);
+		let date = solarDate.format("d-m-Y-l");
+		setData('calendar-02', date);
 
-	// Solar Data for the Solar path
-	setData('split-flap-solar-display-00', time);
-	setData('calendar-03', date);
+		// Solar Data for the Solar path
+		setData('split-flap-solar-display-00', time);
+		setData('calendar-03', date);
 
-	let utcDate = new Date(data.epoch);
+		let utcDate = new Date(data.epoch);
 
-	let sysDateFmt = utcDate.format('D d-M-Y H:i:s Z');
-//console.log("System date %s", sysDateFmt);
+		let sysDateFmt = utcDate.format('D d-M-Y H:i:s Z');
+	//console.log("System date %s", sysDateFmt);
 
-    try {
-        document.getElementById("split-flap-display-01")
-                .value = sysDateFmt;
+		try {
+			document.getElementById("split-flap-display-01")
+					.value = sysDateFmt;
 
-        // System date in sun path tab
-        let systemTime = utcDate.format('H:i:s');
-        setData('split-flap-system-display-00', systemTime);
-        let timeOffset = utcDate.format('Z');
-        setData('split-flap-system-display-01', timeOffset);
-        //
-        let systemDate = solarDate.format("d-m-Y-l");
-        setData('calendar-04', systemDate);
+			// System date in sun path tab
+			let systemTime = utcDate.format('H:i:s');
+			setData('split-flap-system-display-00', systemTime);
+			let timeOffset = utcDate.format('Z');
+			setData('split-flap-system-display-01', timeOffset);
+			//
+			let systemDate = solarDate.format("d-m-Y-l");
+			setData('calendar-04', systemDate);
 
-        // utc-date Raw Data tab
-        document.getElementById("utc-date").innerHTML = 'UTC: ' +
-                utcDate.getUTCFullYear() + ' ' +
-                months[utcDate.getUTCMonth()] + ' ' +
-                (utcDate.getUTCDate() < 10 ? '0' : '') + utcDate.getUTCDate() + ' ' +
-                (utcDate.getUTCHours() < 10 ? '0' : '') + utcDate.getUTCHours() + ':' +
-                (utcDate.getUTCMinutes() < 10 ? '0' : '') + utcDate.getUTCMinutes() + ':' +
-                (utcDate.getUTCSeconds() < 10 ? '0' : '') + utcDate.getUTCSeconds();
+			// utc-date Raw Data tab
+			document.getElementById("utc-date").innerHTML = 'UTC: ' +
+					utcDate.getUTCFullYear() + ' ' +
+					months[utcDate.getUTCMonth()] + ' ' +
+					(utcDate.getUTCDate() < 10 ? '0' : '') + utcDate.getUTCDate() + ' ' +
+					(utcDate.getUTCHours() < 10 ? '0' : '') + utcDate.getUTCHours() + ':' +
+					(utcDate.getUTCMinutes() < 10 ? '0' : '') + utcDate.getUTCMinutes() + ':' +
+					(utcDate.getUTCSeconds() < 10 ? '0' : '') + utcDate.getUTCSeconds();
 
-        // Solar Time Raw Data tab
-        document.getElementById("solar-date").innerHTML = 'Solar Time: ' +
-                data.solarDate.year + ' ' +
-                months[data.solarDate.month - 1] + ' ' +
-                (data.solarDate.day < 10 ? '0' : '') + data.solarDate.day + ' ' +
-                (data.solarDate.hour < 10 ? '0' : '') + data.solarDate.hour + ':' +
-                (data.solarDate.min < 10 ? '0' : '') + data.solarDate.min + ':' +
-                (data.solarDate.sec < 10 ? '0' : '') + data.solarDate.sec;
+			// Solar Time Raw Data tab
+			document.getElementById("solar-date").innerHTML = 'Solar Time: ' +
+					data.solarDate.year + ' ' +
+					months[data.solarDate.month - 1] + ' ' +
+					(data.solarDate.day < 10 ? '0' : '') + data.solarDate.day + ' ' +
+					(data.solarDate.hour < 10 ? '0' : '') + data.solarDate.hour + ':' +
+					(data.solarDate.min < 10 ? '0' : '') + data.solarDate.min + ':' +
+					(data.solarDate.sec < 10 ? '0' : '') + data.solarDate.sec;
 
-        // Display transit time Raw Data tab
-        document.getElementById("sun-transit").innerHTML = 'Sun Transit: ' +
-                (data.tPass.hour < 10 ? '0' : '') + data.tPass.hour + ':' +
-                (data.tPass.min < 10 ? '0' : '') + data.tPass.min + ':' +
-                (data.tPass.sec < 10 ? '0' : '') + data.tPass.sec + ' ' +
-                data.tPass.tz;
+			// Display transit time Raw Data tab
+			document.getElementById("sun-transit").innerHTML = 'Sun Transit: ' +
+					(data.tPass.hour < 10 ? '0' : '') + data.tPass.hour + ':' +
+					(data.tPass.min < 10 ? '0' : '') + data.tPass.min + ':' +
+					(data.tPass.sec < 10 ? '0' : '') + data.tPass.sec + ' ' +
+					data.tPass.tz;
 
-        // Extra data Raw Tab
-        if (data.moonPhase !== undefined) {
-            if (document.getElementById("moon-phase-rd")) {
-                document.getElementById("moon-phase-rd").innerHTML = 'Moon Phase: ' + data.moonPhase + "°";
-            }
-            if (data.moon.decl !== undefined && data.from.latitude !== undefined) {
-                let alpha = data.moonTilt; // 0;
-    //			let alpha = 0; // Tilt from horizontal
-    //			if (data.moonToSunSkyRoute !== undefined) {
-    //				try {
-    //					alpha = calculateMoonTilt(moonSunData);
-    //				} catch(error) {
-    //					console.debug(error);
-    //				}
-    //			}
-                let moonTilt = alpha;
-                if (document.getElementById("moon-tilt-rd")) {
-                    //document.getElementById("moon-tilt-rd").innerHTML = `Moon Tilt: ${Math.abs(moonTilt)}°, ${moonTilt>=0?"Right ":"Left "}`;
-                    document.getElementById("moon-tilt-rd").innerHTML = `Moon Tilt: ${moonTilt}°`;
-                }
-            }
-        }
+			// Extra data Raw Tab
+			if (data.moonPhase !== undefined) {
+				if (document.getElementById("moon-phase-rd")) {
+					document.getElementById("moon-phase-rd").innerHTML = 'Moon Phase: ' + data.moonPhase + "°";
+				}
+				if (data.moon.decl !== undefined && data.from.latitude !== undefined) {
+					let alpha = data.moonTilt; // 0;
+		//			let alpha = 0; // Tilt from horizontal
+		//			if (data.moonToSunSkyRoute !== undefined) {
+		//				try {
+		//					alpha = calculateMoonTilt(moonSunData);
+		//				} catch(error) {
+		//					console.debug(error);
+		//				}
+		//			}
+					let moonTilt = alpha;
+					if (document.getElementById("moon-tilt-rd")) {
+						//document.getElementById("moon-tilt-rd").innerHTML = `Moon Tilt: ${Math.abs(moonTilt)}°, ${moonTilt>=0?"Right ":"Left "}`;
+						document.getElementById("moon-tilt-rd").innerHTML = `Moon Tilt: ${moonTilt}°`;
+					}
+				}
+			}
+		} catch (err) {
+			// absorb
+		}
 	} catch (err) {
-	    // absorb
+		// absorb
 	}
 	// ISS?
 	if (document.getElementById('iss-01')) {
@@ -1419,7 +1433,7 @@ let aws = 0;
 let awa = 0;
 let tws = 0;
 let twa = 0;
-let hdg = 0;
+let hdg; // = 0;
 let bsp;
 let lwy;
 let sog;

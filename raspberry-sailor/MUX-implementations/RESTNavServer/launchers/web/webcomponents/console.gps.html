@@ -32,6 +32,7 @@
     <script type="module" src="./CalendarDisplay.js"></script>
     <script type="module" src="./CompassRose.js"></script>
     <script type="module" src="./CompassDisplay.js"></script>
+    <script type="module" src="./CompassGlobe.js"></script>
     <script type="module" src="./WorldMap.js"></script>
     <script type="module" src="./SkyMap.js"></script>
     <script type="module" src="./SplitFlapDisplay.js"></script>
@@ -76,6 +77,17 @@
             }
             return s;
         }
+
+        function handleRadioValue(radio) {
+            var val = radio.value;
+            if (val === "sat") {
+                document.getElementById('compass-globe').style.display = 'none';
+                document.getElementById('satellites').style.display = 'block';
+            } else { // compass
+                document.getElementById('compass-globe').style.display = 'block';
+                document.getElementById('satellites').style.display = 'none';
+            }
+        };
 
         let userTimeDataExpanded = false;
 
@@ -333,10 +345,15 @@
 
             setData('compass-rose-01', val);
             setData('compass-01', val);
+            setData('globe-01', val);
+
             // setData('compass-display-01', val);
             // Boat Overview
             let bo = document.getElementById('boat-overview-01');
             bo.cog = val;
+            // if (hdg === null || hdg === undefined) {
+            //     bo.hdg = val;
+            // }
             //  current (instant)
             if (!CURRENT_FROM_COMPUTER_10M) {
                 if (bsp !== undefined && hdg !== undefined && lwy !== undefined && sog !== undefined && cog !== undefined) {
@@ -349,6 +366,7 @@
         events.subscribe(events.topicNames.TRUE_HDG, (val) => {
             hdg = val; // hdg, in console.logic.js
             setData('compass-display-01', val);
+            // setData('globe-01', val);
             let bo = document.getElementById('boat-overview-01');
             setHdgOnDevCurve('compass-deviation', val, (dev) => {
                 bo.dev = dev;
@@ -1294,6 +1312,10 @@
             overflow-y: scroll;
             padding-bottom: 10px;
          }
+
+         .shade {
+            text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5), 0 0 25px white, 0 0 5px orange;
+         }
     </style>
 
     <!-- !! All logic in the script below !!, including the window.onload -->
@@ -2226,27 +2248,46 @@
                             </div>
                         </div>
 
-                        <!--
-                                GPS Satellites
-                        +-->
-                        <div id="satellites">
-                            <div class="black-frame centered">
-                                <satellite-plotter class="sat-plot-02"
-                                                title="Satellites in view"
-                                                id="sp-01"
-                                                width="250"
-                                                height="250"
-                                                sat-in-view='{}'></satellite-plotter>
+                        <div>
+                            <div>
+                                <input type="radio" name="display-type" checked="true" id="display.sat" value="sat" onclick="handleRadioValue(this);">Satellites</input>
+                                <!--br/ -->
+                                <input type="radio" name="display-type" id="display.compass" value="compass" onclick="handleRadioValue(this);">Compass</input>
                             </div>
-                            <div class="black-frame centered mid">
-                                <!-- input type="checkbox" class="border-cb" onchange="setBorder(this, 'bsp-01');" checked -->
-                                Border
-                                <label class="rocker rocker-tiny">
-                                    <input type="checkbox" onchange="setBorder(this, 'sp-01');" checked>
-                                    <span class="switch-left">Yes</span>
-                                    <span class="switch-right">No</span>
-                                </label>
+                            <div id="compass-globe" class="black-frame centered" style="display: none; ">
+                                <!--
+                                    COMPASS GLOBE
+                                 +-->
+                                <compass-globe id="globe-01"
+                                               class="globe-compass-01"
+                                               width="232"
+                                               height="232"
+                                               value="000"
+                                               label="COG"
+                                               title="Compass&#13;COG"></compass-globe>
+                            </div>
+                            <div id="satellites">
+                                <!--
+                                    GPS Satellites
+                                +-->
+                                <div class="black-frame centered">
+                                    <satellite-plotter class="sat-plot-02"
+                                                       title="Satellites in view"
+                                                       id="sp-01"
+                                                       width="232"
+                                                       height="232"
+                                                       sat-in-view='{}'></satellite-plotter>
+                                </div>
+                                <div class="black-frame centered mid">
+                                    <!-- input type="checkbox" class="border-cb" onchange="setBorder(this, 'bsp-01');" checked -->
+                                    Border
+                                    <label class="rocker rocker-tiny">
+                                        <input type="checkbox" onchange="setBorder(this, 'sp-01');" checked>
+                                        <span class="switch-left">Yes</span>
+                                        <span class="switch-right">No</span>
+                                    </label>
 
+                                </div>
                             </div>
                         </div>
 
@@ -2355,6 +2396,11 @@
                                         document.getElementById("vmg-rocker-label").classList.remove('rocker-disabled');
                                         document.getElementById("current-rocker-label").classList.remove('rocker-disabled');
                                     }
+                                }
+
+                                function updateNorthUp(id, checked) {
+                                    let elem = document.getElementById(id);
+                                    elem.northUp = checked;
                                 }
 
                                 function updateWithCurrent(id, checked) {
@@ -2502,15 +2548,16 @@
                                     <td valign="top">
                                         <div class="black-frame">
                                             <boat-overview id="boat-overview-01"
-                                                        class="boat-overview-01"
-                                                        width="800"
-                                                        height="600"
-                                                        boat-shape="MONO"
-                                                        zoom-on-boat="1"
-                                                        with-current="true"
-                                                        with-labels="false"
-                                                        with-w="false"
-                                                        with-vmg="false"/>
+                                                           class="boat-overview-01"
+                                                           width="800"
+                                                           height="600"
+                                                           boat-shape="MONO"
+                                                           zoom-on-boat="1"
+                                                           with-current="true"
+                                                           with-labels="false"
+                                                           with-w="false"
+                                                           with-vmg="false"
+                                                           north-up="true"/>
                                         </div>
                                     </td>
                                     <td valign="top">
@@ -2529,6 +2576,18 @@
                                                     <br/>
 
                                                     <table>
+                                                        <tr>
+                                                            <td valign="middle" style="text-align: left;">
+                                                                <label class="rocker rocker-tiny" title="North Up/Head Up">
+                                                                    <input type="checkbox" onchange="updateNorthUp('boat-overview-01', this.checked);" checked>
+                                                                    <span class="switch-left">Yes</span>
+                                                                    <span class="switch-right">No</span>
+                                                                </label>
+                                                            </td>
+                                                            <td valign="middle" style="text-align: left;">
+                                                                North Up
+                                                            </td>
+                                                        </tr>
                                                         <tr>
                                                             <td valign="middle" style="text-align: left;">
                                                                 <label class="rocker rocker-tiny" title="Display GPS Data&#13;COG &amp; SOG">
@@ -2686,7 +2745,7 @@
                                             <tr>
                                                 <td>
                                                     <wind-angle-display class="analogdisplay-day"
-                                                                        title="Apparent Wind Speed in Knots"
+                                                                        title="Apparent Wind Speed in Knots&#13;Apparent Wind Angle in Degrees"
                                                                         id="aw-01"
                                                                         value="{ &quot;wa&quot;: 0, &quot;ws&quot;: 0.0 }"
                                                                         major-ticks="30"
@@ -2697,11 +2756,12 @@
                                                                         hand="wind"
                                                                         width="200"
                                                                         height="200"></wind-angle-display>
-
+                                                    <br/>
+                                                    <span class="shade">Apparent Wind</span>
                                                 </td>
                                                 <td>
                                                     <wind-angle-display class="analogdisplay-day"
-                                                                        title="True Wind Speed in Knots"
+                                                                        title="True Wind Speed in Knots&#13;True Wind Angle in Degrees"
                                                                         id="tw-01"
                                                                         value="{ &quot;wa&quot;: 0, &quot;ws&quot;: 0.0 }"
                                                                         major-ticks="30"
@@ -2712,7 +2772,8 @@
                                                                         hand="wind"
                                                                         width="200"
                                                                         height="200"></wind-angle-display>
-
+                                                    <br/>
+                                                    <span class="shade">True Wind</span>
                                                 </td>
                                             </tr>
                                             <tr>

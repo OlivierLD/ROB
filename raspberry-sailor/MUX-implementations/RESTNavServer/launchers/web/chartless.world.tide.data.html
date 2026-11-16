@@ -2,6 +2,8 @@
 <!--
  | Chartless Map & Tides. WiP.
  | With World Data
+ |
+ | Tide part all in ES6, can be demanding on a small browser.
  +-->
 <html>
 <head>
@@ -12,6 +14,11 @@
 	<style type="text/css">
 html {
 	font-family: "Courier New";
+}
+
+h1 {
+	margin-left: 10px;
+	text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;
 }
 
 select, input {
@@ -290,16 +297,32 @@ dialog#generated-curve-dialog {
     min-height: 300px;
 }
 
+button {
+	font-family: "Courier New";
+	font-weight: bold;
+	padding: 4px 6px;
+    border: 0.5px solid silver;
+	border-radius: 5px;
+  	background-color: rgba(255, 165, 0, 0.5);
+	box-shadow: 2px 2px 4px grey, 0 0 25px white, 0 0 7px cyan;
+}
+
 .search-item {
     height: 22px;
     margin-right: 0;
     border-radius: 0;
 }
 button.search-item {
-    margin-left: -10px;
+    /* margin-left: -10px; */
     min-width: 28px;
     height: 28px;
     border: 0.5px solid silver;
+	border-radius: 50%;
+  	background-color: rgba(255, 165, 0, 0.5);
+	box-shadow: 2px 2px 4px grey, 0 0 25px white, 0 0 7px cyan;
+  	/* padding: 4px 6px; */
+  	/* min-width: 32px; */
+  	margin: 1px;
 }
 
 .custom-select {
@@ -1769,7 +1792,7 @@ window.onload = () => {
 </head>
 <body>
 
-	<h3>With tides</h3>
+	<h1>With tides</h1>
 
 	<dialog id="generated-curve-dialog">
 		<div class="dialog-header">
@@ -1886,7 +1909,7 @@ window.onload = () => {
 						<td colspan="3"><hr/></td>
 					</tr>
 					<tr>
-						<td>Position:</td>
+						<td>Boat Position:</td>
 						<td><span id="gps-position"></span></td>
 					</tr>
 					<tr>

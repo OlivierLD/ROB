@@ -761,7 +761,7 @@ compass-display .green {
 	--bsp-arrow-color: red;
 	--cmg-arrow-color: cyan;
 	--aw-arrow-color: black;
-	--gps-ws-arrow-color: darkorange;
+	--gps-ws-arrow-color: cyan;
 	--vmg-arrow-color: green;
 	--current-arrow-color: green;
 	--boat-fill-color: silver;
@@ -781,7 +781,7 @@ compass-display .green {
 	--bsp-arrow-color: red;
 	--cmg-arrow-color: cyan;
 	--aw-arrow-color: white;
-	--gps-ws-arrow-color: darkorange;
+	--gps-ws-arrow-color: cyan;
 	--vmg-arrow-color: lightyellow;
 	--current-arrow-color: yellow;
 	--boat-fill-color: rgba(128, 128, 128, 0.5);

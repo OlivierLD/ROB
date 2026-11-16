@@ -72,7 +72,8 @@
 			document.getElementById('position-01').innerHTML = decToSex(gpsPosition.lat, "NS") + "<br/>" + decToSex(gpsPosition.lng, "EW");
 		});
 		events.subscribe('bsp', function(val) {
-			setData('bsp-01', val);
+			// setData('bsp-01', val);
+			document.getElementById('bsp-01').innerHTML = val.toFixed(2) + " kts";
 		});
 		events.subscribe('sog', function(val) {
 			document.getElementById('sog-01').innerHTML = val.toFixed(2) + " kts";
@@ -91,11 +92,11 @@
 			document.getElementById('air-temp-01').innerHTML = val.toFixed(1) + "&deg;C";
 		});
 
-		events.subscribe('log', function(val) {
-			let elem = document.getElementById('bsp-01');
-			elem.digitalDataVal = val;
-			elem.repaint();
-		});
+		// events.subscribe('log', function(val) {
+		// 	let elem = document.getElementById('bsp-01');
+		// 	elem.digitalDataVal = val;
+		// 	elem.repaint();
+		// });
 		events.subscribe('gps-time', function(val) {
 			// val.format("Y-M-d H:i:s")
 			let time = new Date(val).format("H:i:s");
@@ -140,6 +141,29 @@
 			setData('aw-01', JSON.stringify({ ws: aws, wa: awa}));
 			document.getElementById('app-wind-01').innerHTML = aws.toFixed(1) + " kts, " + awa.toFixed(0) + "&deg;";
 		});
+
+		events.subscribe('twa', function(val) {
+			twa = val;
+			// setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
+			document.getElementById('true-wind-01').innerHTML = tws.toFixed(1) + " kts, " + twa.toFixed(0) + "&deg;";
+		});
+
+		events.subscribe('cdr', function(val) {
+			cdr = val;
+			// setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
+			document.getElementById('cdr-01').innerHTML = cdr.toFixed(0) + "&deg;";
+		});
+		events.subscribe('csp', function(val) {
+			csp = val;
+			// setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
+			document.getElementById('csp-01').innerHTML = csp.toFixed(1) + " kts";
+		});
+		events.subscribe('cmg', function(val) {
+			cmg = val;
+			// setData('tw-01', JSON.stringify({ ws: tws, wa: twa}));
+			document.getElementById('cmg-01').innerHTML = cmg.toFixed(0) + "&deg;";
+		});
+
 	</script>
 
 	<style>
@@ -303,22 +327,22 @@
 				<div id="top-row" style="display: grid; grid-template-columns: 25% 25% 25% 25%;">
 					<div class="black-frame small-box">
 						Boat Position
-						<div id="position-01" style="text-align: right; font-size: 24px; font-weight: bold;">
+						<div id="position-01" style="text-align: right; font-size: 36px; font-weight: bold;">
 						</div>
 					</div>
 					<div class="black-frame small-box">
 						SOG
-						<div id="sog-01" style="text-align: right; font-size: 24px; font-weight: bold;">
+						<div id="sog-01" style="text-align: right; font-size: 48px; font-weight: bold;">
 						</div>
 					</div>
 					<div class="black-frame small-box">
 						COG
-						<div id="cog-01" style="text-align: right; font-size: 24px; font-weight: bold;">
+						<div id="cog-01" style="text-align: right; font-size: 48px; font-weight: bold;">
 						</div>
 					</div>
 					<div class="black-frame small-box">
 						DBT
-						<div id="dbt-01" style="text-align: right; font-size: 24px; font-weight: bold;">
+						<div id="dbt-01" style="text-align: right; font-size: 48px; font-weight: bold;">
 						</div>
 					</div>
 				</div>
@@ -381,6 +405,30 @@
 					</div>
 
 				</div>
+
+				<div id="bottom-row" style="display: grid; grid-template-columns: 25% 25% 25% 25%;">
+					<div class="black-frame small-box">
+						Boat Speed
+						<div id="bsp-01" style="text-align: right; font-size: 48px; font-weight: bold;">
+						</div>
+					</div>
+					<div class="black-frame small-box">
+						Current Speed
+						<div id="csp-01" style="text-align: right; font-size: 48px; font-weight: bold;">
+						</div>
+					</div>
+					<div class="black-frame small-box">
+						Current Direction
+						<div id="cdr-01" style="text-align: right; font-size: 48px; font-weight: bold;">
+						</div>
+					</div>
+					<div class="black-frame small-box">
+						CMG (Course Made Good)
+						<div id="cmg-01" style="text-align: right; font-size: 48px; font-weight: bold;">
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</div> <!-- End of Tab id="one" -->
