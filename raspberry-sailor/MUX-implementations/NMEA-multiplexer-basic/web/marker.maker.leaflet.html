@@ -5,35 +5,39 @@
  | Available from http://leafletjs.com/
  | Tutorials and examples at https://leafletjs.com/examples.html
  |
- | Clickable map
+ | Clickable map, optional OpenSeaMap.
  |
- | TODO: "Drive" mode on a track.
  | Note: No native way to change orientation
  +-->
 <head>
 
-    <title>Marker Maker - Leaflet</title>
+  <title>Marker Maker - Leaflet</title>
 
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!--link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" /-->
-    <!-- link rel="icon" type="image/ico" href="icons/hammerhead.02.ico" -->
-    <link rel="icon" type="image/ico" href="icons/jellyfish.ico">
+  <!--link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" /-->
+  <!-- link rel="icon" type="image/ico" href="icons/hammerhead.02.ico" -->
+  <link rel="icon" type="image/ico" href="../icons/jellyfish.ico">
+  <!--link rel="icon" type="image/png" href="../icons/sailboat.jpg"-->
 
-    <!--
-    <link rel="stylesheet" href="leaflet/leaflet.css" />
-    <script src="leaflet/leaflet.js"></script>
-    -->
+  <!--
+  <link rel="stylesheet" href="leaflet/leaflet.css" />
+  <script src="leaflet/leaflet.js"></script>
+  -->
 
-    <!--link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script-->
+  <!--link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script-->
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
 
   <style type="text/css">
+:root {
+  --slider-scale: 0.5;
+}
+
 body {
   background-color: whitesmoke;
 }
@@ -44,9 +48,44 @@ input[type=text], input[type=number], select {
   font-family: 'Courier New', Courier, monospace;
 }
 
-button {
+/* button {
   font-family: 'Courier New', Courier, monospace;
   margin: 5px;
+} */
+
+button {
+			padding: 4px 20px;
+			/* give the background a gradient */
+			background:#ffae00; /* fallback for browsers that don't support gradients */
+			background: -webkit-linear-gradient(top, #ffae00, #d67600);
+			background: -moz-linear-gradient(top, #ffae00, #d67600);
+			background: -o-linear-gradient(top, #ffae00, #d67600);
+			background: linear-gradient(top, #ffae00, #d67600);
+			border:2px outset #dad9d8;
+			/* style the text */
+			font-family:Lato, Verdana, Andika, Arial, sans-serif; /* Andkia is available at http://www.google.com/webfonts/specimen/Andika */
+			font-size:1.1em;
+			letter-spacing:0.05em;
+			text-transform:uppercase;
+			color:#fff;
+			text-shadow: 0px 1px 10px #000;
+			/* add to small curve to the corners of the button */
+			-webkit-border-radius: 15px;
+			-moz-border-radius: 15px;
+			border-radius: 15px;
+			/* give the button a drop shadow */
+			-webkit-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+			-moz-box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+			box-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+}
+/* NOW STYLE THE BUTTON'S HOVER STATE */
+/*	button#rCoffee:hover, button#rCoffee:focus { */
+button:hover, button:focus {
+  border: 2px solid #dad9d8;
+}
+
+button:disabled {
+    background: silver;
 }
 
 .main-container {
@@ -54,7 +93,7 @@ button {
   grid-template-areas: 'left right';
   padding: 10px;
   margin: auto;
-}      
+}
 
 #one-marker {
   min-width: 200px;
@@ -68,6 +107,75 @@ button {
   max-height: 400px;
   overflow: scroll;
 }
+/* For the switch (slider) */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: calc(var(--slider-scale) * 60px);
+  height: calc(var(--slider-scale) * 34px);
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: calc(var(--slider-scale) * 26px);
+  width: calc(var(--slider-scale) * 26px);
+  left: calc(var(--slider-scale) * 4px);
+  bottom: calc(var(--slider-scale) * 4px);
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(calc(var(--slider-scale) * 26px));
+  -ms-transform: translateX(calc(var(--slider-scale) * 26px));
+  transform: translateX(calc(var(--slider-scale) * 26px));
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: calc(var(--slider-scale) * 34px);
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Switch grid */
+.switch-container {
+  display: grid;
+  grid-template-columns: calc(var(--slider-scale) * 64px) 200px;
+}
+.switch-element {
+  place-self: center;
+}
     </style>
 
 </head>
@@ -75,75 +183,116 @@ button {
 
 <!--div id="mapid" style="width: 600px; height: 400px;"></div-->
 <div style="margin: 5px;">
-A simple web UI to build the marker.yaml files. Click on the map to define a marker.<br/>
-<small style="color: blue;">
-  Click on the map, then give your mark a label and a type, and finally click the "Add Marker" button.<br/>
-  Markers can be removed, from the chart, using the associated popup, where there is a "Remove" button.
-</small>
+  A simple web UI to build the marker.yaml files. Click on the map to define a marker.<br/>
+  <span style="color: coral;">Try 'sat=Y' QS Parameter.</span><br/>
+  <small style="color: blue;">
+    Click on the map, then give your mark a label and a type, and finally click the "Add Marker" button.<br/>
+    Markers can be removed, from the chart, using the associated popup, where there is a "Remove" button.
+  </small>
 </div>
 <div>
-Mouse Pos: <span id="mouse-pos"></span>.
+  Mouse Pos: <span id="mouse-pos"></span>.
+</div>
+<div>
+  <div style="display: grid; grid-template-columns: auto auto; margin: 10px 0 5px 0;">
+    <!--div class="switch-container" style="text-align: left;" title="Chart layers">
+        <label class="switch switch-element">
+            <input id="slide-slider-1" type="checkbox" onchange="showSurface(this, 1);">
+            <span class="slider round"></span>
+        </label>
+        <span class="switch-element" id="carto-label-1">Sat Pix</span>
+    </div-->
+    <div class="switch-container" style="text-align: left;" title="Chart layers">
+        <label class="switch switch-element">
+            <input id="slide-slider-3" type="checkbox" onchange="showSurface(this, 2);">
+            <span class="slider round"></span>
+        </label>
+        <span class="switch-element" id="carto-label-3"><a href="https://map.openseamap.org/" target="_blank">OpenSeaMap</a></span>
+    </div>
 </div>
 
 <div id="main-container" class="main-container">
 
-<!--div id="mapid" style="width: 1200px; height: 800px;"></div-->
-<div id="mapid" style="width: 1200px; height: 800px; box-shadow: 4px 4px 8px grey, 0 0 25px white, 0 0 7px cyan; grid-area: left"></div>
+  <!--div id="mapid" style="width: 1200px; height: 800px;"></div-->
+  <div id="mapid" style="width: 1200px; height: 800px; box-shadow: 4px 4px 8px grey, 0 0 25px white, 0 0 7px cyan; grid-area: left"></div>
 
-<div id="markers">
-  <div id="one-marker" style="margin: 10px;">
-    <input type="radio" name="list-type" checked onchange="changeType(this);" value="markers">Markers
-    <input type="radio" name="list-type" onchange="changeType(this);" value="border">Border
-    <table>
-      <tr>
-        <th>Name</th><th>Value</th>
-      </tr>
-      <tr>
-        <td>label</td>
-        <td><input type="text" placeholder="Marker label" value="" width="100%" id="one-marker-label"></td>
-      </tr>
-      <tr>
-        <td>latitude</td>
-        <td><div id="one-marker-latitude"></div></td>
-      </tr>
-      <tr>
-        <td>longitude</td>
-        <td ><div id="one-marker-longitude"></div></td>
-      </tr>
-      <tr>
-        <td>type</td>
-        <td>
-          <select id="one-marker-type">
-            <option value="default" selected>-</option>
-            <option value="green">Green</option>
-            <option value="red">Red</option>
-            <option value="card-n">Cardinal North</option>
-            <option value="card-s">Cardinal South</option>
-            <option value="card-e">Cardinal East</option>
-            <option value="card-w">Cardinal West</option>
-            <option value="sp">Special Mark</option>
-            <option value="is-dng">Isolated Danger</option>
-            <option value="green-triangle">Green Triangle</option>
-            <option value="red-triangle">Red Triangle</option>
-            <option value="blue-triangle">Blue Triangle</option>
-          </select>
-        </td>
-      </tr>
-    </table>
-    <button onclick="addMarker();">Add Marker</button>
-  </div>
-  <div id="markers-code" style="border: 1px solid silver; border-radius: 5px;">
-    <pre>markers:      
+  <div id="markers">
+    <div id="one-marker" style="margin: 10px;">
+      <input type="radio" name="list-type" checked onchange="changeType(this);" value="markers">Markers
+      <input type="radio" name="list-type" onchange="changeType(this);" value="border">Border
+      <table>
+        <tr>
+          <th>Name</th><th>Value</th>
+        </tr>
+        <tr>
+          <td>label</td>
+          <td><input type="text" placeholder="Marker label" value="" width="100%" id="one-marker-label"></td>
+        </tr>
+        <tr>
+          <td>latitude</td>
+          <td><div id="one-marker-latitude"></div></td>
+        </tr>
+        <tr>
+          <td>longitude</td>
+          <td ><div id="one-marker-longitude"></div></td>
+        </tr>
+        <tr>
+          <td>ID</td>
+          <td><input type="text" placeholder="Marker ID (optional)" value="" width="100%" id="one-marker-id"></td>
+        </tr>
+        <tr>
+          <td>type</td>
+          <td>
+            <select id="one-marker-type">
+              <option value="default" selected>-</option>
+              <option value="green">Green</option>
+              <option value="red">Red</option>
+              <option value="card-n">Cardinal North</option>
+              <option value="card-s">Cardinal South</option>
+              <option value="card-e">Cardinal East</option>
+              <option value="card-w">Cardinal West</option>
+              <option value="sp">Special Mark</option>
+              <option value="is-dng">Isolated Danger</option>
+              <option value="red-triangle">Red Triangle</option>
+              <option value="green-triangle">Green Triangle</option>
+              <option value="blue-triangle">Blue Triangle</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+      <button onclick="addMarker();">Add Marker</button>
+    </div>
+    <div id="markers-code" style="border: 1px solid silver; border-radius: 5px;">
+    <pre>markers:
     </pre>
+    </div>
+    <div>
+      <button onclick="copyToClipboard();">Copy to Clipboard</button>
+    </div>
   </div>
-  <div>
-    <button onclick="copyToClipboard();">Copy to Clipboard</button>
-  </div>
-</div>
 
 </div>
 
 <script type="text/javascript">
+
+    let getQSPrm = (prm) => {
+        let value;
+        let loc = document.location.toString();
+        if (loc.indexOf("?") > -1) {
+            let qs = loc.substring(loc.indexOf("?") + 1);
+            let prms = qs.split('&');
+            for (let i=0; i<prms.length; i++) {
+                let nv = prms[i].split('=');
+                if (nv.length === 2) {
+                    if (nv[0] === prm) {
+                        return nv[1];
+                    }
+                }
+            }
+        }
+        return value;
+    };
+
     const MARKERS_OPTION = 1;
     const BORDER_OPTION = 2;
 
@@ -153,11 +302,14 @@ Mouse Pos: <span id="mouse-pos"></span>.
       if (origin.value === 'markers') {
         LIST_OPTION = MARKERS_OPTION;
         document.getElementById('one-marker-label').disabled = false;
+        document.getElementById('one-marker-id').disabled = false;
+
         document.getElementById('one-marker-type').disabled = false;
       } else if (origin.value === 'border') {
         LIST_OPTION = BORDER_OPTION;
         document.getElementById('one-marker-label').disabled = true;
         document.getElementById('one-marker-type').disabled = true;
+        document.getElementById('one-marker-id').disabled = true;
       }
       generateYamlContent(); // Regenerate content
     }
@@ -194,21 +346,32 @@ Mouse Pos: <span id="mouse-pos"></span>.
     // Original zoom
     let zoom = 5;
 
-    // let map = L.map('mapid').setView([currentLatitude, currentLongitude], zoom);
-
-    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    // }).addTo(map);
-
     let map = L.map('mapid').setView([currentLatitude, currentLongitude], zoom);
 
-	let mbAttr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
-	let mbUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+    let addSatPix = 'Y' === getQSPrm('sat');
 
-    const tiles = L.tileLayer(mbUrl, {
-		maxZoom: 19,
-		attribution: mbAttr
-	}).addTo(map);
+    if (!addSatPix) {
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    } else {
+      let mbAttr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
+      let mbUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+
+      const satLayer = L.tileLayer(mbUrl, {id: 'mapbox.streets', attribution: mbAttr, opacity: 1.0});
+      satLayer.addTo(map);
+      const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 25,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          opacity: 0.5
+      }).addTo(map);
+    }
+
+
+    // Open Sea Map
+    const tileOpenSeaMap = L.tileLayer('https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', {
+        attribution: 'Map data: &copy; <a href="https://www.openseamap.org">OpenSeaMap</a> contributors'
+    }); // .addTo(map);
 
     let popup = L.popup(); // Used below.
 
@@ -217,6 +380,7 @@ Mouse Pos: <span id="mouse-pos"></span>.
         document.getElementById('one-marker-label').value = "";
         document.getElementById('one-marker-latitude').innerText = e.latlng.lat;
         document.getElementById('one-marker-longitude').innerText = e.latlng.lng;
+        document.getElementById('one-marker-id').value = "";
         document.getElementById('one-marker-type').value = "default";
 
         popup
@@ -238,15 +402,15 @@ Mouse Pos: <span id="mouse-pos"></span>.
       // Remove the associated LeafLet marker and popup
       map.removeLayer(leafletMakerList[idx]);
       leafletMakerList.splice(idx, 1);
-      
+
       generateYamlContent();
     }
 
     function generatePopupContent(label, type, latitude, longitude, idx) {
-      let content = 
-        `<div>` + 
-          `<button onclick="removeFromList(this, ${idx})">Remove</button><br/>` + 
-          `<b>label: ${label}</b><br/>type: ${type}<br/>latitude: ${latitude}<br/>longitude: ${longitude}` + 
+      let content =
+        `<div>` +
+          `<button onclick="removeFromList(this, ${idx})">Remove</button><br/>` +
+          `<b>label: ${label}</b><br/>type: ${type}<br/>latitude: ${latitude}<br/>longitude: ${longitude}` +
         `</div>`;
       return content;
     }
@@ -266,13 +430,14 @@ Mouse Pos: <span id="mouse-pos"></span>.
           oneElement = `  - label: "${mark.label}"\n` +
                        `    latitude: ${mark.latitude}\n` +
                        `    longitude: ${mark.longitude}\n` +
-                       `    type: ${mark.type}\n`;
+                       `    type: ${mark.type}\n` +
+                       (mark.id.trim().length > 0 ? `    id: ${mark.id}\n` : ``);
         } else {
           oneElement = `    - rank: ${idx + 1}\n` +
                        `      latitude: ${mark.latitude}\n` +
                        `      longitude: ${mark.longitude}\n`;
         }
-        content += oneElement;                 
+        content += oneElement;
       });
 
       document.getElementById('markers-code').innerHTML = `<pre>${content}</pre>`;
@@ -283,12 +448,14 @@ Mouse Pos: <span id="mouse-pos"></span>.
       let longitude = document.getElementById('one-marker-longitude').innerText;
       let label = document.getElementById('one-marker-label').value;
       let type = document.getElementById('one-marker-type').value;
+      let id = document.getElementById('one-marker-id').value;
 
       markerList.push({
         label: label,
         type: type,
         latitude: parseFloat(latitude),
-        longitude: parseFloat(longitude)
+        longitude: parseFloat(longitude),
+        id: id
       });
 
       generateYamlContent();
@@ -310,6 +477,26 @@ Mouse Pos: <span id="mouse-pos"></span>.
       document.body.removeChild(codeHolder);
       // Content in the clipboard
       alert("Copied!");
+    }
+
+    // Switch to show/hide the OpenStreetMap layer on top of the satellite imagery.
+    function showSurface(checkbox, option) {
+        switch (option) {
+            case 1:
+                if (checkbox.checked) {
+                    satTiles.addTo(map);
+                } else {
+                    map.removeLayer(satTiles);
+                }
+                break;
+            case 2:
+                if (checkbox.checked) {
+                    tileOpenSeaMap.addTo(map);
+                } else {
+                    map.removeLayer(tileOpenSeaMap);
+                }
+                break;
+        }
     }
 
 </script>

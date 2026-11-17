@@ -5,7 +5,7 @@
  | Available from http://leafletjs.com/
  | Tutorials and examples at https://leafletjs.com/examples.html
  |
- | Clickable map
+ | Clickable map, optional OpenSeaMap.
  |
  | Note: No native way to change orientation
  +-->
@@ -34,6 +34,10 @@
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
 
   <style type="text/css">
+:root {
+  --slider-scale: 0.5;
+}
+
 body {
   background-color: whitesmoke;
 }
@@ -81,7 +85,7 @@ button:hover, button:focus {
 }
 
 button:disabled {
-    background: silver;  
+    background: silver;
 }
 
 .main-container {
@@ -103,6 +107,75 @@ button:disabled {
   max-height: 400px;
   overflow: scroll;
 }
+/* For the switch (slider) */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: calc(var(--slider-scale) * 60px);
+  height: calc(var(--slider-scale) * 34px);
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: calc(var(--slider-scale) * 26px);
+  width: calc(var(--slider-scale) * 26px);
+  left: calc(var(--slider-scale) * 4px);
+  bottom: calc(var(--slider-scale) * 4px);
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(calc(var(--slider-scale) * 26px));
+  -ms-transform: translateX(calc(var(--slider-scale) * 26px));
+  transform: translateX(calc(var(--slider-scale) * 26px));
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: calc(var(--slider-scale) * 34px);
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Switch grid */
+.switch-container {
+  display: grid;
+  grid-template-columns: calc(var(--slider-scale) * 64px) 200px;
+}
+.switch-element {
+  place-self: center;
+}
     </style>
 
 </head>
@@ -110,7 +183,8 @@ button:disabled {
 
 <!--div id="mapid" style="width: 600px; height: 400px;"></div-->
 <div style="margin: 5px;">
-  A simple web UI to build the marker.yaml files. Click on the map to define a marker. Try 'sat=Y' QS Parameter.<br/>
+  A simple web UI to build the marker.yaml files. Click on the map to define a marker.<br/>
+  <span style="color: coral;">Try 'sat=Y' QS Parameter.</span><br/>
   <small style="color: blue;">
     Click on the map, then give your mark a label and a type, and finally click the "Add Marker" button.<br/>
     Markers can be removed, from the chart, using the associated popup, where there is a "Remove" button.
@@ -118,6 +192,23 @@ button:disabled {
 </div>
 <div>
   Mouse Pos: <span id="mouse-pos"></span>.
+</div>
+<div>
+  <div style="display: grid; grid-template-columns: auto auto; margin: 10px 0 5px 0;">
+    <!--div class="switch-container" style="text-align: left;" title="Chart layers">
+        <label class="switch switch-element">
+            <input id="slide-slider-1" type="checkbox" onchange="showSurface(this, 1);">
+            <span class="slider round"></span>
+        </label>
+        <span class="switch-element" id="carto-label-1">Sat Pix</span>
+    </div-->
+    <div class="switch-container" style="text-align: left;" title="Chart layers">
+        <label class="switch switch-element">
+            <input id="slide-slider-3" type="checkbox" onchange="showSurface(this, 2);">
+            <span class="slider round"></span>
+        </label>
+        <span class="switch-element" id="carto-label-3"><a href="https://map.openseamap.org/" target="_blank">OpenSeaMap</a></span>
+    </div>
 </div>
 
 <div id="main-container" class="main-container">
@@ -275,6 +366,13 @@ button:disabled {
           opacity: 0.5
       }).addTo(map);
     }
+
+
+    // Open Sea Map
+    const tileOpenSeaMap = L.tileLayer('https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', {
+        attribution: 'Map data: &copy; <a href="https://www.openseamap.org">OpenSeaMap</a> contributors'
+    }); // .addTo(map);
+
     let popup = L.popup(); // Used below.
 
     map.on('click', e => {
@@ -339,7 +437,7 @@ button:disabled {
                        `      latitude: ${mark.latitude}\n` +
                        `      longitude: ${mark.longitude}\n`;
         }
-        content += oneElement;                 
+        content += oneElement;
       });
 
       document.getElementById('markers-code').innerHTML = `<pre>${content}</pre>`;
@@ -379,6 +477,26 @@ button:disabled {
       document.body.removeChild(codeHolder);
       // Content in the clipboard
       alert("Copied!");
+    }
+
+    // Switch to show/hide the OpenStreetMap layer on top of the satellite imagery.
+    function showSurface(checkbox, option) {
+        switch (option) {
+            case 1:
+                if (checkbox.checked) {
+                    satTiles.addTo(map);
+                } else {
+                    map.removeLayer(satTiles);
+                }
+                break;
+            case 2:
+                if (checkbox.checked) {
+                    tileOpenSeaMap.addTo(map);
+                } else {
+                    map.removeLayer(tileOpenSeaMap);
+                }
+                break;
+        }
     }
 
 </script>
