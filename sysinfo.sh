@@ -12,11 +12,11 @@ if [[ ! -f ${ARCHIVE_NAME} ]]; then
 fi
 if [[ -f ${ARCHIVE_NAME} ]]; then
   echo -e "(Using jar ${ARCHIVE_NAME})"
-  java -cp ${ARCHIVE_NAME} utils.SystemUtils --minimal --no-free-mem
+  java -cp ${ARCHIVE_NAME} utils.SystemUtils --minimal --no-free-mem --tiny
 else
   pushd ${FOLDER_NAME}
     # Will run a build before a run
-    ../gradlew run -P--minimal -P--no-free-mem
+    ../gradlew run -P--minimal -P--no-free-mem --tiny
   popd
 fi
 #

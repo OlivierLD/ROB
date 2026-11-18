@@ -422,11 +422,15 @@ public class SystemUtils {
 
         AtomicBoolean minimal = new AtomicBoolean(false);
         AtomicBoolean freeMem = new AtomicBoolean(true);
+        AtomicBoolean tiny = new AtomicBoolean(false);
+
         Arrays.asList(args).forEach(arg -> {
             if ("--minimal".equals(arg)) {
                 minimal.set(true);
             } else if ("--no-free-mem".equals(arg)) {
                 freeMem.set(false);
+            } else if ("--tiny".equals(arg)) {
+                tiny.set(true);
             }
         });
 
@@ -465,70 +469,72 @@ public class SystemUtils {
         }
         System.out.println("=====================================================");
 
-        try {
-            System.out.printf("OS Details:\n%s\n", String.join("\n", getOSDetails()));
-        } catch (Exception ex) {
-            System.err.println(ex);
-        }
-
-        try {
-            List<String> networkName = getNetworkName();
+        if (!tiny.get()) {
             try {
-                networkName.forEach(network -> System.out.printf("Network: %s\n", network));
+                System.out.printf("OS Details:\n%s\n", String.join("\n", getOSDetails()));
             } catch (Exception ex) {
                 System.err.println(ex);
             }
-            System.out.println();
-            System.out.println("All IP Addresses:");
-            List<String[]> addresses = getIPAddresses();
-            addresses.stream().forEach(pair -> System.out.printf("%s -> %s\n", pair[0], pair[1]));
-            // Filtered
-            System.out.println("\nFiltered (en0):");
-            addresses = getIPAddresses("en0");
-            addresses.stream().forEach(pair -> System.out.printf("%s -> %s\n", pair[0], pair[1]));
-            // IPv4 only
-            System.out.println("\nFiltered (IPv4):");
-            addresses = getIPAddresses(true);
-            addresses.stream().forEach(pair -> System.out.printf("%s -> %s\n", pair[0], pair[1]));
-        } catch (Exception ex) {
-            System.err.println(ex);
-        }
 
-        try {
-            System.out.println();
-            System.out.printf("DiskUsage: %s\n", getDiskUsage());
-            System.out.printf("uname: %s\n", getUname());
-            if (!minimal.get()) {
+            try {
+                List<String> networkName = getNetworkName();
+                try {
+                    networkName.forEach(network -> System.out.printf("Network: %s\n", network));
+                } catch (Exception ex) {
+                    System.err.println(ex);
+                }
                 System.out.println();
-                System.out.printf("Directory listing:\n%s\n", String.join("\n", getDirectoryListing()));
+                System.out.println("All IP Addresses:");
+                List<String[]> addresses = getIPAddresses();
+                addresses.stream().forEach(pair -> System.out.printf("%s -> %s\n", pair[0], pair[1]));
+                // Filtered
+                System.out.println("\nFiltered (en0):");
+                addresses = getIPAddresses("en0");
+                addresses.stream().forEach(pair -> System.out.printf("%s -> %s\n", pair[0], pair[1]));
+                // IPv4 only
+                System.out.println("\nFiltered (IPv4):");
+                addresses = getIPAddresses(true);
+                addresses.stream().forEach(pair -> System.out.printf("%s -> %s\n", pair[0], pair[1]));
+            } catch (Exception ex) {
+                System.err.println(ex);
             }
-        } catch (Exception ex) {
-            System.err.println(ex);
-        }
 
-        // Temperature & voltage
-        try {
-            System.out.println();
-            System.out.printf("CPU Temperature %s\n", getCPUTemperature2());
-            System.out.printf("Core Voltage %s\n", getCoreVoltage());
-        } catch (Exception ex) {
-            System.err.printf("Maybe not on a Raspberry PI ? Temp & Volt %s\n", ex.toString());
-        }
-
-        // Memory
-        if (freeMem.get()) {
             try {
                 System.out.println();
-                List<String> memStatus = getMemoryStatus();
-                System.out.printf("Total:     %s MB\n", memStatus.get(MEM_TOTAL));
-                System.out.printf("Free:      %s MB\n", memStatus.get(MEM_FREE));
-                System.out.printf("Available: %s MB\n", memStatus.get(MEM_AVAILABLE));
-
-                System.out.println();
-                String memoryUsage = getMemoryUsage();
-                System.out.printf("Usage: %s\n", memoryUsage);
+                System.out.printf("DiskUsage: %s\n", getDiskUsage());
+                System.out.printf("uname: %s\n", getUname());
+                if (!minimal.get()) {
+                    System.out.println();
+                    System.out.printf("Directory listing:\n%s\n", String.join("\n", getDirectoryListing()));
+                }
             } catch (Exception ex) {
-                System.err.printf("MemStat: %s\n", ex.toString());
+                System.err.println(ex);
+            }
+
+            // Temperature & voltage
+            try {
+                System.out.println();
+                System.out.printf("CPU Temperature %s\n", getCPUTemperature2());
+                System.out.printf("Core Voltage %s\n", getCoreVoltage());
+            } catch (Exception ex) {
+                System.err.printf("Maybe not on a Raspberry PI ? Temp & Volt %s\n", ex.toString());
+            }
+
+            // Memory
+            if (freeMem.get()) {
+                try {
+                    System.out.println();
+                    List<String> memStatus = getMemoryStatus();
+                    System.out.printf("Total:     %s MB\n", memStatus.get(MEM_TOTAL));
+                    System.out.printf("Free:      %s MB\n", memStatus.get(MEM_FREE));
+                    System.out.printf("Available: %s MB\n", memStatus.get(MEM_AVAILABLE));
+
+                    System.out.println();
+                    String memoryUsage = getMemoryUsage();
+                    System.out.printf("Usage: %s\n", memoryUsage);
+                } catch (Exception ex) {
+                    System.err.printf("MemStat: %s\n", ex.toString());
+                }
             }
         }
     }
