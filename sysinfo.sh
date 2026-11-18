@@ -38,12 +38,14 @@ else
   popd
 fi
 #
-echo -e "-------------------------"
-echo -e "uname -m: $(uname -m)"
-echo -e "-------------------------"
-lscpu
-echo -e "-------------------------"
-echo -e "Architecture: $(getconf LONG_BIT) bits"
-echo -e "-------------------------"
-file /lib/systemd/systemd
-echo -e "-------------------------"
+if [[ "${TINY}" != "true" ]]; then
+  echo -e "-------------------------"
+  echo -e "uname -m: $(uname -m)"
+  echo -e "-------------------------"
+  lscpu
+  echo -e "-------------------------"
+  echo -e "Architecture: $(getconf LONG_BIT) bits"
+  echo -e "-------------------------"
+  file /lib/systemd/systemd
+  echo -e "-------------------------"
+fi
