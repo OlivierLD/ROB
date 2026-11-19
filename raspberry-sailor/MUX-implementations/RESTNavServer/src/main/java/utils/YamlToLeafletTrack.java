@@ -11,7 +11,7 @@ public class YamlToLeafletTrack {
     public static void main(String[] args) {
         if (args == null || args.length < 1) {
             System.out.println("Please provide yaml file name as CLI parameter.");
-            // Like /Users/olivierlediouris/repos/ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/web/muxbuilder/norderney.la.trinite.yaml
+            // Like .../ROB/raspberry-sailor/MUX-implementations/RESTNavServer/launchers/web/muxbuilder/norderney.la.trinite.yaml
             System.exit(1);
         }
         String yamlFileName = args[0];

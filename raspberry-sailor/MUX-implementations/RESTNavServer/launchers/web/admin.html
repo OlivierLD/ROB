@@ -24,6 +24,8 @@
   <script type="text/javascript" src="./js/mux.rest.js"></script>
   <script type="text/javascript" src="./widgets/Graph.js"></script>
   <link id="page-ux" rel="stylesheet" href="./css/stylesheet.css" type="text/css"/>
+  <!--link id="page-ux-2" rel="stylesheet" href="./css/halloween.css" type="text/css"/-->
+
   <style type="text/css">
 
       button {
@@ -148,6 +150,17 @@
   </style>
 
   <script type="text/javascript">
+
+    	function applyStyleSheet(ss) {
+    //	  alert("Applying [" + ss + "]");
+          if (ss == "")
+            document.all.styleLink.disabled = true;
+          else
+          {
+            document.all.styleLink.disabled = false;
+            document.all.styleLink.href = ss;
+          }
+        }
 
         function cssSelectManager() {
             let x = document.getElementById("css-select").value;
@@ -891,6 +904,7 @@
 </script>
 </head>
 <body onresize="doOnResize();">
+
 <table width="100%">
     <tr>
         <td>
@@ -913,6 +927,7 @@
             <select id="css-select" onchange="cssSelectManager();" title="Page StyleSheet">
                 <option value="stylesheet.css">Day</option>
                 <option value="night.stylesheet.css">Night</option>
+                <option value="halloween.css">Halloween</option>
                 <!-- More here if needed -->
             </select> &nbsp;
             Graph CSS:
