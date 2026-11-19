@@ -19,6 +19,7 @@ repositories {
 dependencies {
   implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
   implementation 'com.sun.mail:javax.mail:1.6.2'
+  implementation 'org.yaml:snakeyaml:1.21'
   implementation project (':common-utils')
   implementation project (':http-tiny-server')
   implementation project (':astro-computer:AstroUtilities')

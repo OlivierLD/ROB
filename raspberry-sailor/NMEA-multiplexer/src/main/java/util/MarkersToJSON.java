@@ -23,6 +23,9 @@ public class MarkersToJSON {
 	private final static ObjectMapper mapper = new ObjectMapper();
 
 	public static String convertToJSON(String inputFileName) throws Exception {
+		return convertToJSON(inputFileName, false);
+	}
+	public static String convertToJSON(String inputFileName, boolean prettyPrint) throws Exception {
 		final List<Marker> markers = NMEAUtils.loadMarkers(inputFileName);
 		final List<Border> borders = NMEAUtils.loadBorders(inputFileName);
 
@@ -31,7 +34,12 @@ public class MarkersToJSON {
 		cache.put(NMEADataCache.MARKERS_DATA, markers);
 		cache.put(NMEADataCache.BORDERS_DATA, borders);
 
-		return mapper.writeValueAsString(cache);
+		if (prettyPrint) {
+			return mapper.writerWithDefaultPrettyPrinter()
+					     .writeValueAsString(cache);
+		} else {
+			return mapper.writeValueAsString(cache);
+		}
 	}
 
 	public static void main(String... args) {
