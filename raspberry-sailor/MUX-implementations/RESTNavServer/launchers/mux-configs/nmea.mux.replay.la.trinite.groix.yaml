@@ -35,9 +35,12 @@ channels:
     zip: true
     path.in.zip: rubiscup.2024.nmea
     between-records: 50   # Speed up
-    verbose: false
+    loop: true
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
+    active: true  # Default true
+    verbose: false
+    description: "Replay, fast. Going from La Trinité to Groix"
 computers:
   - class: nmea.computers.BorderManager
     properties: mux-configs/border.mgr.default.properties

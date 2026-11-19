@@ -49,7 +49,7 @@ function displayUsage() {
 #
 if [[ $# -gt 0 ]]; then
 	for prm in $*; do
-	  echo "Processing ${prm} ..."
+	  echo -e "Processing ${prm} ..."
 	  if [[ ${prm} == "--small" ]]; then
 	    SMALL_MENU=Y
 	  elif [[ ${prm} == "--browser:"* ]]; then
@@ -150,6 +150,12 @@ else
   cat banner.stby.txt
 fi
 sleep 1 # Wait a bit...
+#
+if [[ $(id -u) -ne 0 ]]; then
+  echo -e ""
+  echo -e "...You might want to run as sudo. Hit return."
+  read dummy
+fi
 #
 NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --http-port:${HTTP_PORT}"
 #

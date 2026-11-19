@@ -36,6 +36,7 @@ channels:
     between-records: 1000   # Normal speed, even slower
     # sentence.filters: ~GGA,~GSV,~GSA
     # sentence.filters: ~GGA
+    loop: true
     active: true  # Default true
     verbose: false
     description: "Replay. Going from La Trinité to Groix"
