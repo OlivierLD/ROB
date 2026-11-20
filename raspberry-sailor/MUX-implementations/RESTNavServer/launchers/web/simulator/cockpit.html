@@ -243,9 +243,9 @@ button:disabled {
                     width="400"
                     height="180"></jumbo-display>
 
-            <!--div style="text-align: center;">
+            <div style="text-align: center; display: none;">
                 <button id="minusSOG" class="round-button" onclick="decreaseSOG();">-</button><button id="plusSOG" class="round-button" onclick="increaseSOG();">+</button>
-            </div-->
+            </div>
         </div>
         <div style="margin-top: 130px; text-align: center;">
             <img id="wheel" src="wheel.png" width="300" height="300" alt="Wheel" title="Wheel, COG" style="display: block; margin-left: auto; margin-right: auto;">
@@ -277,9 +277,9 @@ button:disabled {
                     width="400"
                     height="180"></jumbo-display>
 
-            <!--div style="text-align: center; /* position: absolute; bottom: 10px; */">
+            <div style="text-align: center; /* position: absolute; bottom: 10px; */ display: none;">
                 <button id="minusCOG" class="round-button" onclick="decreaseCOG();">-</button><button id="plusCOG" class="round-button" onclick="increaseCOG();">+</button>
-            </div-->
+            </div>
         </div>
     </div>
 </div>
@@ -712,8 +712,11 @@ let onMessage = json => {
         }
     } else {
         // console.info("No AIS");
+        let centerCB = document.getElementById('keep-centered');
+        if (centerCB.checked) {
+            map.panTo(new L.LatLng(userPos.lat, userPos.lng));
+        }
         document.getElementById("ais-status").innerHTML = "No AIS";
-        map.panTo(new L.LatLng(userPos.lat, userPos.lng));
     }
 };
 
