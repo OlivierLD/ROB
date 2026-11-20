@@ -538,15 +538,18 @@ let onMessage = json => {
                         `</span></b>`);
 
         // Update the widgets
-        document.getElementById('sog').value =  sog;
-        document.getElementById('vertical-gauge-01').value = sog;
-        document.getElementById('jumbo-sog').value = sog;
+        if (sog) {
+            document.getElementById('sog').value =  sog;
+            document.getElementById('vertical-gauge-01').value = sog;
+            document.getElementById('jumbo-sog').value = sog;
+        }
+        if (cog) {
+            document.getElementById('cog').value =  cog;
+            document.getElementById('compass-rose-01').value = cog;
+            document.getElementById('jumbo-cog').value = cog;
 
-        document.getElementById('cog').value =  cog;
-        document.getElementById('compass-rose-01').value = cog;
-        document.getElementById('jumbo-cog').value = cog;
-
-        document.getElementById("wheel").style.transform = `rotate(${cog}deg)`;
+            document.getElementById("wheel").style.transform = `rotate(${cog}deg)`;
+        }
 
         // Draw the "boat"
         let boatLen = 0.02;
