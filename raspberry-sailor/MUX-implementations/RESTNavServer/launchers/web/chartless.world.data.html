@@ -392,7 +392,7 @@ events.subscribe(POS, val => {
 		trackBuffer.push(val);
 		while (trackBuffer.length > maxBufferLength) {
 			// console.log(`Buffer length ${trackBuffer.length}, truncating.`);
-			trackBuffer.splice(0, 1);
+			trackBuffer.splice(0, 1); // remove first element
 			// console.log(`Buffer length now ${trackBuffer.length}...`);
 		}
 		// console.log(`Track: ${trackBuffer.length} element(s).`);
@@ -458,7 +458,6 @@ events.subscribe(BORDERS, val => {
 events.subscribe(BORDERS_THREATS, val => {
 	borderThreats = val;
 });
-
 events.subscribe(TO_WP, val => {
 	if (val !== null) {
 		let WPName = val.to_wp;
@@ -470,12 +469,10 @@ events.subscribe(TO_WP, val => {
 		document.getElementById('to_wp').innerHTML = '';
 	}
 });
-
 events.subscribe(ROUTES, val => {
 	// TODO Manage this
 	// console.log(`Routes subscription: ${JSON.stringify(val)}`);
 });
-
 events.subscribe(AIS, val => {  // Possibly contains threats
 	aisTargets = [];
 	let keys = Object.keys(val);
@@ -654,6 +651,7 @@ events.subscribe(SOG, val => {
 	document.getElementById('gps-sog').innerHTML = `${val} kn`;
 	document.getElementById('sog').value = val.toFixed(1);
 	sog = val;
+	trackBuffer[trackBuffer.length - 1].sog = val; // Update last track point with sog
 });
 events.subscribe(COG, val => {
 	document.getElementById('gps-cog').innerHTML = `${val}&deg;`;
@@ -1130,21 +1128,77 @@ let updateMap = (elmt, context) => {
 	}
 
 	// The points of the track
-	context.beginPath();
-	context.strokeStyle = 'red'; // elmt.colorConfig.markerAndTrackColor;
-	context.lineWidth = 1;
+	let trackColorOnSpeed = true; // Make the color depend on the speed...
+
+	if (!trackColorOnSpeed) {
+		context.strokeStyle = 'red'; // elmt.colorConfig.markerAndTrackColor;
+		context.beginPath();
+	} else {
+		context.closePath(); // Redundant ?
+	}
+	// good color picker at https://www.w3schools.com/colors/colors_picker.asp
+	// Expand this scale at will
+	let colors = [ '#000000',      // 0 kt
+				   '#1a0000',
+				   '#330000',      // 1 kt
+				   '#4d0000',
+				   '#660000',      // 2 kts
+				   '#800000',
+				   '#990000',      // 3 kts
+				   '#b30000',
+				   '#cc0000',      // 4 kts
+				   '#e60000',
+			       '#ff0000' ];    // 5 kts
+	context.lineWidth = 3; // 1;
+	let prevPos = null;
 	for (let i=0; i<trackBuffer.length; i++) {
+		if (trackColorOnSpeed) {
+			context.beginPath();
+		}
 		let pos = trackBuffer[i];
+		if (pos.sog && trackColorOnSpeed) {
+			let color = 'black'; // Default ?
+			// color = colors[i % colors.length];
+			if ((2 * pos.sog).toFixed(0) > 10) {
+				color = colors[10];
+			} else {
+				// color = colors[pos.sog.toFixed(0) % colors.length];
+				color = colors[(2 * pos.sog).toFixed(0)];
+			}
+			// color = `rgba(${(255 * Math.min(1.0, pos.sog / 10.0)).toFixed(0)}, 128, 255, 0.75)`; // Color depending on speed
+			// color = `rgba(${(255 * Math.min(1.0, pos.sog / 10.0)).toFixed(0)}, ${(0 * Math.min(1.0, pos.sog / 10.0)).toFixed(0)}, ${(255 * Math.min(1.0, pos.sog / 10.0)).toFixed(0)}, 0.75)`; // Color depending on speed
+			// color = `rgb(${(255 * Math.min(1.0, pos.sog / 10.0)).toFixed(0)}, ${(0 * Math.min(1.0, pos.sog / 10.0)).toFixed(0)}, ${(255 * Math.min(1.0, pos.sog / 10.0)).toFixed(0)})`; // Color depending on speed
+			let lineWidth = 2 * (10 * Math.min(1.0, pos.sog / 10.0)).toFixed(1);
+			if (false && i === (trackBuffer.length - 1)) { // The last one
+				console.log(`Track point ${i}/${trackBuffer.length} at ${pos.lat} / ${pos.lng}, SOG: ${pos.sog}, width: ${lineWidth}, color: ${color}`);
+			}
+			context.lineWidth = lineWidth;
+			context.strokeStyle = color;
+		} else {
+			context.strokeStyle = 'red'; // elmt.colorConfig.markerAndTrackColor;
+		}
 		let canvasCoord = elmt.posToCanvas(pos.lat, pos.lng);
 		// console.log(`Line to ${canvasCoord.x} / ${canvasCoord.y}`)
 		if (i === 0) {
 			context.moveTo(canvasCoord.x, canvasCoord.y);
+			// prevPos = canvasCoord;
 		} else {
+			if (trackColorOnSpeed) {
+				context.moveTo(prevPos.x, prevPos.y);
+			}
 			context.lineTo(canvasCoord.x, canvasCoord.y);
 		}
+		prevPos = canvasCoord;
+		if (trackColorOnSpeed) {
+			context.stroke();
+			context.closePath();
+		}
 	}
-	context.stroke();
-	context.closePath();
+	if (!trackColorOnSpeed) {
+		context.stroke();
+		context.closePath();
+	}
+	// context.closePath();
 };
 
 let lpad = (str, len, pad) => {

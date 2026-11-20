@@ -153,7 +153,7 @@ sleep 1 # Wait a bit...
 #
 if [[ $(id -u) -ne 0 ]]; then
   echo -e ""
-  echo -e "...You might want to run as sudo. Hit return."
+  echo -en "...You might want to run as sudo. Hit return."
   read dummy
 fi
 #
@@ -161,6 +161,11 @@ NAV_SERVER_EXTRA_OPTIONS="${NAV_SERVER_EXTRA_OPTIONS} --http-port:${HTTP_PORT}"
 #
 while [[ "${GO}" == "true" ]]; do
 	clear
+#  if [[ $(id -u) -ne 0 ]]; then
+#    echo -e ""
+#    echo -e "...You might want to run as sudo. Hit return."
+#    # read dummy
+#  fi
 	if [[ "${SMALL_MENU}" == "Y" ]]; then
     echo -e "+-------------------------------------------------------------------------------------------------------------------+"
     echo -e "|               N A V   S E R V E R   -   L A U N C H E R  🚀                                                       |"
