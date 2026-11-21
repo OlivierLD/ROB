@@ -301,6 +301,7 @@ button:disabled {
                 <input type="checkbox" id="with-sat" onchange="setLayers();" checked>Sat Picture
                 <input type="checkbox" id="with-street-map" onchange="setLayers();" checked>Street Map
                 <input type="checkbox" id="with-open-sea-map" onchange="setLayers();">OpenSeaMap
+                <input type="checkbox" id="with-open-sea-map-depth" onchange="setLayers();">OpenSeaMap Depth
             </div>
 
             <!--div id="mapid" style="width: 1200px; height: 800px;"></div-->
@@ -401,6 +402,7 @@ function setLayers() {
     let satCB = document.getElementById("with-sat");
     let smCB  = document.getElementById("with-street-map");
     let osmCB  = document.getElementById("with-open-sea-map");
+    let osmDepthCB = document.getElementById("with-open-sea-map-depth");
 
     if (satCB.checked) {
         tiles.addTo(map);
@@ -423,6 +425,12 @@ function setLayers() {
         tileOpenSeaMap.addTo(map);
     } else {
         map.removeLayer(tileOpenSeaMap);
+    }
+
+    if (osmDepthCB.checked) {
+        tileMarineProfile.addTo(map);
+    } else {
+        map.removeLayer(tileMarineProfile);
     }
 }
 
@@ -448,6 +456,15 @@ const tileOpenSeaMap = L.tileLayer('https://tiles.openseamap.org/seamark/{z}/{x}
     attribution: 'Map data: &copy; <a href="https://www.openseamap.org">OpenSeaMap</a> contributors'
 }); // .addTo(map);
 
+
+// Marine Profile Layer, depth
+const tileMarineProfile = L.tileLayer.wms('https://geoserver.openseamap.org/geoserver/gwc/service/wms', {
+    layers: 'gebco2021:gebco_2021',
+    format: 'image/png',
+    transparent: true,
+    version: '1.1.1',
+    attribution: 'Marine Profile Data &copy; OpenSeaMap'
+}); // .addTo(map);
 
 /*
 map.fitBounds([

@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!--
+	Main Index. Ex Passe-Coque
+	Warning: This page must NOT contain any language sensitive data !!!
+	         (Some exceptions, though. See updateMenu() in passe-coque.js => js/consoles.js)
+
+	Good resource to validate the code: https://validator.w3.org/nu/, https://validator.w3.org/nu/?doc=http%3A%2F%2Fpasse-coque.com
+-->
+<head>
+	<meta charset="UTF-8">
+	<title>MUX Console</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!--link rel="icon" type="image/png" href="./infinity.png"-->
+
+	<link rel="icon" type="image/png" href="./logos/LOGO_PC_no_txt.png">
+
+	<!--link rel="stylesheet" href="../css/stylesheet.css" type="text/css"/-->
+	<!--link rel="stylesheet" href="./fonts/font.01.css">
+	<link rel="stylesheet" href="./fonts/font.02.css"-->
+
+	<link rel="stylesheet" href="./css/consoles.menu.css">
+	<link rel="stylesheet" href="./css/consoles.css" type="text/css"/>
+	<style type="text/css">
+
+.this-tooltip {
+  position: relative;
+  display: inline-block;
+  /*border-bottom: 1px dotted black;*/
+}
+
+.this-tooltip .this-tooltiptext  {
+  visibility: hidden;
+  width: 160px;
+  background-color: red;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.this-tooltip .this-tooltiptext-top  {
+  visibility: hidden;
+  width: 160px;
+  background-color: orangered;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+/* .this-tooltip:hover {
+	  cursor: wait;
+} */
+
+.this-tooltip:hover .this-tooltiptext {
+  visibility: visible;
+  margin-left: -160px;
+  margin-top: -60px;
+}
+
+.this-tooltip:hover .this-tooltiptext-top {
+  visibility: visible;
+  /* margin-left: -160px; */
+  margin-top: 100px;
+}
+
+.this-tooltip .this-tooltiptext-top::after { /* Tooltip arrow */
+	content: "";
+	position: absolute;
+	bottom: 100%;
+	left: 15%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: transparent transparent orangered transparent;
+}
+
+.help-bot {
+	float: right;
+	padding-right: 10px;
+	margin-right: 10px;
+	background-color: white;
+	border: 2px solid orange;
+	border-radius: 50%;
+	margin: 3px 10px 3px 3px;
+	box-shadow: 4px 4px 8px black, 0 0 25px white, 0 0 10px silver;
+}
+
+.help-bot:hover {
+	cursor: pointer;
+}
+	</style>
+	<script type="text/javascript" src="./js/consoles.js"></script>
+</head>
+
+<body>
+
+	<!--
+		** Structure du menu **
+		▼ = &#9660;
+		- Admin           - 1
+		- Qui sommes nous - 2
+			- Passe-Coque, c'est quoi ?        21
+			- Notre equipe                     22
+			- Creer du lien /* Projet : Eco-village Nautique */   23
+		- Nos actions     - 3
+			- Transmettre                      31
+			- Renover                          32
+			- Partager                         33
+		- La flotte      - 4
+		- Nous soutenir  - 5
+			- Adherer                          51
+			- Faire un don                     52
+			- Investir dans l'Eco-Village      53
+		- En savoir plus - 6
+			- Vie de l'Asso                    68
+			- Actualite                        62
+			- On parle de nous / presse        63
+			- Outils de communication          69
+			- Boutique                         64
+			- Partenaires                      65
+			// - Chart PCC                        66 - Moved
+			- Espace Membres                   67 - Moved / Copied to 7
+			- Contact                          61
+		- Espace Membres  - 7
+		- Boutique  - 8
+		- Navigation - 9
+
+		Pour la traduction FR/EN, voir la fonction updateMenu()
+	-->
+	<div id="nav-menu" class="scrolling-menu" style="margin-left: -8px;">
+		<div style="float: left; display: grid; grid-template-columns: auto auto;">
+		</div>
+		<div style="/*margin-left: -50px; float: right;*/ margin-right: 20px;">  <!-- Touchy ! (Tablets, etc) -->
+			<ul id="navigation" style="display: grid; grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto 80px; width: fit-content;"> <!-- Columns must match the menu below... -->
+				<li>
+					<a href="javascript:void(0)" onclick="clack(this, 'admin.html');" id="_1" title="Manage the full runtime context. Channels, Forwarders, Computers."><span id="home-label">MUX Admin ?</span></a>
+					<!--ul>
+						<li><a href="javascript:void(0)" onclick="clack(this);" id="_11">QR Code</a></li>
+					</ul-->
+				</li>
+				<li>
+					<a href="javascript:void(0)" onclick="clack('_21', 'struct');" id="_2">Admin&nbsp;</a>
+					<ul>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'admin.html');" id="_21">MUX admin</a></li>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'muxbuilder/dragndrop/mux-builder.html');" id="_22">MUX Builder</a></li>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'muxbuilder/marker.maker.leaflet.html?sat=Y');" id="_23">Marker Builder</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_3">Nos actions&nbsp;</a>
+					<ul>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_31">Transmettre - <i style="font-style: italic;">Les projets</i></a></li>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_32">R&eacute;nover - <i style="font-style: italic;">Le chantier</i></a></li>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_33">Partager - <i style="font-style: italic;">Le club</i></a></li>
+						<!--li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_34">Formations</a></li>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_35">Partenaires</a></li-->
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_4">La flotte&nbsp;</a>
+					<!--ul>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_41">Les bateaux</a></li>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_42">Les projets &agrave; saisir</a></li>
+					</ul-->
+				</li>
+				<li>
+					<a href="javascript:void(0)" id="_5">Nous soutenir&nbsp;</a>
+					<ul>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_51">Adh&eacute;rer</a></li>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_52">Faire un don</a></li>
+						<li style="display: none;"><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_53">Investir dans l'Eco-Village</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:void(0)" id="_6">En savoir plus&nbsp;</a>
+					<ul>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_68">Vie de l'asso</a></li>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_62">Actualit&eacute;</a></li>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_63">On parle de nous / Presse</a></li>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_69">Outils de communication</a></li>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_64">La boutique</a></li>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_65">Partenaires</a></li>
+						<!--li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_66">Charte PCC</a></li-->
+						<li>
+							<a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_67">Espace Membres
+							<!--svg class="" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+							</svg--></a>
+						</li>
+						<li><a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_61">Contact</a></li>
+					</ul>
+				</li>
+				<li class="this-tooltip" style="display: flex; /*align-items: center;*/">
+					<span class="this-tooltiptext-top" id="_lang-flag-label">Switch to English</span>
+					<a href="javascript:void(0)" onclick="switchLanguage();" id="_lang-flag">
+						<image id="lang-flag" src="./us_uk_flag.png" alt="US/UK Flag" title="Switch to English" style="width: 27px; margin-left: 30px;"></image>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<br/>
+
+	  <!--
+    The Big Main Sliding Menu on the left, for small devices.
+
+    ◄ = &#9668;
+    ► = &#9658;
+    ▼ = &#9660;
+    ▲ = &#9650;
+        -->
+	<div id="side-menu" class="hamburger-menu">
+		<!--h1 style="width: 100%;"><span id="hamburger" style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> <span id="my-name">Passe&#8209;Coque </span></h1-->
+		<div style="display: grid; grid-template-columns: auto;">
+			<a id="hamburger" style="cursor: pointer;" onclick="openNav();" title="Hamburger Menu"> <!-- onmouseover="openNav();" <= onmouseover (si present avec onclick) fout la merde sur cell-phones et tablettes -->
+				<span style="position: relative; color: #16696d; font-size: 2em; float: right; right: 30px; margin-top: 18px;">Menu&nbsp;&#8801;</span>
+			</a>
+		</div>
+		<!--h1 style="width: 100%;"><span id="hamburger" style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; <img src="/logo.transp.png" style="width: 48px; padding: 14px 10px;" title="Passe&#8209;Coque"/></span> <span id="my-name">Passe&#8209;Coque </span></h1-->
+
+		<div id="side-nav" class="sidenav" onmouseleave="closeNav()"> <!-- Restored... -->
+			<div style="width: 100%; display: grid; grid-template-columns: auto auto; margin-bottom: 20px;">
+				<a href="javascript:void(0)" class="active-link switch-lang" style="text-align: left;" onclick="switchLanguage()"><image id="lang-flag" src="./us_uk_flag.png" alt="US/UK Flag" title="Switch to English" style="width: 27px;"></image></a>
+				<a href="javascript:void(0)" id="close-nav-button" class="closebtn" onclick="closeNav();" role="button" aria-label="Close Dialog">&times;</a>
+			</div>
+
+			<a href="javascript:void(0)" class="active-link" style="margin-top: 10px;" onclick="clack(this, 'admin.html'); closeNav();" id="_1"><span id="home-label"> MUX Admin</span></a>
+
+			<div>
+				<a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_1" style="text-decoration: none;"><img src="/logos/logo.02.png" style="width: 50px;" title="Passe&#8209;Coque"/></a>
+				<a href="javascript:void(0)" onclick="showHideSection(this, 'section-1'); clack('_21');"><span class="expand-collapse">&#9658;&nbsp;</span><span id="_2">Qui sommes-nous ?</span></a>
+				<div id="section-1" class="sub-section">
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_21">Passe&#8209;Coque, c'est quoi ?</a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_22">Notre &eacute;quipe</a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_23">Cr&eacute;er du lien</a>
+				</div>
+			</div>
+			<div>
+				<a href="javascript:void(0)" onclick="showHideSection(this, 'section-2');"><span class="expand-collapse">&#9658;&nbsp;</span><span id="_3">Nos actions</span></a>
+				<div id="section-2" class="sub-section">
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_31">Transmettre - <i>Les projets</i></a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_32">R&eacute;nover - <i>Le chantier</i></a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_33">Partager - <i>Le Club</i></a>
+					<!--a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct');" id="_34">Formations</a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct');" id="_35">Partenaires</a-->
+				</div>
+			</div>
+
+			<div>
+				<a href="javascript:void(0)" class="active-link" style="margin-top: 10px;" onclick="clack(this, 'struct'); closeNav();" id="_4">La flotte</a>
+				<!--a href="javascript:void(0)" onclick="showHideSection(this, 'section-3');"><span class="expand-collapse">&#9658;&nbsp;</span><span id="_4">La flotte</span></a>
+				<div id="section-3" class="sub-section">
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this);" id="_41">Les bateaux</a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this);" id="_42">Les projets &agrave; saisir</a>
+				</div-->
+			</div>
+
+			<div>
+				<a href="javascript:void(0)" onclick="showHideSection(this, 'section-4');"><span class="expand-collapse">&#9658;&nbsp;</span><span id="_5">Nous soutenir</span></a>
+				<div id="section-4" class="sub-section">
+				<a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_1" style="text-decoration: none;"><img src="/logos/logo.02.png" style="width: 50px;" title="Passe&#8209;Coque"/></a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_51">Adh&eacute;rer</a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_52">Faire un don</a>
+					<a class="active-link" style="display: none;" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_53">Investir dans l'Eco-Village</a>
+				</div>
+			</div>
+
+			<div>
+				<a href="javascript:void(0)" onclick="showHideSection(this, 'section-5');"><span class="expand-collapse">&#9658;&nbsp;</span><span id="_6">En savoir plus</span></a>
+				<div id="section-5" class="sub-section">
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_68">Vie de l'asso</a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_62">Actualit&eacute;</a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_63">On parle de nous / Presse</a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_69">Outils de communication</a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_64">La Boutique</a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_65">Partenaires</a>
+					<!--a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_66">Charte PCC</a-->
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_67">Espace membres</a>
+					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_61">Contact</a>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div style="display: none; border: 3px solid navy; border-radius: 5px;">
+		<div id="top-container" style="display: grid; grid-template-columns: auto auto;" >
+			<div>
+				<!--a href="javascript:void(0)" onclick="switchLanguage();"><image id="lang-flag" src="/usa.gif" alt="US Flag" title="Switch to English"></image></a-->
+			</div>
+			<div style="width: 100%; display: flex; justify-content: end;">
+				<!--span style="font-style: italic;">Dummy placeholder</span-->
+				<div class="switch-container" style="justify-content: end;" title="On or off">
+					<label class="switch switch-element">
+					<input id="time-bg-slider" type="checkbox" onchange="startBGAnimation(this);">
+					<span class="slider round"></span>
+					</label>
+					<span class="switch-element">Slide show</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="qrcode" style="display:none; width:250px; height:250px; margin:25px;">
+		<!-- Not used for now -->
+	</div>
+
+	<div id="current-content" class="text-content" style="margin-left: -8px;">
+		<!-- Everything, content goes here -->
+	</div>
+
+	<!--div style="width: 100%; position: fixed; bottom: 0; left: 10px; margin-bottom: 10px;">
+		<hr/>
+		<small style="font-style: italic;">&copy; 2023, Passe&#8209;Coque</small>
+	</div-->
+	<div style="width: 100%; position: fixed; bottom: 0; left: 0; background: rgba(0, 0, 0, 0.85);">
+		<div>
+			<small style="padding-left: 10px; font-style: italic; color: white;">&copy; 2024, Passe&#8209;Coque</small>
+			<div class="this-tooltip help-bot">
+				<span class="this-tooltiptext" style="font-weight: bold;"><!--Need help?&#13;-->Besoin d'aide&nbsp;?</span>
+				<img src="./icons/bot.svg"
+				     style="height: 25px; padding-left: 10px; padding-top: 6px;"
+					 onclick="clack(this, 'struct'); closeNav();" id="_10"/>
+			</div>
+		</div>
+	</div>
+
+</body>
+<script type="text/javascript">
+
+window.onload = () => {
+	// console.log("Loaded!");
+	console.log(`${window.location.href} loaded !`);
+
+	let who;
+
+	// Increment view counter, keep track, etc
+	function requestLogger(appCodeName, appName, product, appVersion, language,
+					       platform, userAgent, latitude, longitude) {
+		fetch("./php/nbViews.php", {
+			method: "POST",
+			body: JSON.stringify({
+				appCodeName: appCodeName,
+				appName: appName,
+				product: product,
+				appVersion: appVersion,
+				language: language,
+				platform: platform,
+				userAgent: userAgent,
+				latitude: latitude,
+				longitude: longitude
+			}),
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		}).then(response => {
+			console.log(`Received from PHP: \nResponse Status:${response.status}`);
+			// Assumimg this is text (not json, or what not)
+			response.text().then(data => {
+				console.log(`Content: ${data}`);
+			});
+		},
+		(error, errmess) => {
+			console.log("RequestLogger: Ooch");
+			let message;
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message = mess.message;
+				}
+			}
+			console.debug("Failed to get to the nbViews.php..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+		});
+	}
+	// For tests, or further use...
+	// console.log(`AppCodeName: ${navigator.appCodeName}\n
+	// Browser Name: ${navigator.appName}\n
+	// Product: ${navigator.product}\n
+	// Browser Name: ${navigator.appName}\n
+	// Browser Version: ${navigator.appVersion}\n
+	// Cookies Enabled: ${navigator.cookieEnabled}\n
+	// Browser Language: ${navigator.language}\n
+	// Browser Online: ${navigator.onLine}\n
+	// Platform: ${navigator.platform}\n
+	// User-agent header: ${navigator.userAgent}`);
+	if (false) {
+		// This will prompt the user for an authorization
+		navigator.geolocation.getCurrentPosition(pos => {
+			console.log(`Invoked from Lat: ${pos.coords.latitude}, Lng: ${pos.coords.longitude}`);
+			requestLogger(navigator.appCodeName,
+						navigator.appName,
+						navigator.product,
+						navigator.appVersion,
+						navigator.language,
+						navigator.platform,
+						navigator.userAgent,
+						pos.coords.latitude,
+						pos.coords.longitude);
+		}, err => {
+			console.log(`Error: ${JSON.stringify(err)}`);
+			requestLogger(navigator.appCodeName,
+						navigator.appName,
+						navigator.product,
+						navigator.appVersion,
+						navigator.language,
+						navigator.platform,
+						navigator.userAgent,
+						null,
+						null);
+		});
+	} else { // No prompt required...
+		requestLogger(navigator.appCodeName,
+						navigator.appName,
+						navigator.product,
+						navigator.appVersion,
+						navigator.language,
+						navigator.platform,
+						navigator.userAgent,
+						null,
+						null);
+	}
+
+	window.translate = translate;
+
+	qrcode = new QRCode(document.getElementById("qrcode"), {
+		width:  250,
+		height: 250
+	});
+
+	// makeCode(); // On request only
+	// document.querySelectorAll('meta[name="viewport"]')[0].content = 'width=400';
+    // See matchMedia, https://www.w3schools.com/howto/howto_js_media_queries.asp
+	// window.innerWidth = 400;
+	// document.body.style.width = '800px'; // <= THAT one works.
+
+	console.log(`Width: ${window.innerWidth}, Height: ${window.innerHeight}`);
+	let cellPhoneUI = false;
+
+	// ('meta[name="viewport"]').prop('content', 'width=400');
+
+	// debugger;
+	// try {
+	// 	document.getElementById("bg-image").src = BG_IMAGES[0].src;
+	// 	document.getElementById("bg-title").src = BG_IMAGES[0].caption;
+	// } catch (err) {
+	// 	console.log("Error setting initial BG image: " + err.message);
+	// }
+
+	// Start the background image slideshow
+	startBGAnimation();
+
+	// TODO Clean this up...
+	if (false && (window.innerWidth < 1000 || window.innerHeight < 500)) {
+		cellPhoneUI = true;
+		// console.log(`Redirecting from Location : ${window.location}`);
+		// let redirected;
+		// if (window.location.href.includes('index.html')) {
+		// 	redirected = window.location.href.replace('index.html', 'index.2.html');
+		// } else {
+		// 	if (window.location.href.endsWith('/')) {
+		// 		redirected = window.location.href + 'index.2.html';
+		// 	} else {
+		// 		redirected = window.location.href + '/index.2.html';
+		// 	}
+		// }
+		// window.location.href = redirected;
+	}
+	// let navMenu = document.getElementById('nav-menu');
+	// let sideBar = document.getElementById('side-menu');
+
+	// if (cellPhoneUI) {
+	// 	navMenu.style.display = 'none';
+	// 	sideBar.style.display = 'block';
+	// } else {
+	// 	navMenu.style.display = 'block';
+	// 	sideBar.style.display = 'none';
+	// }
+
+	/*
+	 * QS parameters management here.
+	 * - lang     FR ou EN
+	 * - nav-to   Menu point (ex: 31 for Projects, 4 for the fleet, 62 for actu, etc)
+	 * - tx       Project number
+	 * - boat-id  for the fleet, id of the boat.
+	 * - who      for team members
+	 * - popup.   show welcome popup yes|no
+	 */
+
+	let userLang = getQueryParameterByName('lang');
+	// if (userLang) {
+	// 	if (userLang === 'EN') {
+	// 		switchLanguage();
+	// 	}
+	// } else {
+	if (!userLang) {
+		let browserUserLang = navigator.language || navigator.userLanguage;
+		console.log("The browser's language is: " + browserUserLang);
+		if (browserUserLang) {
+			if (browserUserLang.substring(0, 2).toUpperCase() === 'FR') {
+				userLang = 'FR';
+			} else {
+				userLang = 'EN';
+				console.log("We'll speak english");
+			}
+		}
+	}
+	if (userLang && userLang === 'EN') {
+		switchLanguage();
+	}
+
+	// ARIA Tags.. (WiP)
+	document.querySelectorAll('[aria-label="Close Dialog"]').forEach(el => {
+		console.log(`Setting ARIA label for ${el.innerHTML}`);
+		el.setAttribute('aria-label', userLang === 'EN' ? 'Close Dialog' : 'Fermer la fen&ecirc;tre');
+	});
+
+
+
+	// Check OffscreenCanvas availability (for JS compatibility)
+	try {
+		if (OffscreenCanvas) {
+			console.log("All good. OffscreenCanvas is available.");
+		} else {
+			let mess = "Your browser seems not to be compatible with the recent versions of ES6 (aka JavaScript).\n" +
+						"Some features might not be available...";
+			if (userLang === 'FR') {
+				mess = "Votre navigateur semble ne pas être compatible avec les récentes versions d'ES6 (JavaScript).\n" +
+					   "Certaines fonctionnalités peuvent ne pas être disopnibles..."
+			}
+			alert(mess);
+		}
+	} catch (err) {
+		let mess = "Your browser seems not to be compatible with the recent versions of ES6 (aka JavaScript).\n" +
+				   "Some features might not be available...";
+		if (userLang === 'FR') {
+			mess = "Votre navigateur semble ne pas être compatible avec les récentes versions d'ES6 (JavaScript).\n" +
+				   "Certaines fonctionnalités peuvent ne pas être disopnibles..."
+		}
+		alert(mess);
+	}
+
+	let pageToLoad = null; // "_1"; // Default
+
+	// nav-to Query Parameter, no underscore
+	let navigateTo = getQueryParameterByName('nav-to');
+	if (navigateTo) {
+		pageToLoad = "_" + navigateTo;
+	}
+
+	// Load Home Page or designated one
+	let el = document.createElement("div"); // Dummy element, with an id for the 'clack'
+	el.id = pageToLoad;
+	clack(el, 'struct');  // New architecture, Wowow !
+
+	if (true) { // Open a dialog ?
+		// debugger;
+		let qsTx = getQueryParameterByName('tx');  // A project id ?
+		if (qsTx) {
+			// Dummy element, with an id for the 'clickOnTxPix'
+			// It's up to the user to set the page on the right id/nav-to (like 31)
+			let el = document.createElement("div");
+			el.id = `tx-${qsTx}`;
+			let title = '';
+			if (qsTx === '04') { // La reveuse. TODO Something better
+				title = (currentLang === 'FR') ? 'Projet Watter' : 'Project Watter';
+			}
+			clickOnTxPix(el, title);
+		}
+		let boatId = getQueryParameterByName('boat-id');
+		if (boatId) { // Mmmmh... Make sure the page is right ?
+			let el = document.createElement("div");
+			el.id = boatId;
+			let boatName = '';
+			// try {
+			// 	boatName = '';
+			// 	THE_BOATS.array.forEach(element => {
+			// 		if (element.id === boatId) {
+			// 			boatName = element.name;
+			// 		}
+			// 	});
+			// } catch (err) {
+			// 	// Bof !
+			// }
+			clickOnBoatPix(el, boatName);
+		}
+		who = getQueryParameterByName('who');  // A team member id ?
+		if (who) {
+			// It's up to the user to set the page on the right id/nav-to (like 21 here)
+			let el = document.createElement("div");
+			el.id = `${who}`;
+			aboutSomeone(el);
+		}
+		if (false) { // Moved in 'clack'.
+			let where = getQueryParameterByName('where'); // An anchor ?
+			if (where) {
+				// debugger;
+				window.setTimeout(() => {
+					console.log(`Scrolling to ${where}`);
+					scrollToGivenAnchor(where);
+				}, 1000); // Wait a bit for the page to load
+				// scrollToGivenAnchor(where);
+			}
+		}
+	}
+
+	// A Test: Query match ?
+	if (false) {
+		let mediaQuery = "screen and (width >= 800px)";
+		// let mediaQuery = "(width >= 800px)";
+		// let mediaQuery = "(max-width: 600px)";
+		let mql = window.matchMedia(mediaQuery);
+		console.log(`Query ${mediaQuery}, Match: ${mql.matches}. Window.innerWidth: ${window.innerWidth}`);
+	}
+
+	// A message onload ? Like Welcome...
+	if (true) {
+		let navigateTo = getQueryParameterByName('nav-to');  // TODO boat-id, tx ?
+		if (! navigateTo) { // In order not to have too many popups
+			let withPopup = getQueryParameterByName('popup'); // .../?popup=no to avoid
+			if (withPopup !== 'no') {
+				// if (withPopup === undefined) {
+					console.log("Showing dialog on load");
+					showDialogOnLoad("Welcome !", "welcome");
+				// }
+			}
+		}
+	}
+};
+
+</script>
+
+</html>
