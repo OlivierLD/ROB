@@ -24,6 +24,7 @@ h1 {
     padding-left: 5pt;
     padding-bottom: 1pt;
     padding-top: 1pt;
+    text-shadow: 2px 2px 4px black, 0 0 25px white, 0 0 7px cyan;
 }
 
 h2 {
@@ -33,6 +34,7 @@ h2 {
     padding-left: 5pt;
     margin-bottom: 1pt;
     margin-top: 1pt;
+    text-shadow: 2px 2px 4px black, 0 0 25px white, 0 0 7px cyan;
 }
 
 h3 {

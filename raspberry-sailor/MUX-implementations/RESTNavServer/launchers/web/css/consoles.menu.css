@@ -72,7 +72,9 @@ ul#navigation li a {
 	transition: color 0.2s linear, background 0.2s linear;
 }
 
-ul#navigation > li > a:hover {
+/* ul#navigation > li > a:hover { */
+ul#navigation li:hover {
+	background: #eac0c0;
 	border: 1px solid silver;
 	border-radius: 5px;
 }
@@ -88,10 +90,6 @@ ul#navigation li a:hover, ul#navigation li, li a:hover > *, li a:visited, #home-
 	font-weight: bold;
 	/* text-decoration: underline; */
 	/* text-shadow: 1px 1px 2px black, 0 0 15px white, 0 0 3px cyan; */
-}
-
-ul#navigation li:hover > a {
-	/* background: #fff; */
 }
 
 /* Drop-Down Navigation */
