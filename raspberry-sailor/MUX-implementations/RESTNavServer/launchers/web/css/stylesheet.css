@@ -175,6 +175,6 @@ a:visited {
 }
 
 .gradient-bg {
-    background: radial-gradient(at top, rgba(60, 60, 60, 0.5), rgba(0, 0, 0, 0.6));
+    background: radial-gradient(at top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.6));
     /*background-image: none;*/
 }

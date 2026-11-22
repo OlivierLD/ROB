@@ -434,7 +434,7 @@ div.tooltip:hover span {
 
 .text-content {
     /* text-shadow: 2px 2px 4px black, 0 0 25px white, 0 0 7px cyan; */
-    margin-top: 59px; /* Depends on the menu's thickness */
+    margin-top: 26px; /* Depends on the menu's thickness */
     color: black; /*blue;*/
     /* font-weight: bold; */
     /* width: 100%; */

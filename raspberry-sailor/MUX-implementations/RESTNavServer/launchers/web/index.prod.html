@@ -107,13 +107,13 @@
 	<!--
 		Pour la traduction FR/EN, voir la fonction updateMenu()
 	-->
-	<div id="nav-menu" class="scrolling-menu" style="margin-left: -8px;">
+	<div id="nav-menu" class="scrolling-menu" style="margin-left: -8px; height: fit-content;">
 		<div style="float: left; display: grid; grid-template-columns: auto auto;">
 		</div>
 		<div style="/*margin-left: -50px; float: right;*/ margin-right: 20px;">  <!-- Touchy ! (Tablets, etc) -->
 			<ul id="navigation" style="display: grid; grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto 80px; width: fit-content;"> <!-- Columns must match the menu below... -->
 				<li>
-					<a href="dummy.html" target="content-frame" id="_1" title="Clear the screen">Clear</a>
+					<a href="javascript:void(0)" onclick="clack(this, `console.home.html?lang=${currentLang}`);" target="content-frame" id="_1" title="Clear the screen">Clear</a>
 				</li>
 				<li>
 					<a href="admin.html" target="content-frame" id="_2">MUX Admin</a>
@@ -290,7 +290,7 @@ window.onload = () => {
 	// Load Home Page or designated one
 	let el = document.createElement("div"); // Dummy element, with an id for the 'clack'
 	el.id = pageToLoad;
-	clack(el, 'dummy.html');
+	clack(el, `console.home.html?lang=${currentLang}`);
 
 	// A message onload ? Like Welcome...
 	if (true) {

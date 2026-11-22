@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Home Page</title>
+	<link rel="icon" type="image/jpg" href="icons/palm.04.jpg">
+	<link rel="stylesheet" href="css/stylesheet.css" type="text/css"/>
+	<style>
+		body {
+			font-family: "Lato", Verdana, sans-serif;
+			/*color: cyan;*/
+		}
+
+		.sidenav {
+			height: 100%;
+			width: 0;
+			position: fixed;
+			z-index: 1;
+			top: 0;
+			left: 0;
+	/*	    background-color: rgba(0, 0, 0, 0.6); */
+	/*		background-image: linear-gradient(rgba(128, 128, 128, 0.6), rgba(0, 0, 0, 0.6));*/
+	/*  	background-image: linear-gradient(rgba(255, 255, 0, 0.6), rgba(0, 0, 0, 0.6)); */
+			background-image: linear-gradient(rgba(0, 255, 255, 0.75), rgba(0, 0, 0, 0.75));
+			overflow-x: hidden;
+			transition: 0.5s;
+			padding-top: 60px;
+		}
+
+		.sidenav a {
+			padding: 4px 4px 4px 16px;
+			text-decoration: none;
+			font-size: 14px;
+			/*color: white;*/ /* #818181; */
+			color: blue; /* #818181; */
+			display: block;
+			transition: 0.3s;
+		}
+
+		.sidenav a:hover, .offcanvas a:focus{
+			/*color: cyan;*/ /* #f1f1f1; */
+			text-shadow: rgba(0, 0, 0, .55) 0 1px 6px;
+		}
+
+		.sidenav .closebtn {
+			position: absolute;
+			top: 0;
+			right: 25px;
+			font-size: 24px;
+			margin-left: 50px;
+		}
+
+		.submenu {
+			font-size: 14px;
+			text-align: right;
+			margin-right: 25px;
+		}
+		.menu-title {
+			font-style: italic;
+		}
+
+		@media screen and (max-height: 450px) {
+			.sidenav {padding-top: 15px;}
+			.sidenav a {font-size: 18px;}
+		}
+
+		.link-description {
+			margin-left: 30px;
+			font-size: 12px;
+			color: orange;
+			font-style: italic;
+			text-shadow: 2px 2px 4px black, 0 0 25px white, 0 0 7px cyan;
+		}
+
+		#wrap { position:fixed; left:0; width:100%; top:40px; height:100%; }
+
+	</style>
+</head>
+<body class="gradient-bg">
+	<!--
+		Pour la traduction FR/EN, voir la fonction switchLanguage()
+	-->
+
+	<div id="fr-content" style="display: none;">
+		<h1>Choisissez vos options dans le menu ci-dessus</h1>
+	</div>
+
+	<div id="en-content" style="display: block;">
+		<h1>Choose your options in the menu above</h1>
+	</div>
+
+</body>
+<script type="text/javascript">
+
+let getQueryParameterByName = (name, url) => {
+    if (!url) {
+        url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) {
+        return null;
+    }
+    if (!results[2]) {
+        return '';
+    }
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+};
+
+let switchLanguage = (lang) => {
+	switch (lang) {
+		case 'FR':
+		  document.getElementById("en-content").style.display = 'none'
+		  document.getElementById("fr-content").style.display = 'block'
+		  break;
+		default: // EN
+		  document.getElementById("en-content").style.display = 'block'
+		  document.getElementById("fr-content").style.display = 'none'
+		  break;
+	}
+
+};
+
+window.onload = () => {
+	// console.log("Loaded!");
+	console.log(`${window.location.href} loaded !`);
+	console.log(`Width: ${window.innerWidth}, Height: ${window.innerHeight}`);
+
+	/*
+	 * QS parameters management here.
+	 * - lang     FR ou EN
+	 */
+
+	let userLang = getQueryParameterByName('lang');
+	if (!userLang) {
+		let browserUserLang = navigator.language || navigator.userLanguage;
+		console.log("The browser's language is: " + browserUserLang);
+		if (browserUserLang) {
+			if (browserUserLang.substring(0, 2).toUpperCase() === 'FR') {
+				userLang = 'FR';
+			} else {
+				userLang = 'EN';
+			}
+		}
+	}
+	console.log(`We'll speak ${ userLang === 'FR' ? 'french' : 'english'}`);
+
+	switchLanguage(userLang);
+};
+
+</script>
+</html>

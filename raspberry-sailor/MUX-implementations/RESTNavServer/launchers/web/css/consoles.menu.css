@@ -53,11 +53,11 @@ ul#navigation li {
 }
 
 ul#navigation li a {
-	padding: 25px 10px;
+	padding: 10px 10px;
 	/* color: darkblue; */
 	/* text-shadow: 1px 1px 0px #fff; */
 	text-decoration: none;
-	width: 100%;
+	width: fit-content;
 	display: inline-block;
 	font-weight: bold;
 	/* border-right: 1px solid #fff; */
@@ -72,13 +72,18 @@ ul#navigation li a {
 	transition: color 0.2s linear, background 0.2s linear;
 }
 
+ul#navigation > li > a:hover {
+	border: 1px solid silver;
+	border-radius: 5px;
+}
+
 #home-label {
 	font-weight: bold;
 }
 
-ul#navigation li a:hover, ul#navigation li, a:hover > *, #home-label:hover {
+ul#navigation li a:hover, ul#navigation li, li a:hover > *, li a:visited, #home-label:hover {
 	/* background: #f8f8f8; */
-	color: var(--pc-bg-color); /* orange; */
+	color: #616161; /* var(--pc-bg-color); // orange; */
 	stroke: var(--pc-bg-color);
 	font-weight: bold;
 	/* text-decoration: underline; */
@@ -94,6 +99,7 @@ ul#navigation li:hover > ul {
 	visibility: visible;
 	opacity: 0.85; /* 1; */
 }
+
 
 svg:hover {
 	/* fill: var(--pc-bg-color); */
@@ -112,7 +118,7 @@ ul#navigation ul, ul#navigation ul li ul {
 	width: 100%;
 	/* background: #f8f8f8; */
 	/* box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055); */
-	opacity: 0.5;
+	opacity: 0.95;
 	-webkit-transition: opacity 0.2s linear, visibility 0.2s linear;
 	-moz-transition: opacity 0.2s linear, visibility 0.2s linear;
 	-o-transition: opacity 0.2s linear, visibility 0.2s linear;
@@ -120,7 +126,7 @@ ul#navigation ul, ul#navigation ul li ul {
 }
 
 ul#navigation ul {
-    top: 56px; /* 43px; */
+    top: 26px; /* 43px; */
     left: 1px;
 }
 
@@ -130,7 +136,7 @@ ul#navigation ul li ul {
 }
 
 ul#navigation ul li {
-	/* background: rgba(245, 245, 245, 0.95); */
+	background: rgba(245, 245, 245, 0.95);
 	clear: both;
 	/* width: 100%; */
 	border: 0 none;
@@ -138,7 +144,7 @@ ul#navigation ul li {
 }
 
 ul#navigation ul li a {
-	background: rgba(245, 245, 245, 0.95);
+	background: rgba(245, 245, 245, 0.99);
 	padding: 7px 15px;
 	color: #616161;
 	/* text-shadow:1px 1px 0px #fff; */
