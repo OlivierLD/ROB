@@ -8,21 +8,6 @@ const NO_DIALOG_MESSAGE = "Dialog tag not supported.";
 const DEFAULT_LANG = "FR";
 let currentLang = DEFAULT_LANG; // Init value
 
-let openNav = () => {
-    // console.log("Opening Hamburger Menu");
-    // alert("Opening Hamburger Menu");
-    // let newWidth = getComputedStyle(document.documentElement).width;
-    // console.log(`Setting new Width to ${newWidth}`);
-	// document.getElementById("side-nav").style.width = newWidth; // getComputedStyle(document.documentElement).getPropertyValue('--expanded-nav-width'); // "450px";
-    document.getElementById("side-nav").style.display = 'inline-block';
-    // debugger;
-};
-
-let closeNav = () => {
-	// document.getElementById("side-nav").style.width = "0";
-    document.getElementById("side-nav").style.display = 'none';
-};
-
 let showSection = (id) => {
 	//document.getElementById(id).style.display = 'inline-block';
 	document.getElementById(id).style.visibility = 'visible';
@@ -82,103 +67,95 @@ let clack = (origin, docToLoad) => {
     }
     currentContext = originId;
 
-    // if (originId === '11') {
-    //     makeCode(document.location.href);
-    //     return;
-    // } else {
-    //     try {
-    //         document.getElementById("qrcode").style.display = 'none'; // Improve this ?..
-    //     } catch (err) {
-    //         console.log(JSON.stringify(err));
-    //     }
-    // }
-
     let contentName = docToLoad;
 	let contentPlaceHolder = document.getElementById("current-content");
 
     console.log(`Fetching ${contentName}...`);
     let iframeToFill = document.getElementById("content-frame");
     iframeToFill.src = contentName;
-
 }
 
 let updateMenu = () => { // Multilang aspect, in index.html.
 
     // Tooltips
-    document.querySelectorAll("#_1-label").forEach(elmt =>  elmt.innerHTML = (currentLang === "FR" ? "Retour accueil" : "Back to Home Page"));
+    document.querySelectorAll("#_1").forEach(elmt =>  elmt.innerHTML = (currentLang === "FR" ? "Effacer" : "Clear"));
     document.querySelectorAll(".this-tooltiptext").forEach(elmt =>  elmt.innerHTML = (currentLang === "FR" ? "Besoin d'aide&nbsp;?" : "Need Help?"));
-    document.querySelectorAll("#_7").forEach(elmt =>  elmt.title = (currentLang === "FR" ? "Espace Membres" : "Member Space"));
-    document.querySelectorAll("#_7-label").forEach(elmt =>  elmt.innerHTML = (currentLang === "FR" ? "Espace Membres" : "Member Space"));
-    document.querySelectorAll("#_8").forEach(elmt =>  elmt.title = (currentLang === "FR" ? "La boutique" : "The store"));
-    document.querySelectorAll("#_8-label").forEach(elmt =>  elmt.innerHTML = (currentLang === "FR" ? "La boutique" : "The store"));
-    document.querySelectorAll("#_9").forEach(elmt =>  elmt.title = (currentLang === "FR" ? "Outils de Navigation" : "Navigation tools"));
-    document.querySelectorAll("#_9-label").forEach(elmt =>  elmt.innerHTML = (currentLang === "FR" ? "Outils de Navigation" : "Navigation tools"));
-    document.querySelectorAll("#_9bis").forEach(elmt =>  elmt.title = (currentLang === "FR" ? "La caisse &agrave; glingues" : "Tool Box"));
-    document.querySelectorAll("#_9bis-label").forEach(elmt =>  elmt.innerHTML = (currentLang === "FR" ? "La caisse &agrave; glingues" : "Tool Box"));
-    document.querySelectorAll("#_10").forEach(elmt =>  elmt.title = (currentLang === "FR" ? "Besoin d'aide ?" : "Need Help?"));
-    document.querySelectorAll("#_10-label").forEach(elmt =>  elmt.innerHTML = (currentLang === "FR" ? "Besoin d'aide ?" : "Need Help?"));
     document.querySelectorAll("#_lang-flag-label").forEach(elmt =>  elmt.innerHTML = (currentLang === "FR" ? "Switch to English" : "En fran&ccedil;ais"));
 
-    // Others
-    document.querySelectorAll("#home-label").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Accueil" : "Home"));
 
-    // "_11", Qr Code, no update needed.
+    document.querySelectorAll("#_2").forEach(elmt => elmt.title = (currentLang === "FR" ? "MUX Admin" : "MUX Admin"));
+	document.querySelectorAll("#_2").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "MUX Admin" : "MUX Admin"));
+	document.querySelectorAll("#_21").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "MUX Admin" : "MUX Admin"));
+	document.querySelectorAll("#_22").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "MUX Builder (graphique)" : "MUX Builder (graphical)"));
+	document.querySelectorAll("#_23").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "MUX Builder (texte)" : "MUX Builder (text)"));
+	document.querySelectorAll("#_24").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Marker Builder" : "Marker Builder"));
 
-	document.querySelectorAll("#_2").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Qui sommes-nous&nbsp;?&nbsp;" : "Who we are&nbsp;"));
-	document.querySelectorAll("#_21").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Passe-Coque, c'est quoi&nbsp;?" : "Passe-Coque, what's that?"));
-	document.querySelectorAll("#_22").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Notre &eacute;quipe" : "Our team"));
-	document.querySelectorAll("#_23").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Cr&eacute;er du lien" : "Connecting people"));
+	document.querySelectorAll("#_3").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Consoles" : "Consoles"));
+	document.querySelectorAll("#_31").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Console compl&egrave;te" : "Full Console"));
+	document.querySelectorAll("#_32").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Console Raymarine" : "Raymarine Console"));
+	document.querySelectorAll("#_33").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Vu du Cockpit" : "Cockpit View"));
+	document.querySelectorAll("#_34").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Simulateur" : "Simulator"));
+	document.querySelectorAll("#_35").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Console avec Vent et WebComponents" : "Console with Wind and WebComponents"));
+	// document.querySelectorAll("#_36").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Console Leaflet - 1, donn&eacute;es GPS" : "Leaflet Console - 1, GPS Data"));
+	document.querySelectorAll("#_37").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Console Leaflet, donn&eacute;es GPS" : "Leaflet Console, GPS Data"));
+	document.querySelectorAll("#_38").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Affichage pare-brise" : "Headup Display"));
 
-	document.querySelectorAll("#_3").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Nos actions&nbsp;" : "Our actions&nbsp;"));
-	document.querySelectorAll("#_31").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Transmettre - <i>Les projets</i>" : "Transmitting - <i>The projects</i>"));
-	document.querySelectorAll("#_32").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "R&eacute;nover - <i>Le chantier</i>" : "Refitting - <i>The shipyard</i>"));
-	document.querySelectorAll("#_33").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Partager - <i>Le Club</i>" : "Sharing - <i>The Club</i>"));
-	// document.querySelectorAll("#_34").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Formations" : "Trainings"));
-	// document.querySelectorAll("#_35").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Partenaires" : "Partners"));
+	document.querySelectorAll("#_4").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Mar&eacute;es" : "Tides"));
+	document.querySelectorAll("#_41").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Ports, avec Leaflets" : "Leaflet Tide Stations"));
+	document.querySelectorAll("#_42").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Courbes" : "Tide Curves"));
+	document.querySelectorAll("#_43").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Publication d'almanachs, mar&eacute;e ou Soleil" : "Tide (or Sun) Almanacs Publication"));
 
-	document.querySelectorAll("#_4").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "La flotte&nbsp;" : "The fleet&nbsp;"));
-	// document.querySelectorAll("#_41").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Les bateaux" : "The boats"));     // Unused
-	// document.querySelectorAll("#_42").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Les projets" : "The projects"));  // Unused
+	document.querySelectorAll("#_5").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Almanachs" : "Almanacs"));
+	document.querySelectorAll("#_51").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Publication d'almanachs nautiques" : "Nautical Almanacs Publication"));
+	document.querySelectorAll("#_52").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Calendrier lunaire" : "Moon Calendar"));
+	document.querySelectorAll("#_53").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Publication d'almanachs, mar&eacute;e ou Soleil" : "Tide (or Sun) Almanacs Publication"));
 
-	document.querySelectorAll("#_5").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Nous soutenir&nbsp;" : "Support us&nbsp;"));
-	document.querySelectorAll("#_51").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Adh&eacute;rer" : "Join us"));
-	document.querySelectorAll("#_52").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Faire un don" : "Make a donation"));
-	document.querySelectorAll("#_53").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Investir dans l'Eco-Village" : "Invest in the Eco-Village"));
+	document.querySelectorAll("#_6").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Chartless, et vues de l'espace" : "Chartless and Space Views"));
+	document.querySelectorAll("#_61").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Chartless, avec carte du monde" : "Chartless with World Data"));
+	document.querySelectorAll("#_62").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Chartless, avec carte du monde et mar&eacute;es" : "Chartless with World and Tide Data"));
+	document.querySelectorAll("#_63").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Vue de l'espace" : "Space View"));
 
-	document.querySelectorAll("#_6").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "En savoir plus&nbsp;" : "Know more&nbsp;"));
-	document.querySelectorAll("#_61").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Contact" : "Contact"));
-	document.querySelectorAll("#_62").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Actualit&eacute;" : "News"));
-	document.querySelectorAll("#_63").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "On parle de nous / Presse" : "We're in the news"));
-	document.querySelectorAll("#_64").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "La boutique" : "The store"));
-	document.querySelectorAll("#_65").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Partenaires" : "Partners"));
-	// document.querySelectorAll("#_66").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Charte PCC" : "PCC Chart"));
-	document.querySelectorAll("#_67").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Espace Membres" : "Members Space"));
-	document.querySelectorAll("#_68").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Vie de l'asso" : "Life of the asso"));
-	document.querySelectorAll("#_69").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Outils de communication" : "Communication material"));
-	// document.querySelectorAll("#_7").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Espace Membres" : "Members Space"));
-	document.querySelectorAll("#ms_7").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? " Espace Membres" : " Members Space"));
-	document.querySelectorAll("#bs_8").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? " La boutique" : " The shop"));
-	document.querySelectorAll("#bs_9").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? " Navigation" : " Navigation"));
-	document.querySelectorAll("#bs_9bis").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? " Bo&icirc;te &agrave; outils" : " Tool Box"));
-    // No 9, Navigation works for both languages
-	document.querySelectorAll("#bs_10").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? " Recherche..." : " Search..."));
+    document.querySelectorAll("#_7").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Assistant m&eacute;t&eacute;o" : "Weather Wizard"));
+    document.querySelectorAll("#_71").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Atelier" : "Basic Workbench"));
+    document.querySelectorAll("#_72").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Op&eacute;ration." : "Operation, at work."));
+    document.querySelectorAll("#_73").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Fax de surface, Atlantique Nord" : "North Atlantic Surface Faxes"));
+    document.querySelectorAll("#_74").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Fax Atlantique Nord, surface et 500mb" : "North Atlantic Surface and 500mb Faxes"));
+
 };
 
-let switchLanguage = () => {
-    if (currentLang === "FR") { // Then switch to EN
-        document.querySelectorAll("#lang-flag").forEach(flagElement => {
-            flagElement.src = "./france.gif";
-            flagElement.alt = "Drapeau français";
-            flagElement.title = "En français";
-        });
-        currentLang = "EN";
-    } else {
-        document.querySelectorAll("#lang-flag").forEach(flagElement => {
-            flagElement.src = "us_uk_flag.png"; // "./usa.gif";
-            flagElement.alt = "US Flag";
-            flagElement.title = "Switch to English";
-        });
-        currentLang = "FR";
+let switchLanguage = (langToUse) => {
+
+    if (langToUse) {
+        currentLang = langToUse;
+        if (langToUse === "FR") { // Then switch to EN
+            document.querySelectorAll("#lang-flag").forEach(flagElement => {
+                flagElement.src = "us_uk_flag.png"; // "./usa.gif";
+                flagElement.alt = "US Flag";
+                flagElement.title = "Switch to English";
+            });
+        } else {
+            document.querySelectorAll("#lang-flag").forEach(flagElement => {
+                flagElement.src = "./france.gif";
+                flagElement.alt = "Drapeau français";
+                flagElement.title = "En français";
+            });
+        }
+    } else { // Flip language
+        if (currentLang === "FR") { // Then switch to EN
+            document.querySelectorAll("#lang-flag").forEach(flagElement => {
+                flagElement.src = "./france.gif";
+                flagElement.alt = "Drapeau français";
+                flagElement.title = "En français";
+            });
+            currentLang = "EN";
+        } else {
+            document.querySelectorAll("#lang-flag").forEach(flagElement => {
+                flagElement.src = "us_uk_flag.png"; // "./usa.gif";
+                flagElement.alt = "US Flag";
+                flagElement.title = "Switch to English";
+            });
+            currentLang = "FR";
+        }
     }
 	// Le reste...
 	updateMenu();
@@ -187,7 +164,7 @@ let switchLanguage = () => {
     let newId = `_${currentContext}`;
     let el = document.createElement("div");
 	el.id = newId;
-	clack(el, 'struct');
+	// clack(el, 'struct');
     // clack(el);
 };
 

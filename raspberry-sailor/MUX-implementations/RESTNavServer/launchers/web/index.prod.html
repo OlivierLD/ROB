@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <!--
-	Main Index. Ex Passe-Coque
-	Warning: This page must NOT contain any language sensitive data !!!
-	         (Some exceptions, though. See updateMenu() in passe-coque.js => js/consoles.js)
+	Main Index.
+	Warning: This page should NOT contain any language sensitive data !!!
+	(Some exceptions, though. See updateMenu() in js/consoles.js)
 
 	Good resource to validate the code: https://validator.w3.org/nu/, https://validator.w3.org/nu/?doc=http%3A%2F%2Fpasse-coque.com
 -->
@@ -105,36 +105,6 @@
 <body>
 
 	<!--
-		** Structure du menu **
-		▼ = &#9660;
-		- Admin           - 1
-		- Qui sommes nous - 2
-			- Passe-Coque, c'est quoi ?        21
-			- Notre equipe                     22
-			- Creer du lien /* Projet : Eco-village Nautique */   23
-		- Nos actions     - 3
-			- Transmettre                      31
-			- Renover                          32
-			- Partager                         33
-		- La flotte      - 4
-		- Nous soutenir  - 5
-			- Adherer                          51
-			- Faire un don                     52
-			- Investir dans l'Eco-Village      53
-		- En savoir plus - 6
-			- Vie de l'Asso                    68
-			- Actualite                        62
-			- On parle de nous / presse        63
-			- Outils de communication          69
-			- Boutique                         64
-			- Partenaires                      65
-			// - Chart PCC                        66 - Moved
-			- Espace Membres                   67 - Moved / Copied to 7
-			- Contact                          61
-		- Espace Membres  - 7
-		- Boutique  - 8
-		- Navigation - 9
-
 		Pour la traduction FR/EN, voir la fonction updateMenu()
 	-->
 	<div id="nav-menu" class="scrolling-menu" style="margin-left: -8px;">
@@ -143,64 +113,61 @@
 		<div style="/*margin-left: -50px; float: right;*/ margin-right: 20px;">  <!-- Touchy ! (Tablets, etc) -->
 			<ul id="navigation" style="display: grid; grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto 80px; width: fit-content;"> <!-- Columns must match the menu below... -->
 				<li>
-					<a href="admin.html" target="content-frame" id="_1" title="Manage the full runtime context. Channels, Forwarders, Computers."><span id="home-label">MUX Admin</span></a>
+					<a href="dummy.html" target="content-frame" id="_1" title="Clear the screen">Clear</a>
+				</li>
+				<li>
+					<a href="admin.html" target="content-frame" id="_2">MUX Admin</a>
 					<ul>
-						<li><a target="content-frame" href="admin.html" id="_21">MUX Admin</a></li>
-						<li><a target="content-frame" href="muxbuilder/dragndrop/mux-builder.html" id="_22">MUX Builder</a></li>
-						<li><a target="content-frame" href="muxbuilder/marker.maker.leaflet.html?sat=Y" id="_23">Marker Builder</a></li>
+						<li><a target="content-frame" href="admin.html" id="_21" title="Manage the full runtime context. Channels, Forwarders, Computers.">MUX Admin</a></li>
+						<li><a target="content-frame" href="muxbuilder/dragndrop/mux-builder.html" id="_22">MUX Builder (graphical)</a></li>
+						<li><a target="content-frame" href="muxbuilder/text/mux-builder.html" id="_23">MUX Builder (text)</a></li>
+						<li><a target="content-frame" href="muxbuilder/marker.maker.leaflet.html?sat=Y" id="_24">Marker Builder</a></li>
 					</ul>
 				</li>
 				<li>
-					<a href="javascript:void(0)" id="_2">Consoles&nbsp;</a>
+					<a href="javascript:void(0)" id="_3">Consoles&nbsp;</a>
 					<ul>
-						<li><a target="content-frame" href="webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n" id="_21">Full Console</a></li>
-						<li><a target="content-frame" href="webcomponents/console.raymarine.html" id="_22">Raymarine</a></li>
-						<li><a target="content-frame" href="simulator/cockpit.html" id="_23">Cockpit View</a></li>
-						<li><a target="content-frame" href="simulator/simulator.html" id="_24">Simulator</a></li>
+						<li><a target="content-frame" href="webcomponents/console.gps.html?style=flat-gray&bg=black&border=y&boat-data=n" id="_31">Full Console</a></li>
+						<li><a target="content-frame" href="webcomponents/console.raymarine.html" id="_32" title="Raymarine-like console">Raymarine</a></li>
+						<li><a target="content-frame" href="simulator/cockpit.html" id="_33" title="Requires Internet connection">Cockpit View</a></li>
+						<li><a target="content-frame" href="simulator/simulator.html" id="_34" title="Requires Internet connection">Simulator</a></li>
+						<li><a target="content-frame" href="webcomponents/console.html?style=flat-gray&bg=dark" id="_35" title="With Web Components">Console with Wind and WebComponents</a></li>
+						<!-- no _36 ... -->
+						<li><a target="content-frame" href="leaflet.driving.html" id="_37" title="With Leaflets">Leaflet Console, GPS Data</a></li>
+						<li><a target="content-frame" href="headup.html" id="_38" title="With Leaflets">Headup Display</a></li>
 					</ul>
 				</li>
 				<li>
-					<a target="content-frame" href="struct" id="_3">Tides&nbsp;</a>
+					<a href="javascript:void(0)" id="_4">Tides&nbsp;</a>
 					<ul>
-						<li><a target="content-frame" href="struct" id="_31">Transmettre - <i style="font-style: italic;">Les projets</i></a></li>
-						<li><a target="content-frame" href="struct" id="_32">R&eacute;nover - <i style="font-style: italic;">Le chantier</i></a></li>
-						<li><a target="content-frame" href="struct" id="_33">Partager - <i style="font-style: italic;">Le club</i></a></li>
-						<!--li><a target="content-frame" href="struct" id="_34">Formations</a></li>
-						<li><a target="content-frame" href="struct" id="_35">Partenaires</a></li-->
+						<li><a target="content-frame" href="tide/leaflet.tide.stations.html" id="_41" title="Requires Internet connection">Leaflet Tide Stations</a></li>
+						<li><a target="content-frame" href="tide/select.station.html" id="_42">Tide Curves</a></li>
+						<li><a target="content-frame" href="tide/pub.101.html" id="_43">Tide (or Sun) Almanacs Publication</a></li>
 					</ul>
 				</li>
 				<li>
-					<a target="content-frame" href="struct" id="_4">Almanacs&nbsp;</a>
-					<!--ul>
-						<li><a target="content-frame" href="struct" id="_41">Les bateaux</a></li>
-						<li><a target="content-frame" href="struct" id="_42">Les projets &agrave; saisir</a></li>
-					</ul-->
-				</li>
-				<li>
-					<a href="javascript:void(0)" id="_5">Chartless and Space Views&nbsp;</a>
+					<a href="javascript:void(0)" id="_5">Almanacs&nbsp;</a>
 					<ul>
-						<li><a target="content-frame" href="struct" id="_51">Adh&eacute;rer</a></li>
-						<li><a target="content-frame" href="struct" id="_52">Faire un don</a></li>
-						<li style="display: none;"><a target="content-frame" href="struct" id="_53">Investir dans l'Eco-Village</a></li>
+						<li><a target="content-frame" href="almanac/almanac.html" id="_51">Nautical Almanacs Publication</a></li>
+						<li><a target="content-frame" href="tide/moon.calendar.html" id="_52">Moon Calendar</a></li>
+						<li><a target="content-frame" href="tide/pub.101.html" id="_53">Tide (or Sun) Almanacs Publication</a></li>
 					</ul>
 				</li>
 				<li>
-					<a href="javascript:void(0)" id="_6">Weather Wizard&nbsp;</a>
+					<a href="javascript:void(0)" id="_6">Chartless and Space Views&nbsp;</a>
 					<ul>
-						<li><a target="content-frame" href="struct" id="_68">Vie de l'asso</a></li>
-						<li><a target="content-frame" href="struct" id="_62">Actualit&eacute;</a></li>
-						<li><a target="content-frame" href="struct" id="_63">On parle de nous / Presse</a></li>
-						<li><a target="content-frame" href="struct" id="_69">Outils de communication</a></li>
-						<li><a target="content-frame" href="struct" id="_64">La boutique</a></li>
-						<li><a target="content-frame" href="struct" id="_65">Partenaires</a></li>
-						<!--li><a target="content-frame" href="struct" id="_66">Charte PCC</a></li-->
-						<li>
-							<a target="content-frame" href="struct" id="_67">Espace Membres
-							<!--svg class="" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-							</svg--></a>
-						</li>
-						<li><a target="content-frame" href="struct" id="_61">Contact</a></li>
+						<li><a target="content-frame" href="chartless.world.data.html" id="_61">Chartless with World Data</a></li>
+						<li><a target="content-frame" href="chartless.world.tide.data.html" id="_62">Chartless with World and Tide Data</a></li>
+						<li><a target="content-frame" href="from.space/FromSpace.html" id="_63">Space View</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:void(0)" id="_7">Weather Wizard&nbsp;</a>
+					<ul>
+						<li><a target="content-frame" href="weather.wizard/ww.html" id="_71">Basic Workbench</a></li>
+						<li><a target="content-frame" href="weather.wizard/ww.2.html" id="_72">Operation, at work.</a></li>
+						<li><a target="content-frame" href="weather.wizard/internet.faxes.01.html" id="_73">North Atlantic Surface Faxes</a></li>
+						<li><a target="content-frame" href="weather.wizard/internet.faxes.02.html" id="_74">North Atlantic Surface and 500mb Faxes</a></li>
 					</ul>
 				</li>
 				<li class="this-tooltip" style="display: flex; /*align-items: center;*/">
@@ -215,103 +182,9 @@
 
 	<br/>
 
-	  <!--
-    The Big Main Sliding Menu on the left, for small devices.
-
-    ◄ = &#9668;
-    ► = &#9658;
-    ▼ = &#9660;
-    ▲ = &#9650;
-        -->
-	<div id="side-menu" class="hamburger-menu">
-		<!--h1 style="width: 100%;"><span id="hamburger" style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; &#8801;</span> <span id="my-name">Passe&#8209;Coque </span></h1-->
-		<div style="display: grid; grid-template-columns: auto;">
-			<a id="hamburger" style="cursor: pointer;" onclick="openNav();" title="Hamburger Menu"> <!-- onmouseover="openNav();" <= onmouseover (si present avec onclick) fout la merde sur cell-phones et tablettes -->
-				<span style="position: relative; color: #16696d; font-size: 2em; float: right; right: 30px; margin-top: 18px;">Menu&nbsp;&#8801;</span>
-			</a>
-		</div>
-		<!--h1 style="width: 100%;"><span id="hamburger" style="cursor: pointer;" onclick="openNav()" onmouseover="openNav()" title="Hamburger">&nbsp; <img src="/logo.transp.png" style="width: 48px; padding: 14px 10px;" title="Passe&#8209;Coque"/></span> <span id="my-name">Passe&#8209;Coque </span></h1-->
-
-		<div id="side-nav" class="sidenav" onmouseleave="closeNav()"> <!-- Restored... -->
-			<div style="width: 100%; display: grid; grid-template-columns: auto auto; margin-bottom: 20px;">
-				<a href="javascript:void(0)" class="active-link switch-lang" style="text-align: left;" onclick="switchLanguage()"><image id="lang-flag" src="./us_uk_flag.png" alt="US/UK Flag" title="Switch to English" style="width: 27px;"></image></a>
-				<a href="javascript:void(0)" id="close-nav-button" class="closebtn" onclick="closeNav();" role="button" aria-label="Close Dialog">&times;</a>
-			</div>
-
-			<a href="javascript:void(0)" class="active-link" style="margin-top: 10px;" onclick="clack(this, 'admin.html'); closeNav();" id="_1"><span id="home-label"> MUX Admin</span></a>
-
-			<div>
-				<a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_1" style="text-decoration: none;"><img src="/logos/logo.02.png" style="width: 50px;" title="Passe&#8209;Coque"/></a>
-				<a href="javascript:void(0)" onclick="showHideSection(this, 'section-1'); clack('_21');"><span class="expand-collapse">&#9658;&nbsp;</span><span id="_2">Qui sommes-nous ?</span></a>
-				<div id="section-1" class="sub-section">
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_21">Passe&#8209;Coque, c'est quoi ?</a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_22">Notre &eacute;quipe</a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_23">Cr&eacute;er du lien</a>
-				</div>
-			</div>
-			<div>
-				<a href="javascript:void(0)" onclick="showHideSection(this, 'section-2');"><span class="expand-collapse">&#9658;&nbsp;</span><span id="_3">Nos actions</span></a>
-				<div id="section-2" class="sub-section">
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_31">Transmettre - <i>Les projets</i></a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_32">R&eacute;nover - <i>Le chantier</i></a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_33">Partager - <i>Le Club</i></a>
-					<!--a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct');" id="_34">Formations</a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct');" id="_35">Partenaires</a-->
-				</div>
-			</div>
-
-			<div>
-				<a href="javascript:void(0)" class="active-link" style="margin-top: 10px;" onclick="clack(this, 'struct'); closeNav();" id="_4">La flotte</a>
-				<!--a href="javascript:void(0)" onclick="showHideSection(this, 'section-3');"><span class="expand-collapse">&#9658;&nbsp;</span><span id="_4">La flotte</span></a>
-				<div id="section-3" class="sub-section">
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this);" id="_41">Les bateaux</a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this);" id="_42">Les projets &agrave; saisir</a>
-				</div-->
-			</div>
-
-			<div>
-				<a href="javascript:void(0)" onclick="showHideSection(this, 'section-4');"><span class="expand-collapse">&#9658;&nbsp;</span><span id="_5">Nous soutenir</span></a>
-				<div id="section-4" class="sub-section">
-				<a href="javascript:void(0)" onclick="clack(this, 'struct');" id="_1" style="text-decoration: none;"><img src="/logos/logo.02.png" style="width: 50px;" title="Passe&#8209;Coque"/></a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_51">Adh&eacute;rer</a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_52">Faire un don</a>
-					<a class="active-link" style="display: none;" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_53">Investir dans l'Eco-Village</a>
-				</div>
-			</div>
-
-			<div>
-				<a href="javascript:void(0)" onclick="showHideSection(this, 'section-5');"><span class="expand-collapse">&#9658;&nbsp;</span><span id="_6">En savoir plus</span></a>
-				<div id="section-5" class="sub-section">
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_68">Vie de l'asso</a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_62">Actualit&eacute;</a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_63">On parle de nous / Presse</a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_69">Outils de communication</a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_64">La Boutique</a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_65">Partenaires</a>
-					<!--a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_66">Charte PCC</a-->
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_67">Espace membres</a>
-					<a class="active-link" href="javascript:void(0)" onclick="clack(this, 'struct'); closeNav();" id="_61">Contact</a>
-				</div>
-			</div>
-
-		</div>
-	</div>
-
 	<div style="display: none; border: 3px solid navy; border-radius: 5px;">
 		<div id="top-container" style="display: grid; grid-template-columns: auto auto;" >
-			<div>
-				<!--a href="javascript:void(0)" onclick="switchLanguage();"><image id="lang-flag" src="/usa.gif" alt="US Flag" title="Switch to English"></image></a-->
-			</div>
-			<div style="width: 100%; display: flex; justify-content: end;">
-				<!--span style="font-style: italic;">Dummy placeholder</span-->
-				<div class="switch-container" style="justify-content: end;" title="On or off">
-					<label class="switch switch-element">
-					<input id="time-bg-slider" type="checkbox" onchange="startBGAnimation(this);">
-					<span class="slider round"></span>
-					</label>
-					<span class="switch-element">Slide show</span>
-				</div>
-			</div>
+			<!-- Unused -->
 		</div>
 	</div>
 
@@ -335,7 +208,7 @@
 				<span class="this-tooltiptext" style="font-weight: bold;"><!--Need help?&#13;-->Besoin d'aide&nbsp;?</span>
 				<img src="./icons/bot.svg"
 				     style="height: 25px; padding-left: 10px; padding-top: 6px;"
-					 onclick="clack(this, 'struct'); closeNav();" id="_10"/>
+					 onclick="clack(this, `help.html?lang=${currentLang}`);" id="_10"/>
 			</div>
 		</div>
 	</div>
@@ -347,7 +220,7 @@ window.onload = () => {
 	// console.log("Loaded!");
 	console.log(`${window.location.href} loaded !`);
 
-	window.translate = translate;
+	// window.translate = translate;
 
 	// makeCode(); // On request only
 	// document.querySelectorAll('meta[name="viewport"]')[0].content = 'width=400';
@@ -356,25 +229,7 @@ window.onload = () => {
 	// document.body.style.width = '800px'; // <= THAT one works.
 
 	console.log(`Width: ${window.innerWidth}, Height: ${window.innerHeight}`);
-	let cellPhoneUI = false;
 
-
-	// TODO Clean this up...
-	if (false && (window.innerWidth < 1000 || window.innerHeight < 500)) {
-		cellPhoneUI = true;
-		// console.log(`Redirecting from Location : ${window.location}`);
-		// let redirected;
-		// if (window.location.href.includes('index.html')) {
-		// 	redirected = window.location.href.replace('index.html', 'index.2.html');
-		// } else {
-		// 	if (window.location.href.endsWith('/')) {
-		// 		redirected = window.location.href + 'index.2.html';
-		// 	} else {
-		// 		redirected = window.location.href + '/index.2.html';
-		// 	}
-		// }
-		// window.location.href = redirected;
-	}
 	/*
 	 * QS parameters management here.
 	 * - lang     FR ou EN
@@ -384,11 +239,6 @@ window.onload = () => {
 	 */
 
 	let userLang = getQueryParameterByName('lang');
-	// if (userLang) {
-	// 	if (userLang === 'EN') {
-	// 		switchLanguage();
-	// 	}
-	// } else {
 	if (!userLang) {
 		let browserUserLang = navigator.language || navigator.userLanguage;
 		console.log("The browser's language is: " + browserUserLang);
@@ -397,12 +247,13 @@ window.onload = () => {
 				userLang = 'FR';
 			} else {
 				userLang = 'EN';
-				console.log("We'll speak english");
 			}
 		}
 	}
-	if (userLang && userLang === 'EN') {
-		switchLanguage();
+	console.log(`We'll speak ${ userLang === 'FR' ? 'french' : 'english'}`);
+
+	if (true || (userLang && userLang !== 'EN')) {
+		switchLanguage(userLang);
 	}
 
 	// Check OffscreenCanvas availability (for JS compatibility)
