@@ -1,4 +1,4 @@
-  #!/usr/bin/env bash
+#!/usr/bin/env bash
 #
 # WIP
 # Warning: If possible, run the process on the target machine.
@@ -96,7 +96,7 @@ if [[ "${REBUILD_REQUEST}" == "Y" ]]; then
     ../../../gradlew clean shadowJar -x :astro-computer:AstroComputer:compileScala -x :astro-computer:AstroComputer:compileKotlin ${PROXY_SETTINGS}
   else
     pushd ../RESTNavServer
-    ../../../gradlew clean shadowJar -x :astro-computer:AstroComputer:compileScala -x :astro-computer:AstroComputer:compileKotlin ${PROXY_SETTINGS}
+      ../../../gradlew clean shadowJar -x :astro-computer:AstroComputer:compileScala -x :astro-computer:AstroComputer:compileKotlin ${PROXY_SETTINGS}
     popd
   fi
 fi
@@ -138,10 +138,10 @@ fi
 # Web resources, zipped. To see the content: unzip -vl web.zip
 # cp -R web ${distdir}
 pushd web
-zip -r ../${distdir}/web.zip *
-cp index.star.wars.html index.html  # Default index becomes star wars.
-zip ../${distdir}/web.zip index.html
-rm index.html
+  zip -r ../${distdir}/web.zip *
+  cp index.star.wars.html index.html  # Default index becomes star wars.
+  zip ../${distdir}/web.zip index.html
+  rm index.html
 popd
 #
 cp -r scripts/* ${distdir}/scripts
@@ -238,5 +238,7 @@ echo -e "./mux.sh nmea.mux.basics.yaml   (Ctrl+C to stop it)"
 echo -e "Then, for a first basic test, from a browser (on the machine you generated the distrib, or the target one), reach"
 echo -e "http://localhost:9999/web/index.html, or http://localhost:9999/zip/index.html ..."
 echo -e "Also http://localhost:9999/web/index.star.wars.html, or http://localhost:9999/zip/index.html ..."
+#
+# Also see ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/DRY_RUN.md
 # Yo!
 #

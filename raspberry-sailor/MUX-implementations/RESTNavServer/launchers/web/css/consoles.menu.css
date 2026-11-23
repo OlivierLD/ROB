@@ -98,7 +98,6 @@ ul#navigation li:hover > ul {
 	opacity: 0.85; /* 1; */
 }
 
-
 svg:hover {
 	/* fill: var(--pc-bg-color); */
 	stroke: var(--pc-bg-color);
@@ -130,7 +129,7 @@ ul#navigation ul {
 
 ul#navigation ul li ul {
     top: 0;
-    left: 181px;
+    left: 250px;
 }
 
 ul#navigation ul li {

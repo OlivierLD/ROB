@@ -34,7 +34,7 @@ h2 {
     padding-left: 5pt;
     margin-bottom: 1pt;
     margin-top: 1pt;
-    text-shadow: 2px 2px 4px black, 0 0 25px white, 0 0 7px cyan;
+    /* text-shadow: 2px 2px 4px black, 0 0 25px white, 0 0 7px cyan; */
 }
 
 h3 {
@@ -179,4 +179,9 @@ a:visited {
 .gradient-bg {
     background: radial-gradient(at top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.6));
     /*background-image: none;*/
+}
+
+.message {
+    font-size: 1.5em;
+    font-weight: 300;
 }

@@ -5,7 +5,8 @@
 "use strict";
 
 const NO_DIALOG_MESSAGE = "Dialog tag not supported.";
-const DEFAULT_LANG = "FR";
+const DEFAULT_LANG = "EN";
+
 let currentLang = DEFAULT_LANG; // Init value
 
 let showSection = (id) => {
@@ -62,7 +63,7 @@ let clack = (origin, docToLoad) => {
     if (typeof(origin) === 'string') {
         originId = origin.replace('_', '');
     } else {
-        console.log(`clack: Click on ${origin.innerText}, id ${origin.id}`);
+        // console.log(`clack: Click on ${origin.innerText}, id ${origin.id}`);
         originId = origin.id.replace('_', '');
     }
     currentContext = originId;
@@ -70,24 +71,28 @@ let clack = (origin, docToLoad) => {
     let contentName = docToLoad;
 	let contentPlaceHolder = document.getElementById("current-content");
 
-    console.log(`Fetching ${contentName}...`);
+    // console.log(`Fetching ${contentName}...`);
     let iframeToFill = document.getElementById("content-frame");
     iframeToFill.src = contentName;
 }
 
-let updateMenu = () => { // Multilang aspect, in index.html.
+let updateMenu = () => {
 
-    // Tooltips
-    document.querySelectorAll("#_1").forEach(elmt =>  elmt.innerHTML = (currentLang === "FR" ? "Effacer" : "Clear"));
     document.querySelectorAll(".this-tooltiptext").forEach(elmt =>  elmt.innerHTML = (currentLang === "FR" ? "Besoin d'aide&nbsp;?" : "Need Help?"));
     document.querySelectorAll("#_lang-flag-label").forEach(elmt =>  elmt.innerHTML = (currentLang === "FR" ? "Switch to English" : "En fran&ccedil;ais"));
 
+    document.querySelectorAll("#_1").forEach(elmt =>  {
+        elmt.innerHTML = (currentLang === "FR" ? "Effacer" : "Clear")
+        elmt.title = (currentLang === "FR" ? "Retour à la page d'accueil" : "Back to home page")
+    });
 
     document.querySelectorAll("#_2").forEach(elmt => elmt.title = (currentLang === "FR" ? "MUX Admin" : "MUX Admin"));
 	document.querySelectorAll("#_2").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "MUX Admin" : "MUX Admin"));
 	document.querySelectorAll("#_21").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "MUX Admin" : "MUX Admin"));
-	document.querySelectorAll("#_22").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "MUX Builder (graphique)" : "MUX Builder (graphical)"));
-	document.querySelectorAll("#_23").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "MUX Builder (texte)" : "MUX Builder (text)"));
+	document.querySelectorAll("#_22").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "MUX Builder" : "MUX Builder"));
+	document.querySelectorAll("#_221").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "MUX Builder - graphique" : "MUX Builder - graphical"));
+	document.querySelectorAll("#_222").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "MUX Builder - texte" : "MUX Builder - text"));
+	// document.querySelectorAll("#_23").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "MUX Builder (texte)" : "MUX Builder (text)"));
 	document.querySelectorAll("#_24").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Marker Builder" : "Marker Builder"));
 
 	document.querySelectorAll("#_3").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Consoles" : "Consoles"));
@@ -116,14 +121,15 @@ let updateMenu = () => { // Multilang aspect, in index.html.
 	document.querySelectorAll("#_63").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Vue de l'espace" : "Space View"));
 
     document.querySelectorAll("#_7").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Assistant m&eacute;t&eacute;o" : "Weather Wizard"));
-    document.querySelectorAll("#_71").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Atelier" : "Basic Workbench"));
-    document.querySelectorAll("#_72").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Op&eacute;ration." : "Operation, at work."));
+    document.querySelectorAll("#_71").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "D&eacute;finition des Composites" : "Basic Workbench"));
+    document.querySelectorAll("#_72").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Op&eacute;ration" : "Operation, at work"));
     document.querySelectorAll("#_73").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Fax de surface, Atlantique Nord" : "North Atlantic Surface Faxes"));
     document.querySelectorAll("#_74").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Fax Atlantique Nord, surface et 500mb" : "North Atlantic Surface and 500mb Faxes"));
-
 };
 
 let switchLanguage = (langToUse) => {
+
+    console.log(`In switchLanguage (start), currentLang is set to ${currentLang}`);
 
     if (langToUse) {
         currentLang = langToUse;
@@ -166,6 +172,9 @@ let switchLanguage = (langToUse) => {
 	el.id = newId;
 	// clack(el, 'struct');
     // clack(el);
+
+    console.log(`In switchLanguage (end), currentLang is set to ${currentLang}`);
+
 };
 
 let generateFetchMessage = (contentName, response) => {
@@ -365,55 +374,6 @@ let makeCode = (url, location) => {
 
 const DIALOG_OPTION = true;
 
-// Dynamic translation, for the actu section.
-// We assume all data are already in French.
-let translate = (actuId) => {
-    console.log(`${actuId} : ${(currentLang === 'FR') ? "En français" : "I'll speak english"}`);
-
-    switch (actuId) {
-        case 'cc-2023': // Carter Cup 2023
-            if (currentLang === 'EN') {  // Then translate
-                let dateField = document.getElementById('cc-2023').querySelector('h2');
-                if (dateField) {
-                    dateField.innerText = "Carter Cup, August 2023";
-                }
-                let contentField01 = document.getElementById('cc-2023').querySelector('#content-01');
-                if (contentField01) {
-                    contentField01.innerHTML = 'Jimmy, on board Pordin-Nancq, was a winner!';
-                }
-                // etc...
-            }
-            break;
-        case 'fam-2023': // Festival dea Aventuries de la Mer 2023
-            if (currentLang === 'EN') {  // Then translate
-                let dateField = document.getElementById('fam-2023').querySelector('h2');
-                if (dateField) {
-                    dateField.innerText = "Festival des Aventuriers de la Mer, October 2023";
-                }
-                let contentField01 = document.getElementById('fam-2023').querySelector('#content-01');
-                if (contentField01) {
-                    contentField01.innerHTML = 'Passe-Coque wins the "Audelor et R&eacute;gion Bretagne" prize, and a 5000€ check, for the creation of the boat-club of the association.';
-                }
-                // etc...
-            }
-            break;
-        case 'early-2024':
-            if (currentLang === 'EN') {
-                let dateField = document.getElementById('early-2024').querySelector('h2');
-                if (dateField) {
-                    dateField.innerText = "Mid-january 2024";
-                }
-                let contentField01 = document.getElementById('early-2024').querySelector('div');
-                if (contentField01) {
-                    contentField01.innerHTML = 'Release of the new web site.';
-                }
-            }
-            break;
-        default:
-            break;
-    }
-};
-
 // Copy the content of a field
 let copyToClipboard = (fieldId) => {
     let value = document.getElementById(fieldId).innerHTML;
@@ -449,11 +409,6 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 };
 
-
-// let mouseOnTop = (el) => {
-//     console.log(`Mouse on ${el.id}`);
-//     // el.style.cursor = 'pointer';
-// }
 
 // Jump to somewhere else in the same site...
 let jumpTo = (page, extraPrm) => {

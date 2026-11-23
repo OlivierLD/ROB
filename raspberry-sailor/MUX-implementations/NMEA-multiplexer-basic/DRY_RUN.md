@@ -5,6 +5,7 @@ Build, run, watch:
 - `./mux.sh nmea.mux.replay.big.log.yaml` (wind, GPS, etc)
     - or `./mux.sh nmea.mux.replay.etel.groix.yaml` (GPS, Chartless Maps, AIS, etc)
 - then reach <http://localhost:8080/web/basic.html> in your browser.
+- And <http://localhost:8080/web/index.star.wars.html> too.
 - and also <http://localhost:8080/web/index.html>, and <http://localhost:8080/web/admin.html>.
 
 

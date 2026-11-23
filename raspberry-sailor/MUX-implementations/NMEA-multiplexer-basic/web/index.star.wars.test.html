@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ | Star Wars stuff inspired by a pen by Darryl Huffman ;)
+ | https://codepen.io/darrylhuffman/pen/MYBYgN
+ |
+ | Multilingual. QS Parameter 'lang' can be used to switch language, or the browser's language is used.
+ +-->
+<head>
+    <meta charset="UTF-8">
+    <title>Star Wars Menu</title>
+    <link rel="icon" type="image/png" href="icons/jellyfish.png">
+
+    <style type="text/css">
+
+body {
+    font-family: "Lato", sans-serif;
+    font-size: 20px;
+}
+
+.sidenav {
+    height: 100%;
+    max-height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1200;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 255, 0.6);
+    color: orange;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 18px;
+    color: white; /* #818181; */
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover, .offcanvas a:focus {
+    color: cyan; /* #f1f1f1; */
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 24px;
+    margin-left: 50px;
+}
+
+.description {
+    color: gold;
+    text-align: right;
+    padding-right: 10px;
+    font-size: 16px;
+}
+
+.description:hover {
+	color: silver;
+	font-style: italic;
+}
+
+@media screen and (max-width: 600px) { /*(max-height: 600px) {*/
+  .sidenav {
+    padding-top: 15px;
+    font-size: 50px;
+  }
+  .sidenav a {
+  	font-size: 50px;
+  }
+  body {
+  	font-size: 50px;
+  }
+}
+
+h2 {
+   width: 100%;
+   text-align: center;
+   /*border-bottom: 1px solid blue;*/
+   line-height: 0.1em;
+   margin: 10px 0 20px;
+}
+
+h2 span {
+    background: transparent;
+    padding: 0 10px;
+}
+
+#wrap {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    top: 40px;
+    height: 100%;
+}
+
+    </style>
+
+    <style type="text/css">
+h1 {
+  width: 100%;
+  text-align: center;
+  color: #F8FF00;
+  position: absolute;
+  top: 10%;
+  font-size: 11vw;
+  font-family: Verdana, Helvetica, sans-serif;
+  font-weight: bold;
+  -webkit-animation: logo 4s linear; /* Chrome, Safari, Opera */
+  animation: logo 4s linear;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 3px;
+}
+
+h1x {
+  font: 800 40px Arial;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px;
+}
+
+#container {
+  text-align: center;
+  width: 300px;
+  margin:0 auto;
+  -webkit-perspective: 600;
+  perspective: 600;
+  transition: all .5s;
+
+}
+
+section {
+  font-smooth: always;
+  transition: all 5s;
+  font-size: 22px;
+  font-family: Helvetica, sans-serif;
+  width: 100%;
+  height: 100px;
+  color: #F8FF00;
+  -webkit-transform: rotateX(70deg) translate(0, -1800px);
+  transform: rotateX(70deg) translate(0, -1800px);
+  -webkit-animation: mymove 140s linear; /* Chrome, Safari, Opera */
+  animation: mymove 140s linear;
+}
+
+section p {
+  line-height: 20px;
+  font-size: 14px;
+  font-smooth: always;
+  text-align: justify;
+}
+
+@font-face {
+	font-family: "Digi Font";
+	src: url(./fonts/Sterion-BLLld.ttf) format("truetype");
+}
+.digifont {
+  font-family: "Digi Font", Verdana, Tahoma;
+}
+
+@-webkit-keyframes logo {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  50%{
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+}
+
+@keyframes logo {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  50%{
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+}
+
+@-webkit-keyframes mymove {
+  from {
+    -webkit-transform: rotateX(70deg) translate(0, 550px);
+    transform: rotateX(70deg) translate(0, 550px);
+  }
+  to {
+    -webkit-transform: rotateX(70deg) translate(0, -1800px);
+    transform: rotateX(70deg) translate(0, -1800px);
+  }
+}
+
+/* Standard syntax */
+@keyframes mymove {
+  from {
+    -webkit-transform: rotateX(70deg) translate(0, 550px);
+    transform: rotateX(70deg) translate(0, 550px);
+  }
+  to {
+    -webkit-transform: rotateX(70deg) translate(0, -1800px);
+    transform: rotateX(70deg) translate(0, -1800px);
+  }
+}
+
+/* Background */
+
+body {
+  background-color: #000000;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+canvas {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 1000;
+}
+
+.cleartxt {
+  top: 80px;
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+  height: 80px;
+  background: rgba(0, 0, 0, 1);
+  background: -moz-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0,0,0,1)), color-stop(100%, rgba(0,0,0,0)));
+  background: -webkit-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  background: -o-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  background: -ms-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000', GradientType=0 );
+}
+.black {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: #000;
+  z-index: 999;
+  height: 80px;
+  width: 100%;
+}
+/* End Background */
+    </style>
+
+</head>
+<body>
+
+<audio controls autoplay>
+    <source src="Star.Wars.mp3" type="audio/mpeg">
+    <!--source src="horse.ogg" type="audio/ogg"-->
+    Your browser does not support the audio element.
+</audio>
+
+<h1>Hear anything ?</h1>
+</body>
+
+</html>
