@@ -122,3 +122,13 @@ img {
 a:link { color : #0000A0}
 a:active { color: #8080FF}
 a:visited { color : #8080FF}
+
+.gradient-bg {
+    background: radial-gradient(at top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.6));
+    /*background-image: none;*/
+}
+
+.message {
+    font-size: 1.5em;
+    font-weight: 300;
+}
