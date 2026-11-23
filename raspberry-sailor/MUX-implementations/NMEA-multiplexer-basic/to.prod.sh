@@ -136,10 +136,11 @@ fi
 # Log folder
 # mkdir ${distdir}/logged
 # Web resources, zipped. To see the content: unzip -vl web.zip
-# cp -R web ${distdir}
+# cp -R web ${distdir}   # TODO The extra stuff for tides, astro, fromSpace, etc...
+
 pushd web
   zip -r ../${distdir}/web.zip *
-  cp index.star.wars.html index.html  # Default index becomes star wars.
+  cp index.star.wars.html index.html  # Default index becomes star wars. Could depend on the option (big or not)
   zip ../${distdir}/web.zip index.html
   rm index.html
 popd
@@ -234,10 +235,10 @@ echo -e "+----------------------------------------------------------------------
 echo -e "PS: Current folder is ${PWD} "
 echo -e ""
 echo -e "For tests, you can run (form the distrib folder, if not dropped):"
-echo -e "./mux.sh nmea.mux.basics.yaml   (Ctrl+C to stop it)"
-echo -e "Then, for a first basic test, from a browser (on the machine you generated the distrib, or the target one), reach"
-echo -e "http://localhost:9999/web/index.html, or http://localhost:9999/zip/index.html ..."
-echo -e "Also http://localhost:9999/web/index.star.wars.html, or http://localhost:9999/zip/index.html ..."
+echo -e "    ./mux.sh nmea.mux.basics.yaml   (Ctrl+C to stop it)"
+echo -e "    Then, for a first basic test, from a browser (on the machine you generated the distrib, or the target one), reach"
+echo -e "    http://localhost:9999/web/index.html, or http://localhost:9999/zip/index.html ..."
+echo -e "    Also http://localhost:9999/web/index.star.wars.html, or http://localhost:9999/zip/index.html ..."
 #
 # Also see ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/DRY_RUN.md
 # Yo!

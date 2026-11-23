@@ -2,7 +2,7 @@
 # Close to demoLauncher.sh, but with no choice from a menu.
 # Uses runNavServer.sh
 # Hard-coded PROP_FILE=mux-configs/nmea.mux.no.gps.yaml in the script.
-# 
+#
 # For parameters --no-rmc-time --no-date : see in runNavServer.sh
 #
 # Escape codes (for colors): https://en.wikipedia.org/wiki/ANSI_escape_code
@@ -79,6 +79,7 @@ if [[ $# -gt 0 ]]; then
 fi
 #
 URL_OPTION_1_01="http://localhost:${HTTP_PORT}/web/index.html"
+URL_OPTION_1_02="http://localhost:${HTTP_PORT}/web/index.prod.html"
 #
 function openBrowser() {
   if [[ $(uname -s) == *Linux* ]]; then
@@ -140,11 +141,20 @@ if [[ "${INTERACTIVE}" == "Y" ]] && [[ "${LAUNCH_BROWSER}" == "N" ]] && [[ "${LN
   read REPLY
   if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
     LAUNCH_BROWSER=Y
-    echo -e ">> Will launch a browser, for option [${option}]"
+    echo -e ">> Will launch a browser."
   fi
 fi
 if [[ "${LAUNCH_BROWSER}" == "Y" ]] || [[ "${LAUNCH_BROWSER}" == "y" ]]; then
+  echo -en "Option 1 or 2 ? [1]|2 > "
+  read REPLY
   URL_01=${URL_OPTION_1_01}
+  if [[ "${REPLY}" == "1" ]] || [[ "${REPLY}" == "" ]]; then
+    URL_01=${URL_OPTION_1_01}
+  elif [[ "${REPLY}" == "2" ]]; then
+    URL_01=${URL_OPTION_1_02}
+  else
+    echo -e "Unmanaged reply ${REPLY}. Using 1."
+  fi
 fi
 echo -e "Launching Nav Server with ${PROP_FILE}:"
 echo -e "-----------------------------"

@@ -1,13 +1,19 @@
 const analogVerbose = false;
 const ANALOG_TAG_NAME = 'analog-display';
 
+if (Math.toRadians === undefined) {
+	Math.toRadians = (deg) => {
+		return deg * (Math.PI / 180);
+	};
+}
+
 /*
 * See custom properties in CSS.
 * =============================
 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/
-* Relies on a rule named .graphdisplay, like that:
+* Relies on those elements:
 *
-.analogdisplay {
+.xxxxxxxx {
 	--bg-color: rgba(0, 0, 0, 0);
 	--digit-color: black;
 	--with-gradient: true;
@@ -42,7 +48,7 @@ const ANALOG_TAG_NAME = 'analog-display';
  * spine-case to camelCase
  */
 const defaultAnalogDisplayColorConfig = {
-	bgColor: 'rgba(0, 0, 0, 0)', /* transparent, 'white', */
+	bgColor: 'rgba(0, 0, 0, 0)', /* transparent, 'white' */
 	digitColor: 'black',
 	withGradient: true,
 	displayBackgroundGradient: {
@@ -68,8 +74,10 @@ const defaultAnalogDisplayColorConfig = {
 	valueFontSizeFactor: 1
 };
 
+// import * as Utilities from "../utilities/Utilities.js";
+
 /* global HTMLElement */
-class AnalogDisplay extends HTMLElement { // WIP
+class AnalogDisplay extends HTMLElement {
 
 	static get observedAttributes() {
 		return [
@@ -83,11 +91,21 @@ class AnalogDisplay extends HTMLElement { // WIP
 			"with-min-max",     // Boolean, default false
 			"with-digits",      // Boolean, default true. Index Values for major-ticks
 			"with-border",      // Boolean, default true
-			"label",            // String. Ignored if digital-data-* are provided.
-			"unit",             // Optional. Like hPa, mmHg, etc.
+			"label",            // String.
+			"rotate-digits",    // Boolean, default true. false means display all values straight, no rotation
+			"major-ticks-2",    // Float. For an inner scale, value between major ticks (those with labels)
+			"minor-ticks-2",    // Float. For an inner scale, value between minor ticks
+			"min-value-2",      // Float. For an inner scale, Min value. Default 0
+			"max-value-2",      // Float. For an inner scale, Max value.
 			"digital-data-len", // Integer, optional, to display instead of label, like log value along with BSP. Number of characters to display
-			"digital-data-val", // Float, optional. Must be present idf the above exists.
-			"value"             // Float. Value to display
+			"digital-data-val", // Float, optional. Must be present if the above exists.
+			"value",            // Float. Value to display
+			"value-2",          // Float. Value to display, for scale 2
+			"unit",             // String. Unit
+			"unit-2",           // String. Unit 2
+			"display-value",    // String. Value label (if differente from value, like "W 2.1" for -2.1)
+			"display-value-2",  // String, Value label 2
+			"abs-tick-value"    // Boolean. Display absolute major tick values,m default false
 		];
 	}
 
@@ -96,10 +114,17 @@ class AnalogDisplay extends HTMLElement { // WIP
 		this._shadowRoot = this.attachShadow({mode: 'open'}); // 'open' means it is accessible from external JavaScript.
 		// create and append a <canvas>
 		this.canvas = document.createElement("canvas");
+		let fallbackElemt = document.createElement("h1");
+		let content = document.createTextNode("This is an AnalogDisplay, on an HTML5 canvas");
+		fallbackElemt.appendChild(content);
+		this.canvas.appendChild(fallbackElemt);
 		this.shadowRoot.appendChild(this.canvas);
 
 		// Default values
 		this._value            =   0;
+		this._value_2          = undefined;
+		this._display_value    = undefined;
+		this._display_value_2  = undefined;
 		this._width            = 150;
 		this._height           = 150;
 		this._major_ticks      =  10;
@@ -110,10 +135,20 @@ class AnalogDisplay extends HTMLElement { // WIP
 		this._with_min_max     = false;
 		this._with_digits      = true;
 		this._with_border      = true;
+		this._rotate_digits    = true;
 		this._label            = undefined;
-		this._unit             = undefined;
 		this._digital_data_len = undefined;
 		this._digital_data_val = undefined;
+
+		this._major_ticks_2    = undefined;
+		this._minor_ticks_2    = undefined;
+		this._min_value_2      = 0;
+		this._max_value_2      = undefined;
+
+		this._unit             = undefined;
+		this._unit_2           = undefined;
+
+		this._abs_tick_value = false;
 
 		this.miniVal =  10000000;
 		this.maxiVal = -10000000;
@@ -152,6 +187,21 @@ class AnalogDisplay extends HTMLElement { // WIP
 				this.miniVal = Math.min(Math.max(this._min_value, this._value), this.miniVal);
 				this.maxiVal = Math.max(Math.min(this._max_value, this._value), this.maxiVal);
 				break;
+			case "value-2":
+				this._value_2 = parseFloat(newVal);
+				break;
+			case "display-value":
+				this._display_value = newVal;
+				break;
+			case "display-value-2":
+				this._display_value_2 = newVal;
+				break;
+			case "unit":
+				this._unit = newVal;
+				break;
+			case "unit-2":
+				this._unit_2 = newVal;
+				break;
 			case "width":
 				this._width = parseInt(newVal);
 				break;
@@ -170,11 +220,29 @@ class AnalogDisplay extends HTMLElement { // WIP
 			case "max-value":
 				this._max_value = parseFloat(newVal);
 				break;
+			case "major-ticks-2":
+				this._major_ticks_2 = parseFloat(newVal);
+				break;
+			case "minor-ticks-2":
+				this._minor_ticks_2 = parseFloat(newVal);
+				break;
+			case "min-value-2":
+				this._min_value_2 = parseFloat(newVal);
+				break;
+			case "max-value-2":
+				this._max_value_2 = parseFloat(newVal);
+				break;
 			case "overlap":
 				this._overlap = parseInt(newVal);
 				break;
 			case "with-digits":
 				this._with_digits = ("true" === newVal);
+				break;
+			case "abs-tick-value":
+				this._abs_tick_value = ("true" === newVal);
+				break;
+			case "rotate-digits":
+				this._rotate_digits = ("true" === newVal);
 				break;
 			case "with-border":
 				this._with_border = ("true" === newVal);
@@ -184,9 +252,6 @@ class AnalogDisplay extends HTMLElement { // WIP
 				break;
 			case "label":
 				this._label = newVal;
-				break;
-			case "unit":
-				this._unit = newVal;
 				break;
 			case "digital-data-len":
 				this._digital_data_len = parseInt(newVal);
@@ -214,6 +279,27 @@ class AnalogDisplay extends HTMLElement { // WIP
 		}
 //	this.repaint();
 	}
+	set displayValue(option) {
+		this.setAttribute("display-value", option);
+		if (analogVerbose) {
+			console.log(">> DisplayValue option:", option);
+		}
+//	this.repaint();
+	}
+	set value2(option) {
+		this.setAttribute("value-2", option);
+		if (analogVerbose) {
+			console.log(">> Value2 option:", option);
+		}
+//	this.repaint();
+	}
+	set displayValue2(option) {
+		this.setAttribute("display-value-2", option);
+		if (analogVerbose) {
+			console.log(">> DisplayValue2 option:", option);
+		}
+//	this.repaint();
+	}
 	set width(val) {
 		this.setAttribute("width", val);
 	}
@@ -226,11 +312,20 @@ class AnalogDisplay extends HTMLElement { // WIP
 	set minorTicks(val) {
 		this.setAttribute("minor-ticks", val);
 	}
+	set majorTicks2(val) {
+		this.setAttribute("major-ticks-2", val);
+	}
+	set minorTicks2(val) {
+		this.setAttribute("minor-ticks-2", val);
+	}
 	set withMinMax(val) {
 		this.setAttribute("with-min-max", val);
 	}
 	set withDigits(val) {
 		this.setAttribute("with-digits", val);
+	}
+	set rotateDigits(val) {
+		this.setAttribute("rotate-digits", val);
 	}
 	set withBorder(val) {
 		this.setAttribute("with-border", val);
@@ -244,8 +339,20 @@ class AnalogDisplay extends HTMLElement { // WIP
 	set maxValue(val) {
 		this.setAttribute("max-value", val);
 	}
+	set minValue2(val) {
+		this.setAttribute("min-value-2", val);
+	}
+	set maxValue2(val) {
+		this.setAttribute("max-value-2", val);
+	}
 	set label(val) {
 		this.setAttribute("label", val);
+	}
+	set unit(val) {
+		this.setAttribute("unit", val);
+	}
+	set unit2(val) {
+		this.setAttribute("unit-2", val);
 	}
 	set digitalDataLen(val) {
 		this.setAttribute("digital-data-len", val);
@@ -260,6 +367,15 @@ class AnalogDisplay extends HTMLElement { // WIP
 	get value() {
 		return this._value;
 	}
+	get value2() {
+		return this._value_2;
+	}
+	get displayValue() {
+		return this._display_value;
+	}
+	get displayValue2() {
+		return this._display_value_2;
+	}
 	get width() {
 		return this._width;
 	}
@@ -272,11 +388,20 @@ class AnalogDisplay extends HTMLElement { // WIP
 	get majorTicks() {
 		return this._major_ticks;
 	}
+	get minorTicks2() {
+		return this._minor_ticks_2;
+	}
+	get majorTicks2() {
+		return this._major_ticks_2;
+	}
 	get withMinMax() {
 		return this._with_min_max;
 	}
 	get withDigits() {
 		return this._with_digits;
+	}
+	get rotateDigits() {
+		return this._rotate_digits;
 	}
 	get withBorder() {
 		return this._with_border;
@@ -287,6 +412,12 @@ class AnalogDisplay extends HTMLElement { // WIP
 	get maxValue() {
 		return this._max_value;
 	}
+	get minValue2() {
+		return this._min_value_2;
+	}
+	get maxValue2() {
+		return this._max_value_2;
+	}
 	get overlap() {
 		return this._overlap;
 	}
@@ -295,6 +426,9 @@ class AnalogDisplay extends HTMLElement { // WIP
 	}
 	get unit() {
 		return this._unit;
+	}
+	get unit2() {
+		return this._unit_2;
 	}
 	get digitalDataLen() {
 		return this._digital_data_len;
@@ -308,8 +442,13 @@ class AnalogDisplay extends HTMLElement { // WIP
 
 	// Component methods
 	repaint() {
-		this.drawDisplay(this._value);
+		this.drawDisplay(this._value, this._value_2);
 	}
+
+	resetMinMax() {
+        this.miniVal =  10000000;
+        this.maxiVal = -10000000;
+    }
 
 	getColorConfig(classNames) {
 		let colorConfig = defaultAnalogDisplayColorConfig;
@@ -317,105 +456,103 @@ class AnalogDisplay extends HTMLElement { // WIP
 		for (let cls=0; cls<classes.length; cls++) {
 			let className = classes[cls];
 			for (let s=0; s<document.styleSheets.length; s++) {
-	//		console.log("Walking though ", document.styleSheets[s]);
-				for (let r = 0; document.styleSheets[s].cssRules !== null && r < document.styleSheets[s].cssRules.length; r++) {
-					let selector = document.styleSheets[s].cssRules[r].selectorText;
-	//			console.log(">>> ", selector);
-					if (selector !== undefined && (selector === '.' + className || (selector.indexOf('.' + className) > -1 && selector.indexOf(ANALOG_TAG_NAME) > -1))) { // Cases like "tag-name .className"
-	//				console.log("  >>> Found it! [%s]", selector);
-						let cssText = document.styleSheets[s].cssRules[r].style.cssText;
-						let cssTextElems = cssText.split(";");
-						cssTextElems.forEach(function (elem) {
-							if (elem.trim().length > 0) {
-								let keyValPair = elem.split(":");
-								let key = keyValPair[0].trim();
-								let value = keyValPair[1].trim();
-								switch (key) {
-									case '--bg-color':
-										colorConfig.bgColor = value;
-										break;
-									case '--digit-color':
-										colorConfig.digitColor = value;
-										break;
-									case '--with-gradient':
-										colorConfig.withGradient = (value === 'true');
-										break;
-									case '--display-background-gradient-from':
-										colorConfig.displayBackgroundGradient.from = value;
-										break;
-									case '--display-background-gradient-to':
-										colorConfig.displayBackgroundGradient.to = value;
-										break;
-									case '--display-line-color':
-										colorConfig.displayLineColor = value;
-										break;
-									case '--label-fill-color':
-										colorConfig.labelFillColor = value;
-										break;
-									case '--with-display-shadow':
-										colorConfig.withDisplayShadow = (value === 'true');
-										break;
-									case '--shadow-color':
-										colorConfig.shadowColor = value;
-										break;
-									case '--outline-color':
-										colorConfig.outlineColor = value;
-										break;
-									case '--major-tick-color':
-										colorConfig.majorTickColor = value;
-										break;
-									case '--minor-tick-color':
-										colorConfig.minorTickColor = value;
-										break;
-									case '--value-color':
-										if (/^var\(.*\)/.test(value)) { // There must be a better way...
-											var cssVar = value.trim().split("(")[1].split(")")[0].trim();
-											colorConfig.valueColor = window.getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim();
-										} else {
+				//		console.log("Walking though ", document.styleSheets[s]);
+				try {
+					for (let r = 0; document.styleSheets[s].cssRules !== null && r < document.styleSheets[s].cssRules.length; r++) {
+						let selector = document.styleSheets[s].cssRules[r].selectorText;
+						//			console.log(">>> ", selector);
+						if (selector !== undefined && (selector === '.' + className || (selector.indexOf('.' + className) > -1 && selector.indexOf(ANALOG_TAG_NAME) > -1))) { // Cases like "tag-name .className"
+							//				console.log("  >>> Found it! [%s]", selector);
+							let cssText = document.styleSheets[s].cssRules[r].style.cssText;
+							let cssTextElems = cssText.split(";");
+							cssTextElems.forEach((elem) => {
+								if (elem.trim().length > 0) {
+									let keyValPair = elem.split(":");
+									let key = keyValPair[0].trim();
+									let value = keyValPair[1].trim();
+									switch (key) {
+										case '--bg-color':
+											colorConfig.bgColor = value;
+											break;
+										case '--digit-color':
+											colorConfig.digitColor = value;
+											break;
+										case '--with-gradient':
+											colorConfig.withGradient = (value === 'true');
+											break;
+										case '--display-background-gradient-from':
+											colorConfig.displayBackgroundGradient.from = value;
+											break;
+										case '--display-background-gradient-to':
+											colorConfig.displayBackgroundGradient.to = value;
+											break;
+										case '--display-line-color':
+											colorConfig.displayLineColor = value;
+											break;
+										case '--label-fill-color':
+											colorConfig.labelFillColor = value;
+											break;
+										case '--with-display-shadow':
+											colorConfig.withDisplayShadow = (value === 'true');
+											break;
+										case '--shadow-color':
+											colorConfig.shadowColor = value;
+											break;
+										case '--outline-color':
+											colorConfig.outlineColor = value;
+											break;
+										case '--major-tick-color':
+											colorConfig.majorTickColor = value;
+											break;
+										case '--minor-tick-color':
+											colorConfig.minorTickColor = value;
+											break;
+										case '--value-color':
 											colorConfig.valueColor = value;
-										}
-										break;
-									case '--value-outline-color':
-										colorConfig.valueOutlineColor = value;
-										break;
-									case '--value-nb-decimal':
-										colorConfig.valueNbDecimal = value;
-										break;
-									case '--hand-color':
-										colorConfig.handColor = value;
-										break;
-									case '--hand-outline-color':
-										colorConfig.handOutlineColor = value;
-										break;
-									case '--with-hand-shadow':
-										colorConfig.withHandShadow = (value === 'true');
-										break;
-									case '--knob-color':
-										colorConfig.knobColor = value;
-										break;
-									case '--knob-outline-color':
-										colorConfig.knobOutlineColor = value;
-										break;
-									case '--font':
-										colorConfig.font = value;
-										break;
-									case '--value-font-size-factor':
-										colorConfig.valueFontSizeFactor = parseFloat(value);
-										break;
-									default:
-										break;
+											break;
+										case '--value-outline-color':
+											colorConfig.valueOutlineColor = value;
+											break;
+										case '--value-nb-decimal':
+											colorConfig.valueNbDecimal = value;
+											break;
+										case '--hand-color':
+											colorConfig.handColor = value;
+											break;
+										case '--hand-outline-color':
+											colorConfig.handOutlineColor = value;
+											break;
+										case '--with-hand-shadow':
+											colorConfig.withHandShadow = (value === 'true');
+											break;
+										case '--knob-color':
+											colorConfig.knobColor = value;
+											break;
+										case '--knob-outline-color':
+											colorConfig.knobOutlineColor = value;
+											break;
+										case '--font':
+											colorConfig.font = value;
+											break;
+										case '--value-font-size-factor':
+											colorConfig.valueFontSizeFactor = parseFloat(value);
+											break;
+										default:
+											break;
+									}
 								}
-							}
-						});
+							});
+						}
 					}
+				} catch (err) {
+					// Absorb
 				}
 			}
 		}
 		return colorConfig;
 	}
 
-
-	drawDisplay(analogValue) {
+	drawDisplay(analogValue, analogValue2) {
 
 		let currentStyle = this.className;
 		if (this._previousClassName !== currentStyle || true) {
@@ -441,14 +578,14 @@ class AnalogDisplay extends HTMLElement { // WIP
 		this.canvas.width = this.width;
 		this.canvas.height = this.height;
 
-		let totalAngle = (Math.PI + (2 * (this.toRadians(this.overlap))));
+		let totalAngle = (Math.PI + (2 * (Math.toRadians(this.overlap))));
 
 		context.beginPath();
 
 		if (this.withBorder === true) {
 			//  context.arc(x, y, radius, startAngle, startAngle + Math.PI, antiClockwise);
 //    context.arc(canvas.width / 2, radius + 10, radius, Math.PI - toRadians(overlapOver180InDegree), (2 * Math.PI) + toRadians(overlapOver180InDegree), false);
-			context.arc(this.canvas.width / 2, radius + 10, radius, Math.PI - this.toRadians(this.overlap > 0 ? 90 : 0), (2 * Math.PI) + this.toRadians(this.overlap > 0 ? 90 : 0), false);
+			context.arc(this.canvas.width / 2, radius + 10, radius, Math.PI - Math.toRadians(this.overlap > 0 ? 90 : 0), (2 * Math.PI) + Math.toRadians(this.overlap > 0 ? 90 : 0), false);
 			context.lineWidth = 5;
 		}
 
@@ -481,8 +618,8 @@ class AnalogDisplay extends HTMLElement { // WIP
 		if (this.withMinMax && this.miniVal < this.maxiVal) {
 			context.beginPath();
 
-			let ___minAngle = (totalAngle * ((this.miniVal - this.minValue) / (this.maxValue - this.minValue))) - this.toRadians(this.overlap) - (Math.PI);
-			let ___maxAngle = (totalAngle * ((this.maxiVal - this.minValue) / (this.maxValue - this.minValue))) - this.toRadians(this.overlap) - (Math.PI);
+			let ___minAngle = (totalAngle * ((this.miniVal - this.minValue) / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap) - (Math.PI);
+			let ___maxAngle = (totalAngle * ((this.maxiVal - this.minValue) / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap) - (Math.PI);
 
 			//Center
 			context.moveTo(this.canvas.width / 2, radius + 10);
@@ -504,7 +641,7 @@ class AnalogDisplay extends HTMLElement { // WIP
 		context.beginPath();
 		for (let i = 0; i <= (this.maxValue - this.minValue); i++) {
 			if ((i + this.minValue) % this.majorTicks === 0) {
-				let currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - this.toRadians(this.overlap);
+				let currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap);
 				let xFrom = (this.canvas.width / 2) - ((radius * 0.95) * Math.cos(currentAngle));
 				let yFrom = (radius + 10) - ((radius * 0.95) * Math.sin(currentAngle));
 				let xTo = (this.canvas.width / 2) - ((radius * 0.85) * Math.cos(currentAngle));
@@ -522,7 +659,7 @@ class AnalogDisplay extends HTMLElement { // WIP
 		if (this.minorTicks > 0) {
 			context.beginPath();
 			for (let i = 0; i <= (this.maxValue - this.minValue); i += this.minorTicks) {
-				let _currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - this.toRadians(this.overlap);
+				let _currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap);
 
 				let xFrom = (this.canvas.width / 2) - ((radius * 0.95) * Math.cos(_currentAngle));
 				let yFrom = (radius + 10) - ((radius * 0.95) * Math.sin(_currentAngle));
@@ -537,50 +674,171 @@ class AnalogDisplay extends HTMLElement { // WIP
 			context.closePath();
 		}
 
+		let smallScaleRatio = 0.65;
+		// Second scale?
+		if (this.majorTicks2 !== undefined && this.maxValue2 !== undefined) {
+			context.beginPath();
+			for (let i = 0; i <= (this.maxValue2 - this.minValue2); i++) {
+				if ((i + this.minValue2) % this.majorTicks2 === 0) {
+					let currentAngle = (totalAngle * (i / (this.maxValue2 - this.minValue2))) - Math.toRadians(this.overlap);
+					let xFrom = (this.canvas.width / 2) - ((radius * smallScaleRatio * 0.95) * Math.cos(currentAngle));
+					let yFrom = (radius + 10) - ((radius * smallScaleRatio * 0.95) * Math.sin(currentAngle));
+					let xTo = (this.canvas.width / 2) - ((radius * smallScaleRatio * 0.85) * Math.cos(currentAngle));
+					let yTo = (radius + 10) - ((radius * smallScaleRatio * 0.85) * Math.sin(currentAngle));
+					context.moveTo(xFrom, yFrom);
+					context.lineTo(xTo, yTo);
+				}
+			}
+			context.lineWidth = 2;
+			context.strokeStyle = this.analogDisplayColorConfig.majorTickColor;
+			context.stroke();
+			context.closePath();
+
+			// Minor Ticks ?
+			if (this.minorTicks2 !== undefined && this.minorTicks2 > 0) {
+				context.beginPath();
+				for (let i = 0; i <= (this.maxValue2 - this.minValue2); i += this.minorTicks2) {
+					let _currentAngle = (totalAngle * (i / (this.maxValue2 - this.minValue2))) - Math.toRadians(this.overlap);
+
+					let xFrom = (this.canvas.width / 2) - ((radius * smallScaleRatio * 0.95) * Math.cos(_currentAngle));
+					let yFrom = (radius + 10) - ((radius * smallScaleRatio * 0.95) * Math.sin(_currentAngle));
+					let xTo = (this.canvas.width / 2) - ((radius * smallScaleRatio * 0.90) * Math.cos(_currentAngle));
+					let yTo = (radius + 10) - ((radius * smallScaleRatio * 0.90) * Math.sin(_currentAngle));
+					context.moveTo(xFrom, yFrom);
+					context.lineTo(xTo, yTo);
+				}
+				context.lineWidth = 1;
+				context.strokeStyle = this.analogDisplayColorConfig.minorTickColor;
+				context.stroke();
+				context.closePath();
+			}
+		}
+
 		let scale = radius / 100;
-		// Numbers (indexes) on major ticks
+		// Numbers (indexes) on major (and major-2) ticks
 		if (this.withDigits) {
 			context.beginPath();
 			for (let i = 0; i <= (this.maxValue - this.minValue); i++) {
 				if ((i + this.minValue) % this.majorTicks === 0) {
 					context.save();
-					context.translate(this.canvas.width / 2, (radius + 10)); // canvas.height);
-					let __currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - this.toRadians(this.overlap);
-//      context.rotate((Math.PI * (i / maxValue)) - (Math.PI / 2));
-					context.rotate(__currentAngle - (Math.PI / 2));
 					context.font = "bold " + Math.round(scale * 15) + "px " + this.analogDisplayColorConfig.font; // Like "bold 15px Arial"
 					context.fillStyle = digitColor;
 					let str = (i + this.minValue).toString();
+					if (this._abs_tick_value) {
+						str = Math.abs(i + this.minValue).toString();
+					}
 					let len = context.measureText(str).width;
-					context.fillText(str, -len / 2, (-(radius * .8) + 10));
-					context.lineWidth = 1;
-					context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
-					context.strokeText(str, -len / 2, (-(radius * .8) + 10)); // Outlined
+					let __currentAngle = (totalAngle * (i / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap);
+					if (this.rotateDigits) { // Rotate
+						context.translate(this.canvas.width / 2, (radius + 10)); // canvas.height);
+//          context.rotate((Math.PI * (i / maxValue)) - (Math.PI / 2));
+						context.rotate(__currentAngle - (Math.PI / 2));
+						context.fillText(str, -len / 2, (-(radius * .8) + 10));
+						context.lineWidth = 1;
+						context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
+						context.strokeText(str, -len / 2, (-(radius * .8) + 10)); // Outlined
+					} else {                // Don't rotate
+						let xTo = (this.canvas.width / 2) - ((radius * 0.75) * Math.cos(__currentAngle));
+						let yTo = (radius + 10) - ((radius * 0.75) * Math.sin(__currentAngle));
+						context.fillText(str, xTo - (len / 2), yTo + (scale * 11 / 2));
+						context.lineWidth = 1;
+						context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
+						context.strokeText(str, xTo - (len / 2), yTo + (scale * 11 / 2)); // Outlined
+					}
 					context.restore();
 				}
 			}
 			context.closePath();
+
+			if (this.majorTicks2 !== undefined && this.maxValue2 !== undefined) {
+				context.beginPath();
+				for (let i = 0; i <= (this.maxValue2 - this.minValue2); i++) {
+					if ((i + this.minValue2) % this.majorTicks2 === 0) {
+						context.save();
+						context.font = "bold " + Math.round(scale * 8) + "px " + this.analogDisplayColorConfig.font; // Like "bold 15px Arial"
+						context.fillStyle = digitColor;
+						let str = (i + this.minValue2).toString();
+						if (this._abs_tick_value) {
+							str = Math.abs(i + this.minValue2).toString();
+						}
+						let len = context.measureText(str).width;
+						let __currentAngle = (totalAngle * (i / (this.maxValue2 - this.minValue2))) - Math.toRadians(this.overlap);
+						if (this.rotateDigits) { // Rotate
+							context.translate(this.canvas.width / 2, (radius + 10)); // canvas.height);
+//          context.rotate((Math.PI * (i / maxValue)) - (Math.PI / 2));
+							context.rotate(__currentAngle - (Math.PI / 2));
+							context.fillText(str, -len / 2, (-(radius * smallScaleRatio * .8) + 10));
+							context.lineWidth = 1;
+							context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
+							context.strokeText(str, -len / 2, (-(radius * smallScaleRatio * .8) + 10)); // Outlined
+						} else {                // Don't rotate
+							let xTo = (this.canvas.width / 2) - ((radius * smallScaleRatio * 0.75) * Math.cos(__currentAngle));
+							let yTo = (radius + 10) - ((radius * smallScaleRatio * 0.75) * Math.sin(__currentAngle));
+							context.fillText(str, xTo - (len / 2), yTo + (scale * 5 / 2));
+							context.lineWidth = 1;
+							context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
+							context.strokeText(str, xTo - (len / 2), yTo + (scale * 5 / 2)); // Outlined
+						}
+						context.restore();
+					}
+				}
+				context.closePath();
+
+			}
 		}
 
-		// Value
+		// Value. Font size can be tweaked with --value-font-size-factor
 		let text = analogValue.toFixed(this.analogDisplayColorConfig.valueNbDecimal);
-//  text = displayValue.toFixed(nbDecimal); // analogDisplayColorConfig.valueNbDecimal);
+		if (this.displayValue !== undefined) {
+			text = this.displayValue;
+		}
+    //  text = displayValue.toFixed(nbDecimal); // analogDisplayColorConfig.valueNbDecimal);
 		let len = 0;
-		context.font = "bold " + Math.round(scale * 40 * this.analogDisplayColorConfig.valueFontSizeFactor) + "px " + this.analogDisplayColorConfig.font; // "bold 40px Arial"
+		let fontCoeff = 40;
+		if (this.majorTicks2 !== undefined && this.maxValue2 !== undefined) { // Display value smaller if there is a second scale.
+			fontCoeff /= 1.5;
+		}
+		context.font = "bold " + Math.round(scale * fontCoeff * this.analogDisplayColorConfig.valueFontSizeFactor) + "px " + this.analogDisplayColorConfig.font; // "bold 40px Arial"
 		let metrics = context.measureText(text);
 		len = metrics.width;
 
+		let yValueOffsetCoeff = .75;
+		if (this.majorTicks2 !== undefined && this.maxValue2 !== undefined) { // Display value smaller if there is a second scale.
+			yValueOffsetCoeff = .85;
+		}
 		context.beginPath();
 		context.fillStyle = this.analogDisplayColorConfig.valueColor;
-		context.fillText(text, (this.canvas.width / 2) - (len / 2), ((radius * .75) + 10));
+		context.fillText(text, (this.canvas.width / 2) - (len / 2), ((radius * yValueOffsetCoeff) + 10));
 		context.lineWidth = 1;
 		context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
-		context.strokeText(text, (this.canvas.width / 2) - (len / 2), ((radius * .75) + 10)); // Outlined
+		context.strokeText(text, (this.canvas.width / 2) - (len / 2), ((radius * yValueOffsetCoeff) + 10)); // Outlined
 		context.closePath();
+
+		if (analogValue2 !== undefined) {
+			let text = analogValue2.toFixed(this.analogDisplayColorConfig.valueNbDecimal);
+//  text = displayValue.toFixed(nbDecimal); // analogDisplayColorConfig.valueNbDecimal);
+			if (this.displayValue2 !== undefined) {
+				text = this.displayValue2;
+			}
+			let len = 0;
+			let fontCoeff = 20;
+			context.font = "bold " + Math.round(scale * fontCoeff * this.analogDisplayColorConfig.valueFontSizeFactor) + "px " + this.analogDisplayColorConfig.font; // "bold 40px Arial"
+			let metrics = context.measureText(text);
+			len = metrics.width;
+
+			let yValueOffsetCoeff = 1.25;
+			context.beginPath();
+			context.fillStyle = this.analogDisplayColorConfig.valueColor;
+			context.fillText(text, (this.canvas.width / 2) - (len / 2), ((radius * yValueOffsetCoeff) + 10));
+			context.lineWidth = 1;
+			context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
+			context.strokeText(text, (this.canvas.width / 2) - (len / 2), ((radius * yValueOffsetCoeff) + 10)); // Outlined
+			context.closePath();
+		}
 
 		// Label ?
 		if (this.label !== undefined) {
-			var fontSize = 20;
+			let fontSize = 20;
 			text = this.label;
 			len = 0;
 			context.font = "bold " + Math.round(scale * fontSize) + "px " + this.analogDisplayColorConfig.font; // "bold 40px Arial"
@@ -589,29 +847,46 @@ class AnalogDisplay extends HTMLElement { // WIP
 
 			context.beginPath();
 			context.fillStyle = this.analogDisplayColorConfig.labelFillColor;
-			context.fillText(text, (this.canvas.width / 2) - (len / 2), (2 * radius - (fontSize * scale * 2.1)));
+			context.fillText(text, (this.canvas.width / 2) - (len / 2), (2 * radius - (fontSize * scale * 2.1)) + (this.digitalDataLen !== undefined ? 15 : 0));
 			context.lineWidth = 1;
 			context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
-			context.strokeText(text, (this.canvas.width / 2) - (len / 2), (2 * radius - (fontSize * scale * 2.1))); // Outlined
+			context.strokeText(text, (this.canvas.width / 2) - (len / 2), (2 * radius - (fontSize * scale * 2.1)) + (this.digitalDataLen !== undefined ? 15 : 0)); // Outlined
 			context.closePath();
 		}
-		// Unit ?
+		// Unit
 		if (this.unit !== undefined) {
-			var fontSize = 14;
+			let fontSize = 12;
 			text = this.unit;
 			len = 0;
 			context.font = "bold " + Math.round(scale * fontSize) + "px " + this.analogDisplayColorConfig.font; // "bold 40px Arial"
 			metrics = context.measureText(text);
 			len = metrics.width;
 
+			let lineOffset = 5;
 			context.beginPath();
-			context.fillStyle = this.analogDisplayColorConfig.labelFillColor;
-			let y = (2 * radius) - (fontSize * scale * 1.4);
-			// console.log(`y:${y}`);
-			context.fillText(text, (this.canvas.width / 2) - (len / 2),  y);
+			context.fillStyle = this.analogDisplayColorConfig.valueColor;
+			context.fillText(text, (this.canvas.width / 2) - (len / 2), (2 * radius - (lineOffset * scale * 2.1)) + (this.digitalDataLen !== undefined ? 15 : 0));
 			context.lineWidth = 1;
 			context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
-			context.strokeText(text, (this.canvas.width / 2) - (len / 2), y); // Outlined
+			context.strokeText(text, (this.canvas.width / 2) - (len / 2), (2 * radius - (lineOffset * scale * 2.1)) + (this.digitalDataLen !== undefined ? 15 : 0)); // Outlined
+			context.closePath();
+		}
+		// Unit 2
+		if (this.unit2 !== undefined) {
+			let fontSize = 8;
+			text = this.unit2;
+			len = 0;
+			context.font = "bold " + Math.round(scale * fontSize) + "px " + this.analogDisplayColorConfig.font; // "bold 40px Arial"
+			metrics = context.measureText(text);
+			len = metrics.width;
+
+			let lineOffset = 11;
+			context.beginPath();
+			context.fillStyle = this.analogDisplayColorConfig.valueColor;
+			context.fillText(text, (this.canvas.width / 2) - (len / 2), (2 * radius - (lineOffset * scale * 2.1)) + (this.digitalDataLen !== undefined ? 15 : 0));
+			context.lineWidth = 1;
+			context.strokeStyle = this.analogDisplayColorConfig.valueOutlineColor;
+			context.strokeText(text, (this.canvas.width / 2) - (len / 2), (2 * radius - (lineOffset * scale * 2.1)) + (this.digitalDataLen !== undefined ? 15 : 0)); // Outlined
 			context.closePath();
 		}
 
@@ -631,12 +906,13 @@ class AnalogDisplay extends HTMLElement { // WIP
 			}
 
 			// The rectangles around each digit
+			let distFactor = 1.1;
 			let digitOrigin = (this.canvas.width / 2) - ((this.digitalDataLen * oneDigitWidth) / 2);
 			for (let i = 0; i < this.digitalDataLen; i++) {
 				context.beginPath();
 
 				let x = digitOrigin + (i * oneDigitWidth);
-				let y = 1.025 * (this.canvas.height / 2);
+				let y = distFactor * (this.canvas.height / 2);
 				context.fillRect(x, y, oneDigitWidth, oneDigitHeight);
 				context.lineWidth = 1;
 				context.strokeStyle = this.analogDisplayColorConfig.displayLineColor;
@@ -663,7 +939,7 @@ class AnalogDisplay extends HTMLElement { // WIP
 					let metrics = context.measureText(txt);
 					len = metrics.width;
 					let x = digitOrigin + (i * oneDigitWidth);
-					let y = 1.025 * (this.canvas.height / 2);
+					let y = distFactor * (this.canvas.height / 2);
 					context.beginPath();
 					context.fillStyle = this.analogDisplayColorConfig.valueColor;
 					context.fillText(txt, x + (oneDigitWidth / 2) - (len / 2), y + (oneDigitHeight / 2) + (fontSize / 2));
@@ -688,7 +964,7 @@ class AnalogDisplay extends HTMLElement { // WIP
 		let valInBoundaries = Math.min(analogValue, this._max_value);
 		valInBoundaries = Math.max(valInBoundaries, this._min_value);
 
-		let ___currentAngle = (totalAngle * ((valInBoundaries - this.minValue) / (this.maxValue - this.minValue))) - this.toRadians(this.overlap);
+		let ___currentAngle = (totalAngle * ((valInBoundaries - this.minValue) / (this.maxValue - this.minValue))) - Math.toRadians(this.overlap);
 		// Left
 		let x = (this.canvas.width / 2) - ((radius * 0.05) * Math.cos((___currentAngle - (Math.PI / 2))));
 		let y = (radius + 10) - ((radius * 0.05) * Math.sin((___currentAngle - (Math.PI / 2))));
@@ -716,14 +992,6 @@ class AnalogDisplay extends HTMLElement { // WIP
 		context.fill();
 		context.strokeStyle = this.analogDisplayColorConfig.knobOutlineColor;
 		context.stroke();
-	}
-
-	toDegrees(rad) {
-		return rad * (180 / Math.PI);
-	}
-
-	toRadians(deg) {
-		return deg * (Math.PI / 180);
 	}
 }
 

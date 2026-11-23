@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<!--
+ | Chartless Map & Tides. WiP.
+ | With World Data
+ |
+ | Tide part all in ES6, can be demanding on a small browser.
+ +-->
+<html>
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>With Tides</title>
+    <link rel="icon" type="image/ico" href="./icons/hammerhead.02.ico">
+	<style type="text/css">
+html {
+	font-family: "Courier New";
+}
+
+h1 {
+	margin-left: 10px;
+	text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;
+}
+
+select, input {
+	font-family: "Courier New";
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+.html-01 {
+	background-color: white;
+	color: black;
+}
+.html-02 {
+	background-color: gray;
+	color: cyan;
+}
+.html-03 {
+	background-color: black;
+	color: silver;
+}
+
+.chartless-map-01 {
+	--bg-color: rgba(224, 215, 215, 0.5);
+	--grid-color: rgba(0, 0, 0, 0.7);
+	--fg-color: gray;
+	--marker-and-track-color: navy;
+	--target-color: green;
+	--border-color: blue;
+	--value-font: 'Courier New';
+}
+.chartless-map-02 {
+	--bg-color: rgba(0, 0, 0, 0.5);
+	--grid-color: lime;
+	--fg-color: lime;
+	--marker-and-track-color: cyan;
+	--target-color: lime;
+	--border-color: cyan;
+	--value-font: 'Courier New';
+}
+.chartless-map-03 {
+	--bg-color: rgb(62, 58, 58);
+	--grid-color: cyan;
+	--fg-color: cyan;
+	--marker-and-track-color: cyan;
+	--target-color: lime;
+	--border-color: cyan;
+	--value-font: 'Courier New';
+}
+.chart-buttons {
+  z-index: 10;
+  position: relative;
+  top: -74px;
+  left: 96%;
+  height: 0;
+}
+.zoom-button {
+  border-radius: 50%;
+  background-color: rgba(255, 165, 0, 0.5);
+
+  padding: 4px 6px;
+  min-width: 32px;
+  margin: 2px;
+}
+compass-display .green {
+	--bg-color: transparent;
+	--digit-color: lime;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: lime;
+	--cross-hair-color: red;
+	--display-line-color: lime;
+	--label-fill-color: green;
+	--with-display-shadow: false;
+	--outline-color: lime;
+	--major-tick-color: lime;
+	--minor-tick-color: lime;
+	--value-color: green;
+	--value-outline-color: lime;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+compass-display .orange {
+	--bg-color: transparent;
+	--digit-color: orange;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: orange;
+	--cross-hair-color: red;
+	--display-line-color: orange;
+	--label-fill-color: orange;
+	--with-display-shadow: false;
+	--outline-color: orange;
+	--major-tick-color: orange;
+	--minor-tick-color: orange;
+	--value-color: orange;
+	--value-outline-color: orange;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+compass-display .gray {
+	--bg-color: transparent;
+	--digit-color: gray;
+	--with-gradient: false;
+	--display-background-gradient-to: transparent;
+	--tick-color: gray;
+	--cross-hair-color: red;
+	--display-line-color: gray;
+	--label-fill-color: blue;
+	--with-display-shadow: false;
+	--outline-color: gray;
+	--major-tick-color: gray;
+	--minor-tick-color: gray;
+	--value-color: navy;
+	--value-outline-color: gray;
+	--value-nb-decimal: 0;
+	--knob-color: red;
+	--knob-outline-color: cyan;
+}
+.display-data {
+	grid-area: middle;
+	text-align: center;
+	vertical-align: baseline;
+	margin: auto;
+	color: inherit;
+	font-size: 48px;
+	font-weight: bold;
+}
+
+/* Day, flat gray */
+.analogdisplay-flat-gray {
+	--bg-color: rgba(255, 255, 255, 0.0);
+	--digit-color: grey;
+	--with-gradient: true;
+	--display-background-gradient-from: LightGrey;
+	--display-background-gradient-to: white; /* used if --withGradient: false */
+	--display-line-color: rgba(0, 0, 0, 0.5);
+	--label-fill-color: rgba(255, 255, 255, 0.5);
+	--with-display-shadow: false;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--outline-color: DarkGrey;
+	--major-tick-color: grey;
+	--minor-tick-color: grey;
+	--value-color: grey;
+	--value-outline-color: black;
+	--value-nb-decimal: 1;
+	--hand-color: red;
+	--hand-outline-color: grey;
+	--with-hand-shadow: true;
+	--knob-color: DarkGrey;
+	--knob-outline-color: black;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+.analogdisplay-monochrome-orange {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: orange;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(255, 165, 0, 0.5); /* orange */
+	--label-fill-color: rgba(255, 255, 255, 0);
+	--with-display-shadow: false;
+	--shadow-color: black;
+	--outline-color: orange;
+	--major-tick-color: orange;
+	--minor-tick-color: orange;
+	--value-color: orange;
+	--value-outline-color: orange;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0);
+	--hand-outline-color: orange;
+	--with-hand-shadow: false;
+	--knob-color: orange;
+	--knob-outline-color: orange;
+	--outlined-port-starboard: true;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+.analogdisplay-monochrome-green {
+	--bg-color: rgba(0, 0, 0, 0);
+	--digit-color: lime;
+	--with-gradient: false;
+	--display-background-gradient-from: undefined; /* used if --withGradient: true */
+	--display-background-gradient-to: rgba(0, 0, 0, 0);
+	--display-line-color: rgba(255, 165, 0, 0.5); /* orange */
+	--label-fill-color: rgba(255, 255, 255, 0);
+	--with-display-shadow: false;
+	--shadow-color: black;
+	--outline-color: lime;
+	--major-tick-color: lime;
+	--minor-tick-color: lime;
+	--value-color: lime;
+	--value-outline-color: lime;
+	--value-nb-decimal: 1;
+	--hand-color: rgba(0, 0, 0, 0);
+	--hand-outline-color: lime;
+	--with-hand-shadow: false;
+	--knob-color: lime;
+	--knob-outline-color: lime;
+	--outlined-port-starboard: true;
+	--font: Arial;
+	--value-font-size-factor: 1
+}
+
+satellite-plotter .sat-plot-01 {
+	--border-color: darkGrey;
+	--with-gradient: true;
+	--display-background-gradient-from: LightGrey;
+	--display-background-gradient-to: DarkGrey;
+	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--line-color: grey;
+	--font: Arial;
+}
+
+satellite-plotter .sat-plot-02 {
+	--border-color: silver;
+	--with-gradient: true;
+	--display-background-gradient-from: DarkGrey;
+	--display-background-gradient-to: black;
+	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--line-color: lightGreen;
+	--font: Arial;
+}
+
+satellite-plotter .sat-plot-03 {
+	--border-color: silver;
+	--with-gradient: false;
+	--display-background-gradient-from: white;
+	--display-background-gradient-to: white;
+	--with-display-shadow: true;
+	--shadow-color: rgba(0, 0, 0, 0.75);
+	--line-color: DarkGrey;
+	--font: Arial;
+}
+
+chartless-map#chartless-map-01 {
+	/* cursor: crosshair; */
+	cursor: url('./images/crosshair.png') 19 20, auto;
+}
+
+	</style>
+    <style type="text/css">
+.dialog-header {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    width: 102.7%;
+    margin-left: -16px;
+    margin-top: -16px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    background-color: silver;
+}
+
+.dialog-header-close {
+    margin-left: 10px;
+    float: right;
+}
+.dialog-header-close:hover {
+  color: cyan;
+  cursor: pointer;
+}
+
+dialog {
+    border-radius: 5px;
+    border: 2px solid navy;
+}
+dialog#generated-curve-dialog {
+    z-index: 500;
+    min-width: 400px;
+    min-height: 300px;
+}
+
+button {
+	font-family: "Courier New";
+	font-weight: bold;
+	padding: 4px 6px;
+    border: 0.5px solid silver;
+	border-radius: 5px;
+  	background-color: rgba(255, 165, 0, 0.5);
+	box-shadow: 2px 2px 4px grey, 0 0 25px white, 0 0 7px cyan;
+}
+
+.search-item {
+    height: 22px;
+    margin-right: 0;
+    border-radius: 0;
+}
+button.search-item {
+    /* margin-left: -10px; */
+    min-width: 28px;
+    height: 28px;
+    border: 0.5px solid silver;
+	border-radius: 50%;
+  	background-color: rgba(255, 165, 0, 0.5);
+	box-shadow: 2px 2px 4px grey, 0 0 25px white, 0 0 7px cyan;
+  	/* padding: 4px 6px; */
+  	/* min-width: 32px; */
+  	margin: 1px;
+}
+
+.custom-select {
+    /* position: relative;
+    font-family: Arial; */
+    max-width: 200px;
+    min-width: 200px;
+    width: 200px;
+    background: dodgerblue;
+    color: white;
+    height: 30px;
+}
+
+    </style>
+
+	<script type="text/javascript" src="js/date.proto.js"></script>
+	<script type="text/javascript" src="js/pub.sub.js"></script>
+	<script type="text/javascript" src="js/ajax.manager.js"></script>
+	<script type="text/javascript" src="./webcomponents/utils/NavigationHelper.js"></script>
+
+
+	<script type="module" src="./webcomponents/ChartlessMap.js"></script>
+
+	<script type="module" src="./webcomponents/AnalogDisplay.js"></script>
+	<script type="module" src="./webcomponents/CompassDisplay.js"></script>
+
+	<script type="module" src="./webcomponents/GraphDisplay.js"></script>
+
+	<script type="module">
+import * as tideEngine from './tide/tideEngine.js'; // this one itself imports the json/js data files.
+
+// Adding features to the Date object.
+import * as dateFmt from './js/date.module.js';
+
+const THE_YEAR = new Date().getYear() + 1900; // Argh ! Current (system) year.
+const VERBOSE = true;
+
+let before = 0.0;
+let after = 0.0;
+
+before = Date.now();
+let tideStations = tideEngine.default.getStations(); // ["stations"];
+after = Date.now();
+let mess = `We have ${Object.keys(tideStations).length} stations ${ VERBOSE ? `(retrieved in ${after - before} ms)` : '' }.`;
+console.log(mess);
+
+// Spit out station list, sorted, if needed.
+let listContent = "<pre>";
+Object.keys(tideStations).sort().forEach(station => {
+    listContent += `${decodeURIComponent(station)}, ${tideEngine.decToSex(tideStations[station].latitude, 'NS')  + '/' +
+                        tideEngine.decToSex(tideStations[station].longitude, 'EW')} \n`;
+});
+listContent += "</pre>";
+
+// Populate a drop-down list
+let selectList = document.getElementById('station-list');
+while (selectList.length > 0) {
+    selectList.remove(0);
+}
+
+let topEl = document.createElement("option");
+topEl.textContent = "Select Station:";
+topEl.value = "0";
+selectList.appendChild(topEl);
+
+Object.keys(tideStations).sort((a, b) => Intl.Collator().compare(decodeURIComponent(a), decodeURIComponent(b))).forEach(station => {
+    let el = document.createElement("option");
+    el.textContent = decodeURIComponent(station);
+    el.value = station;
+    selectList.appendChild(el);
+});
+
+// Expose outside the module, functions, variables, etc.
+window.tideStations = tideStations;
+window.tideEngine = tideEngine;
+window.THE_YEAR = THE_YEAR;
+window.dateFmt = dateFmt;
+
+console.log("Done with inner Module");
+    </script>
+
+	<script type="text/javascript">
+
+const VERBOSE = false;
+
+let map;
+let world_map_data = null;
+
+const WORLD_DATA = "./json/world.data.json";
+
+let loadWorldData = (fn) => {
+	window.fetch(WORLD_DATA)
+		.then(response => {
+			console.log(`Data Response: ${response.status} - ${response.statusText}`);
+			response.json().then(doc => {
+				world_map_data = doc;
+				console.log(`World data loaded`);
+				if (fn) {
+					console.log("Executing next func.");
+					fn();
+				}
+			});
+		}, (error, errmess) => {
+			console.log("Ooch");
+			let message;
+			if (errmess) {
+				let mess = JSON.parse(errmess);
+				if (mess.message) {
+					message = mess.message;
+				}
+			}
+			console.debug("Failed to get Path data..." + (error ? JSON.stringify(error, null, 2) : ' - ') + ', ' + (message ? message : ' - '));
+		});
+};
+
+function displayErr(err) {
+	if (err) {
+		// document.getElementById("err-mess").innerHTML = ("<small>" + err + "</small>");
+		console.log(err);
+	}
+}
+
+let collisionManager = (mmsi, vesselName, lat, lng, cog, sog, radius) => {
+	// TODO Manage a specific component here, to display the threat graphically.
+	console.log(`>>> Collision Threat with ${mmsi}/${vesselName} (${lat} / ${lng}, COG:${cog}\u00b0, SOG:${sog} kn, radius: ${radius}) !!`);
+	// let aisCollisionZone = document.getElementById('ais-threats');
+};
+
+function onSlider(event) {
+	if (VERBOSE) {
+		console.log(`Setting chart width to ${this.value}.`);
+	}
+	if (this.value > 0) {
+    	map.chartWidth = this.value;
+	} else {
+		console.log(`Chart width ${this.value} !!`);
+	}
+}
+
+function setMaxLength(origin) {
+	maxBufferLength = parseInt(origin.value);
+}
+
+const MAX_BUFFER_LENGTH = 1000; // Tweak at will
+
+let maxBufferLength = MAX_BUFFER_LENGTH;
+
+let trackBuffer = [];
+let aisTargets = [];
+let markers = [];
+let userDefinedWP = [];
+let borders = [];
+let borderThreats = [];
+let waypoints = [];
+let aisThreats = null;
+let cog = 0;
+let hdg;
+let bsp;
+let sog;
+let pos;
+let gpsDate;
+
+let centerOnBoat = true;
+let displayMarkers = true;
+let displayTideStations = true;
+let displayMarkerNames = true;
+let displayBorders = true;
+let displayBorderMarkers = false;
+let displayAISTargets = true;
+let withDistBearing = false;
+let withWorldMap = false;
+
+let boatRadius = 10;
+
+function zoomIn() {
+	let currentWidth = map.chartWidth;
+	let newWidth = (currentWidth * 0.89); // .toFixed(1);
+	map.chartWidth = newWidth;
+	map.repaint();
+	// document.getElementById('ChartWidth').innerText = newWidth;
+}
+function zoomOut() {
+	let currentWidth = map.chartWidth;
+	let newWidth = (currentWidth * 1.11); // .toFixed(1);
+	map.chartWidth = newWidth;
+	map.repaint();
+	// document.getElementById('ChartWidth').innerText = newWidth;
+}
+
+/**
+ *  SUBSCRIBERS HERE.
+ *
+ * See js/ajax.manager.js
+ * Note: Event's definition (topic's name) is in ajax.manager.js, method onMessage
+ */
+events.subscribe(POS, val => {
+	if (val.lat == 0 && val.lng == 0) {
+		console.log("Suspicious pos, all 0...");
+	} else {
+		let strLat = decToSex(val.lat, 'NS');
+		let strLng = decToSex(val.lng, 'EW');
+		if (VERBOSE) {
+			console.log(`Got position: ${strLat} / ${strLng}`);
+		}
+		document.getElementById('gps-position').innerHTML = `${strLat} <br/> ${strLng}`;
+		pos = val;
+		trackBuffer.push(val);
+		while (trackBuffer.length > maxBufferLength) {
+			// console.log(`Buffer length ${trackBuffer.length}, truncating.`);
+			trackBuffer.splice(0, 1);
+			// console.log(`Buffer length now ${trackBuffer.length}...`);
+		}
+		// console.log(`Track: ${trackBuffer.length} element(s).`);
+		document.getElementById('track-length').innerHTML = `${trackBuffer.length}/${maxBufferLength} points`;
+		if (centerOnBoat) {
+			map.centerLat = val.lat; // This does the repaint...
+			map.centerLng = val.lng;
+		} else {
+			map.repaint();
+		}
+		// XTE ?
+		let waypointSelect = document.getElementById('next-wp');
+		// console.log(`Waypoint select: ${waypointSelect.value}`);
+		if (waypointSelect.value !== '0') {
+			let waypoint = waypoints.filter(wp => wp.id === waypointSelect.value);
+			if (waypoint.length > 0) {
+				let dist = NavigationHelper.getGCDistanceInNM({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) },
+				                                            { lat: Math.toRadians(waypoint[0].latitude), lng: Math.toRadians(waypoint[0].longitude) });
+				let bearing = NavigationHelper.getBearingInDegrees({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) },
+				                                               { lat: Math.toRadians(waypoint[0].latitude), lng: Math.toRadians(waypoint[0].longitude) });
+				document.getElementById('xte').innerHTML = `To ${waypoint[0].id}: ${dist.toFixed(2)} nm, ${bearing.toFixed(0)}&deg; (client)`;
+			}
+		} else {
+			document.getElementById('xte').innerHTML = '';
+		}
+	}
+});
+events.subscribe(MARKERS, val => {
+	// concat with user defined
+	markers = val.concat(userDefinedWP);
+
+	// Identify potential waypoints, for XTE and Co. TODO: refresh option
+	if (markers.length > 0) {
+		let _waypoints = markers.filter(m => m.id !== null);
+		if (_waypoints.length > 0 && waypoints.length === 0) {
+			console.log(`Found ${_waypoints.length} waypoint(s).`);
+			_waypoints.forEach(wp => {
+				if (false) {
+					console.log(`- ${wp.id} at ${wp.latitude} / ${wp.longitude}`);
+				}
+			});
+			waypoints = _waypoints;
+			// Populate the select list
+			let waypointSelect = document.getElementById('next-wp');
+			while (waypointSelect.firstChild) {  // Drop all options
+				waypointSelect.removeChild(waypointSelect.firstChild);
+			}
+			let blankOption = document.createElement('option');
+			blankOption.value = '0';
+			blankOption.innerHTML = 'None';
+			waypointSelect.appendChild(blankOption); // Add a blank option
+			// Add potential waypoints
+			_waypoints.forEach(wp => {
+				let option = document.createElement('option');
+				option.value = wp.id;
+				option.innerHTML = wp.id;
+				waypointSelect.appendChild(option);
+			});
+		}
+	}
+});
+events.subscribe(BORDERS, val => {
+	borders = val;
+});
+events.subscribe(BORDERS_THREATS, val => {
+	borderThreats = val;
+});
+
+events.subscribe(TO_WP, val => {
+	if (val !== null) {
+		let WPName = val.to_wp;
+		let bearing = val.b2wp;
+		let dist =  val.d2wp;
+		console.log(`Going to waypoint ${WPName}`);
+		document.getElementById('to_wp').innerHTML = `To ${WPName} (GC): ${dist.toFixed(2)} nm, ${bearing.toFixed(0)}&deg;`;
+	} else {
+		document.getElementById('to_wp').innerHTML = '';
+	}
+});
+
+events.subscribe(ROUTES, val => {
+	// TODO Manage this
+	// console.log(`Routes subscription: ${JSON.stringify(val)}`);
+});
+
+events.subscribe(AIS, val => {  // Possibly contains threats
+	aisTargets = [];
+	let keys = Object.keys(val);
+	// console.log(`Received AIS Data, ${keys.length} target(s).`);
+	for (let i=0; i<keys.length; i++) {
+		// console.log(`Key ${keys[i]}`);
+		let recSet = val[keys[i]];
+		let recordKeys = Object.keys(recSet);
+		// console.log(`${recordKeys.length} records`);
+		// Is there a "18" (Position report) ?
+		if (recordKeys.indexOf('1') !== -1) { // Type 1
+			// console.log(`We have a 1`);
+			let rec1 = recSet['1'];
+			let vesselName = rec1['vesselName'];
+			let recContent = rec1['recordContent'];
+			if (vesselName === null) {
+				// Look somewhere else
+				if (recordKeys.indexOf('24') !== -1) { // Static Data
+					vesselName = recSet['24']['vesselName'];
+				}
+			}
+			if (vesselName !== null) {
+				vesselName = vesselName.replace(/@/g, " ").trim();
+			}
+			if (true) {
+				if (rec1.collisionThreat !== null) {
+					// console.log(`>>> Collision Threat with ${keys[i]}/${vesselName} (${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn, radius: ${rec1.collisionThreat.minimumDistance}) !!`);
+					collisionManager(keys[i], vesselName, recContent.latitude, recContent.longitude, recContent.cog, recContent.sog, rec1.collisionThreat.minimumDistance);
+					// debugger;
+				}
+			}
+			// console.log(`Here, ${keys[i]}/${vesselName} at ${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn.`);
+
+			aisTargets.push({
+				mmsi: keys[i],
+				vesselName: vesselName,
+				lat: recContent.latitude,
+				lng: recContent.longitude,
+				cog: recContent.cog,
+				sog: recContent.sog,
+				radius: rec1.collisionThreat !== null ? rec1.collisionThreat.minimumDistance : 0,
+				threat: rec1.collisionThreat !== null,
+				bearingFromTarget: rec1.collisionThreat !== null ? rec1.collisionThreat.bearingFromTarget : null,
+				distToTarget: rec1.collisionThreat !== null ? rec1.collisionThreat.distToTarget : null,
+				minDist: rec1.collisionThreat !== null ? rec1.collisionThreat.minimumDistanceWithTarget : null,
+				date: new Date(rec1.recordTimeStamp)
+			});
+		}
+		if (recordKeys.indexOf('2') !== -1) { // Type 2
+			// console.log(`We have a 2`);
+			let rec2 = recSet['2'];
+			let vesselName = rec2['vesselName'];
+			let recContent = rec2['recordContent'];
+			if (vesselName === null) {
+				// Look somewhere else
+				if (recordKeys.indexOf('24') !== -1) { // Static Data
+					vesselName = recSet['24']['vesselName'];
+				}
+			}
+			if (vesselName !== null) {
+				vesselName = vesselName.replace(/@/g, " ").trim();
+			}
+			if (true) {
+				if (rec2.collisionThreat !== null) {
+					// console.log(`>>> Collision Threat with ${keys[i]}/${vesselName} (${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn, radius: ${rec2.collisionThreat.minimumDistance}) !!`);
+					collisionManager(keys[i], vesselName, recContent.latitude, recContent.longitude, recContent.cog, recContent.sog, rec2.collisionThreat.minimumDistance);
+					// debugger;
+				}
+			}
+			// console.log(`Here, ${keys[i]}/${vesselName} at ${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn.`);
+
+			aisTargets.push({
+				mmsi: keys[i],
+				vesselName: vesselName,
+				lat: recContent.latitude,
+				lng: recContent.longitude,
+				cog: recContent.cog,
+				sog: recContent.sog,
+				radius: rec2.collisionThreat !== null ? rec2.collisionThreat.minimumDistance : 0,
+				threat: rec2.collisionThreat !== null,
+				bearingFromTarget: rec2.collisionThreat !== null ? rec2.collisionThreat.bearingFromTarget : null,
+				distToTarget: rec2.collisionThreat !== null ? rec2.collisionThreat.distToTarget : null,
+				minDist: rec2.collisionThreat !== null ? rec2.collisionThreat.minimumDistanceWithTarget : null,
+				date: new Date(rec2.recordTimeStamp)
+			});
+		}
+		if (recordKeys.indexOf('3') !== -1) { // Type 3
+			// console.log(`We have a 3`);
+			let rec3 = recSet['3'];
+			let vesselName = rec3['vesselName'];
+			let recContent = rec3['recordContent'];
+			if (vesselName === null) {
+				// Look somewhere else
+				if (recordKeys.indexOf('24') !== -1) { // Static Data
+					vesselName = recSet['24']['vesselName'];
+				}
+			}
+			if (vesselName !== null) {
+				vesselName = vesselName.replace(/@/g, " ").trim();
+			}
+			if (true) {
+				if (rec3.collisionThreat !== null) {
+					// console.log(`>>> Collision Threat with ${keys[i]}/${vesselName} (${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn, radius: ${rec3.collisionThreat.minimumDistance}) !!`);
+					collisionManager(keys[i], vesselName, recContent.latitude, recContent.longitude, recContent.cog, recContent.sog, rec3.collisionThreat.minimumDistance);
+					// debugger;
+				}
+			}
+			// console.log(`Here, ${keys[i]}/${vesselName} at ${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn.`);
+
+			aisTargets.push({
+				mmsi: keys[i],
+				vesselName: vesselName,
+				lat: recContent.latitude,
+				lng: recContent.longitude,
+				cog: recContent.cog,
+				sog: recContent.sog,
+				radius: rec3.collisionThreat !== null ? rec3.collisionThreat.minimumDistance : 0,
+				threat: rec3.collisionThreat !== null,
+				bearingFromTarget: rec3.collisionThreat !== null ? rec3.collisionThreat.bearingFromTarget : null,
+				distToTarget: rec3.collisionThreat !== null ? rec3.collisionThreat.distToTarget : null,
+				minDist: rec3.collisionThreat !== null ? rec3.collisionThreat.minimumDistanceWithTarget : null,
+				date: new Date(rec3.recordTimeStamp)
+			});
+		}
+		if (recordKeys.indexOf('18') !== -1) { // TODO 1, 2, 3 too.
+			// console.log(`We have a 18`);
+			let rec18 = recSet['18'];
+			let vesselName = rec18['vesselName'];
+			let recContent = rec18['recordContent'];
+			if (vesselName === null) {
+				// Look somewhere else
+				if (recordKeys.indexOf('24') !== -1) { // Static Data
+					vesselName = recSet['24']['vesselName'];
+				}
+			}
+			if (vesselName !== null) {
+				vesselName = vesselName.replace(/@/g, " ").trim();
+			}
+			if (true) {
+				if (rec18.collisionThreat !== null) {
+					// console.log(`>>> Collision Threat with ${keys[i]}/${vesselName} (${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn, radius: ${rec18.collisionThreat.minimumDistance}) !!`);
+					collisionManager(keys[i], vesselName, recContent.latitude, recContent.longitude, recContent.cog, recContent.sog, rec18.collisionThreat.minimumDistance);
+					// debugger;
+				}
+			}
+			// console.log(`Here, ${keys[i]}/${vesselName} at ${recContent.latitude} / ${recContent.longitude}, COG:${recContent.cog}\u00b0, SOG:${recContent.sog} kn.`);
+
+			aisTargets.push({
+				mmsi: keys[i],
+				vesselName: vesselName,
+				lat: recContent.latitude,
+				lng: recContent.longitude,
+				cog: recContent.cog,
+				sog: recContent.sog,
+				radius: rec18.collisionThreat !== null ? rec18.collisionThreat.minimumDistance : 0,
+				threat: rec18.collisionThreat !== null,
+				bearingFromTarget: rec18.collisionThreat !== null ? rec18.collisionThreat.bearingFromTarget : null,
+				distToTarget: rec18.collisionThreat !== null ? rec18.collisionThreat.distToTarget : null,
+				minDist: rec18.collisionThreat !== null ? rec18.collisionThreat.minimumDistanceWithTarget : null,
+				date: new Date(rec18.recordTimeStamp)
+			});
+		}
+		document.getElementById('ais-targets').innerHTML = `${aisTargets.length} / ${keys.length}`;
+	}
+});
+events.subscribe(GPS_TIME, val => {
+	let date = new Date(val);
+	// val.format("Y-M-d H:i:s")
+	// let date = gpsTime.format("d-m-Y-l");
+	// console.log(`GPS-TIME: ${val.format("Y-M-d H:i:s")}`);
+	document.getElementById('gps-date').innerHTML = `${date.format("Y-m-d") + ' UTC'}`;
+	document.getElementById('gps-time').innerHTML = `${date.format("H:i:s") + ' UTC'}`;
+	gpsDate = date;
+});
+events.subscribe(SOG, val => {
+	// document.getElementById('gps-sog').innerHTML = `${val} kn`;
+	document.getElementById('sog').value = val.toFixed(1);
+	sog = val;
+});
+events.subscribe(COG, val => {
+	// document.getElementById('gps-cog').innerHTML = `${val}&deg;`;
+	document.getElementById('cog').value = val;
+	cog = val;
+});
+// For debug, mainly, tossion.
+if (false) {
+	events.subscribe(FULL, val => {
+		console.log(JSON.stringify(val, null, 2));
+	});
+}
+///// END OF SUBSCRIBERS ////
+
+function findClosestStation() {
+	if (pos !== null && pos !== undefined) {
+
+		let closestStation = null;
+		let minDist = Number.MAX_VALUE;
+
+		Object.keys(tideStations).sort().forEach(station => {
+			let stationObj = tideStations[station];
+
+			let dist = NavigationHelper.getGCDistanceInNM({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) },
+			                                              { lat: Math.toRadians(stationObj.latitude), lng: Math.toRadians(stationObj.longitude) });
+			if (dist < minDist) {
+				minDist = dist;
+				closestStation = stationObj;
+			}
+		});
+
+		if (closestStation !== null) {
+			console.log(`${closestStation.fullName} (${minDist.toFixed(2)} nm)`);
+			produceSearchList(decodeURIComponent(closestStation.fullName));
+		}
+	}
+}
+
+// Display event subscribers ?
+if (false) {
+	console.log("Event Subscribers:");
+	events.listener.forEach(l => console.log(`- ${l.topic}`));
+	console.log("-------------------");
+}
+
+function drawArrow(context, canvasX, canvasY, boatLen, heading, color) {
+
+	// console.log(`Drawing arrow for heading ${heading}`);
+
+	context.beginPath();
+	context.lineWidth = 1.5;
+	// context.fillStyle = color;
+	context.strokeStyle = color;
+
+	context.moveTo(canvasX +  ((boatLen / 2) * Math.sin(Math.toRadians(heading))),
+					canvasY - ((boatLen / 2) * Math.cos(Math.toRadians(heading))));
+
+	context.lineTo(canvasX + ((boatLen / 2) * Math.sin(Math.toRadians(heading))),
+					canvasY - ((boatLen / 2) * Math.cos(Math.toRadians(heading))));
+	context.lineTo(canvasX - ((boatLen / 2) * Math.sin(Math.toRadians(heading - 10))),
+					canvasY + ((boatLen / 2) * Math.cos(Math.toRadians(heading - 10))));
+	context.lineTo(canvasX - ((boatLen * 0.9 / 2) * Math.sin(Math.toRadians(heading - 0))),
+					canvasY + ((boatLen * 0.9 / 2) * Math.cos(Math.toRadians(heading - 0)))); // Transom center
+	context.lineTo(canvasX - ((boatLen / 2) * Math.sin(Math.toRadians(heading + 10))),
+					canvasY + ((boatLen / 2) * Math.cos(Math.toRadians(heading + 10))));
+
+	context.closePath();
+	context.stroke();
+}
+
+function drawBoat(context, canvasX, canvasY, boatLen, heading, color) {
+	const BOAT_FACT = 0.8;
+	let boatPoints = [
+		{ x: 0, y: - boatLen * BOAT_FACT * 0.6 },                            // Bow
+		{ x: boatLen * BOAT_FACT * 0.22, y: - boatLen * BOAT_FACT * 0.3 },   // Starboard, point one
+		{ x: boatLen * BOAT_FACT * 0.30, y: - boatLen * BOAT_FACT * 0.0 },   // Starboard, point two
+		{ x: boatLen * BOAT_FACT * 0.28, y: + boatLen * BOAT_FACT * 0.3 },   // Starboard, point three
+		{ x: boatLen * BOAT_FACT * 0.20, y: + boatLen * BOAT_FACT * 0.6 },   // Starboard, point four
+		{ x: BOAT_FACT * 0, y: + boatLen * BOAT_FACT * 0.6 },                // Mid-transom
+		{ x: - boatLen * BOAT_FACT * 0.20, y: + boatLen * BOAT_FACT * 0.6 }, // Port, point four
+		{ x: - boatLen * BOAT_FACT * 0.28, y: + boatLen * BOAT_FACT * 0.3 }, // Port, point three
+		{ x: - boatLen * BOAT_FACT * 0.30, y: - boatLen * BOAT_FACT * 0.0 }, // Port, point two
+		{ x: - boatLen * BOAT_FACT * 0.22, y: - boatLen * BOAT_FACT * 0.3 }, // Port, point one
+		{ x: BOAT_FACT * 0, y: - boatLen * BOAT_FACT * 0.6 }                 // Bow
+	];
+	let radAngle = Math.toRadians(heading); // + (Math.PI / 2);
+
+	context.beginPath();
+	context.lineWidth = 1.5;
+	// context.fillStyle = color;
+	context.strokeStyle = color;
+
+	// Apply rotation to the points of the 'needle'
+	boatPoints.forEach((pt, idx) => {
+		x = canvasX + ((pt.x * Math.cos(radAngle)) - (pt.y * Math.sin(radAngle)));
+		y = canvasY + ((pt.x * Math.sin(radAngle)) + (pt.y * Math.cos(radAngle)));
+		if (idx === 0) {
+			context.moveTo(x, y);
+		} else {
+			context.lineTo(x, y);
+		}
+	});
+
+	// context.closePath();
+	// context.stroke();
+
+	// Add a long arrow ?
+	let arrowLen = 2 * boatLen
+	x = canvasX; // + ((pt.x * Math.cos(radAngle)) - (pt.y * Math.sin(radAngle)));
+	y = canvasY; // + ((pt.x * Math.sin(radAngle)) + (pt.y * Math.cos(radAngle)));
+
+	// context.strokeStyle = 'black';
+	context.moveTo(x, y);
+	context.lineTo(x + (arrowLen * Math.sin(radAngle)),
+				   y - (arrowLen * Math.cos(radAngle)));
+
+	context.closePath();
+	context.stroke();
+}
+
+let markerAndTrackColor = 'navy';
+
+/*
+ * Used as the doAfter callback on the ChartlessMap.
+ */
+let updateMap = (elmt, context) => {
+
+	if (false) { // Plot Chart Center
+		let center = elmt.posToCanvas(elmt._centerLat, elmt._centerLng);
+
+		context.save();
+
+		context.beginPath();
+		context.strokeStyle = 'red';
+		context.lineWidth = 1;
+		// console.log(`Plotting chart center on ${center.x} x ${center.y}`);
+		context.moveTo(center.x, center.y - 20);
+		context.lineTo(center.x, center.y + 20);
+
+		context.moveTo(center.x - 20, center.y);
+		context.lineTo(center.x + 20, center.y);
+		context.stroke();
+		context.closePath();
+
+		context.beginPath();
+		context.lineWidth = 4;
+		context.arc(center.x, center.y, 10, 0, 2 * Math.PI, false);
+
+		context.stroke();
+		context.closePath();
+
+		context.restore();
+	}
+
+	if (withWorldMap) { // Draw World Chart
+		context.save();
+		try {
+			let worldTop = world_map_data.top;
+			let section = worldTop.section; // We assume top has been found.
+
+			// console.log("Found " + section.length + " section(s).")
+			for (let i = 0; i < section.length; i++) {
+				let point = section[i].point;
+				if (point !== undefined) {
+					let firstPt = null;
+					let previousPt = null;
+					context.beginPath();
+					for (let p = 0; p < point.length; p++) {
+						let lat = parseFloat(point[p].Lat);
+						let lng = parseFloat(point[p].Lng);
+						if (lng < -180) {
+							lng += 360;
+						}
+						if (lng > 180) {
+							lng -= 360;
+						}
+
+						let pt = elmt.posToCanvas(lat, lng);
+
+						if (previousPt === null) { // p === 0) {
+							context.moveTo(pt.x, pt.y);
+							firstPt = pt;
+							previousPt = pt;
+						} else {
+							// if (Math.abs(previousPt.x - pt.x) < (this.width / 2) && Math.abs(previousPt.y - pt.y) < (this.height / 2)) {
+								context.lineTo(pt.x, pt.y);
+								previousPt = pt;
+							// }
+						}
+					}
+					// Close the loop
+					if (firstPt !== null && previousPt !== null) {
+						context.lineTo(firstPt.x, firstPt.y);
+					}
+				}
+				context.lineWidth = 1;
+				context.strokeStyle = 'gray';
+				context.stroke();
+				context.closePath();
+			}
+		} catch (ex) {
+			console.log("Oops:" + ex);
+		}
+		context.restore();
+	}
+
+	// Markers.
+	if (VERBOSE) {
+		console.log(`${markers.length} markers`);
+	}
+	if (displayMarkers) {
+		context.save();
+		let markerRadius = 10;
+		let beaconHeight = 2 * markerRadius;
+		markers.forEach(marker => {
+			let extraMess = [];
+			if (pos && withDistBearing) {
+				// Calculate distance and bearing to mark
+				// 1 - Distance
+				let dist = NavigationHelper.getGCDistanceInNM({ lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) },
+							                                  { lat: Math.toRadians(marker.latitude), lng: Math.toRadians(marker.longitude) });
+				let distMess = `Distance: ${dist.toFixed(2)} nm`;
+				extraMess.push(distMess);
+				// 2 - Bearing
+				let from = { lat: Math.toRadians(pos.lat), lng: Math.toRadians(pos.lng) };
+				let to = { lat: Math.toRadians(marker.latitude), lng: Math.toRadians(marker.longitude) };
+				let bearing = NavigationHelper.getBearingInDegrees(from, to);
+				let bearingMess = `Bearing: ${bearing.toFixed(0)}\u00b0`;
+				extraMess.push(bearingMess);
+			}
+			if (!displayMarkerNames) {
+				// console.log(`Suppressing marker name for ${marker.label}`);
+				marker.label = "";
+			}
+			elmt.plotMark(context, marker, markerRadius, beaconHeight, elmt.colorConfig.markerAndTrackColor, extraMess); // method defined in the ChartlessMap
+		});
+		context.restore();
+	}
+
+	if (displayTideStations) {
+		// Plot tide stations, if any
+		Object.keys(tideStations).sort().forEach(station => {
+			let stationObj = tideStations[station];
+			// console.log(`Plotting Station: ${decodeURIComponent(station)} at ${stationObj.latitude} / ${stationObj.longitude}`);
+			let marker = {
+				latitude: stationObj.latitude,
+				longitude: stationObj.longitude,
+				label: decodeURIComponent(station),
+				type: 'tide-station'
+			};
+			let markerRadius = 10;
+			let beaconHeight = 2 * markerRadius;
+			let color = 'red';
+			map.plotMark(context, marker, markerRadius, beaconHeight, color, null, true); // method defined in the ChartlessMap
+		});
+
+	}
+
+	// Borders.
+	if (VERBOSE) {
+		console.log(`${borders.length} borders`);
+	}
+	if (displayBorders) {
+		context.save();
+		let markerRadius = 10;
+		let beaconHeight = 2 * markerRadius;
+		borders.forEach(border => {
+			let extraMess = [];
+			let borderName = border.borderName;
+			let markerList = border.markerList;
+			// console.log(`Border [${borderName}]`);
+
+			let plotBorder = [];
+			// Plot markers
+			markerList.forEach((marker, idx) => {
+				let plotIt = true;
+				// Manage closed borders, don't plot the last point...
+				if (idx > 0 && marker.latitude === markerList[0].latitude && marker.longitude === markerList[0].longitude) {  // Last point of a closed border
+					plotIt = false;
+				}
+				if (plotIt && displayBorderMarkers) { // false || idx < (markerList.length - 1)) {
+					elmt.plotMark(context, marker, markerRadius, beaconHeight, elmt.colorConfig.borderColor, extraMess);
+				}
+				let plot = elmt.posToCanvas(marker.latitude, marker.longitude);
+				plotBorder.push(plot);
+			});
+			// Highlight the threats
+			if (borderThreats.length > 0) {
+				borderThreats.forEach(bt => {
+					// Highlight border on the map
+					// See borders and markers variables.
+					let borderName = bt.borderName;
+					let segmentIndex = bt.segmentIdx;
+					let theBorder = borders.filter(b => b.borderName === borderName);
+					if (theBorder) {
+						// seg index starts at 1.
+						let from = theBorder[0].markerList[segmentIndex - 1];
+						let to = theBorder[0].markerList[segmentIndex];
+						// Draw the line
+						let plotFrom = elmt.posToCanvas(from.latitude, from.longitude);
+						let plotTo = elmt.posToCanvas(to.latitude, to.longitude);
+
+						context.save();
+						context.beginPath();
+						context.strokeStyle = 'rgba(255, 0, 0, 0.25)'; // 'red';
+						context.lineWidth = 6;
+
+						context.moveTo(plotFrom.x, plotFrom.y);
+						context.lineTo(plotTo.x, plotTo.y);
+
+						context.stroke();
+						context.closePath();
+						context.restore();
+					}
+				});
+			}
+
+			// Draw border
+			context.save();
+			context.beginPath();
+			context.strokeStyle = elmt.colorConfig.borderColor; // 'blue';
+			context.lineWidth = 2;
+
+			if (plotBorder.length > 0) {
+				// console.log(`Border: plotting ${plotBorder.length} segments.`);
+				context.moveTo(plotBorder[0].x, plotBorder[0].y); // idx 0
+				for (let i=1; i<plotBorder.length; i++) {         // the rest, starts at 1
+					context.lineTo(plotBorder[i].x, plotBorder[i].y);
+				}
+			}
+			context.stroke();
+			context.closePath();
+			context.restore();
+		});
+		context.restore();
+	}
+
+	// The boat position and heading, last to stay on top
+	if (true && pos) {
+
+		// console.log(`Pos: ${JSON.stringify(pos)}, cog: ${cog}`);
+
+		let boatXY = elmt.posToCanvas(pos.lat, pos.lng);
+
+		context.save();
+
+		context.strokeStyle = 'orange'; // Only hard-coded one...
+		// drawArrow(context, boatXY.x, boatXY.y, 5 * boatRadius, cog, context.strokeStyle);
+		drawBoat(context, boatXY.x, boatXY.y, 5 * boatRadius, (hdg ? hdg : cog), context.strokeStyle);
+
+		context.beginPath();
+		context.lineWidth = 1;
+		// console.log(`Plotting chart center on ${center.x} x ${center.y}`);
+		// A cross-hair
+		context.moveTo(boatXY.x, boatXY.y - 20);
+		context.lineTo(boatXY.x, boatXY.y + 20);
+
+		context.moveTo(boatXY.x - 20, boatXY.y);
+		context.lineTo(boatXY.x + 20, boatXY.y);
+		context.stroke();
+		context.closePath();
+
+		// Circle around boat position
+		context.beginPath();
+		context.lineWidth = 4;
+		context.arc(boatXY.x, boatXY.y, 10, 0, 2 * Math.PI, false);
+
+		context.stroke();
+		context.closePath();
+
+		// COG, HDG ?
+		if (cog && hdg) {
+			const ARROW_LEN = 80;
+			context.lineWidth = 2;
+
+			context.beginPath();
+
+			// console.log(`Plotting HDG & COG... ${hdg} / ${cog}, from ${boatXY.x}, ${boatXY.y}`);
+			context.strokeStyle = elmt.colorConfig.borderColor; // 'cyan'; // TODO Coast color...
+			context.moveTo(boatXY.x, boatXY.y);
+
+			let length = ARROW_LEN * (bsp ? bsp / 5.0 : 1.0);
+
+			let xHDG = boatXY.x + (length * Math.sin(Math.toRadians(hdg)));
+			let yHDG = boatXY.y - (length * Math.cos(Math.toRadians(hdg)));
+			// console.log(`HDG: ${xHDG} ${yHDG}`);
+			context.lineTo(xHDG, yHDG);
+			context.stroke();
+			context.closePath();
+
+			context.beginPath();
+			context.strokeStyle = 'red';
+			context.moveTo(boatXY.x, boatXY.y);
+			length = ARROW_LEN * (sog ? sog / 5.0 : 1.0);
+			let xCOG = boatXY.x + (length * Math.sin(Math.toRadians(cog)));
+			let yCOG = boatXY.y - (length * Math.cos(Math.toRadians(cog)));
+			// console.log(`COG: ${xCOG} ${yCOG}`);
+			context.lineTo(xCOG, yCOG);
+			context.stroke();
+			context.closePath();
+		}
+
+		context.restore();
+	// } else {
+	// 	console.log("No pos available...");
+	}
+
+	// The points of the track
+	context.beginPath();
+	context.strokeStyle = 'red'; // elmt.colorConfig.markerAndTrackColor;
+	context.lineWidth = 1;
+	for (let i=0; i<trackBuffer.length; i++) {
+		let pos = trackBuffer[i];
+		let canvasCoord = elmt.posToCanvas(pos.lat, pos.lng);
+		// console.log(`Line to ${canvasCoord.x} / ${canvasCoord.y}`)
+		if (i === 0) {
+			context.moveTo(canvasCoord.x, canvasCoord.y);
+		} else {
+			context.lineTo(canvasCoord.x, canvasCoord.y);
+		}
+	}
+	context.stroke();
+	context.closePath();
+};
+
+let lpad = (str, len, pad) => {
+	let s = str;
+	while (s.length < len) {
+		s = (pad === undefined ? ' ' : pad) + s;
+	}
+	return s;
+};
+
+let decToSex = (val, ns_ew) => {
+	let absVal = Math.abs(val);
+	let intValue = Math.floor(absVal);
+	let dec = absVal - intValue;
+	let i = intValue;
+	dec *= 60;
+//    var s = i + "°" + dec.toFixed(2) + "'";
+//    var s = i + String.fromCharCode(176) + dec.toFixed(2) + "'";
+	let s = "";
+	if (ns_ew !== undefined) {
+		if (val < 0) {
+			s += (ns_ew === 'NS' ? 'S' : 'W');
+		} else {
+			s += (ns_ew === 'NS' ? 'N' : 'E');
+		}
+		s += " ";
+	} else {
+		if (val < 0) {
+			s += '-'
+		}
+	}
+	s += i + "\xba" + lpad(dec.toFixed(2), 5, '0') + "'";
+
+	return s;
+};
+
+let centerChart = (cb) => {
+	centerOnBoat = cb.checked;
+};
+let plotMarkers = (cb) => {
+	displayMarkers = cb.checked;
+	map.repaint();
+};
+let plotMarkerNames = (cb) => {
+	displayMarkerNames = cb.checked;
+	map.repaint();
+};
+let plotBorders = (cb) => {
+	displayBorders = cb.checked;
+	map.repaint();
+};
+let plotBorderMarkers = (cb) => {
+	displayBorderMarkers = cb.checked;
+	map.repaint();
+}
+let distBearing = (cb) => {
+	withDistBearing = cb.checked;
+	map.repaint();
+};
+let plotAISTargets = (cb) => {
+	displayAISTargets = cb.checked;
+	map.repaint();
+};
+let plotWorldMap = (cb) => {
+	withWorldMap = cb.checked;
+	if (withWorldMap && world_map_data === null) {
+		if (false) {
+			// Promise option (promise within a promise... Mmmmh)
+			let loadData = () => {
+				let promise = new Promise((resolve, reject) => {
+					try {
+						resolve(loadWorldData());
+					} catch (err) {
+						reject(err);
+					}
+				});
+				return promise;
+			};
+			loadData().then(result => {
+				map.repaint();
+			});
+		} else if (false) {
+			// Timeout option
+			loadWorldData();
+			setTimeout(() => { map.repaint(); }, 3000);
+		} else if (true) {
+			// DoNext option
+			loadWorldData(() => map.repaint());
+		}
+	} else {
+		if (world_map_data !== null) {
+			map.repaint();
+		}
+	}
+	// map.repaint(); // TODO in a promise ? then ?
+};
+
+let setStyle = (opt) => {
+	let map = document.getElementById('chartless-map-01');
+	let cog = document.getElementById('cog');
+	let sog = document.getElementById('sog');
+	let anchors = document.getElementsByTagName('a');
+
+	document.getElementById('chartless-map-01').className = opt.value;
+
+	switch (opt.value) {
+		case 'chartless-map-03':
+			// markerAndTrackColor = 'cyan';
+			map.colorConfig.markerAndTrackColor = 'cyan';
+			map.colorConfig.targetColor = 'lime';
+			map.colorConfig.borderColor = 'cyan';
+			document.body.className = 'html-03';
+			// Compass ...
+			cog.classList.remove('gray');
+			cog.classList.add('green');
+			cog.classList.remove('orange');
+			// Speedo
+			sog.classList.remove('analogdisplay-flat-gray');
+			sog.classList.add('analogdisplay-monochrome-green');
+			sog.classList.remove('analogdisplay-monochrome-orange');
+
+			for (let i=0; i<anchors.length; i++) {
+				anchors[i].style.color = 'white';
+			}
+			break;
+		case 'chartless-map-02':
+			// markerAndTrackColor = 'cyan';
+			map.colorConfig.markerAndTrackColor = 'lightcyan';
+			map.colorConfig.targetColor = 'lime';
+			map.colorConfig.borderColor = 'cyan';
+			document.body.className = 'html-02';
+			// Compass ...
+			cog.classList.remove('gray');
+			cog.classList.remove('green');
+			cog.classList.add('orange');
+			// Speedo
+			sog.classList.remove('analogdisplay-flat-gray');
+			sog.classList.remove('analogdisplay-monochrome-green');
+			sog.classList.add('analogdisplay-monochrome-orange');
+
+			for (let i=0; i<anchors.length; i++) {
+				anchors[i].style.color = 'cyan';
+			}
+			break;
+		case 'chartless-map-01':
+		default:
+			// markerAndTrackColor = 'navy';
+			map.colorConfig.markerAndTrackColor = 'navy';
+			map.colorConfig.targetColor = 'green';
+			map.colorConfig.borderColor = 'blue';
+			document.body.className = 'html-01';
+			// Compass ...
+			cog.classList.add('gray');
+			cog.classList.remove('green');
+			cog.classList.remove('orange');
+			// Speedo
+			sog.classList.add('analogdisplay-flat-gray');
+			sog.classList.remove('analogdisplay-monochrome-green');
+			sog.classList.remove('analogdisplay-monochrome-orange');
+
+			for (let i=0; i<anchors.length; i++) {
+				anchors[i].style.color = 'blue';
+			}
+			break;
+	}
+};
+
+let showHide = (cb, id) => {
+	let elmt = document.getElementById(id);
+	if (elmt) {
+		elmt.style.display = cb.checked ? 'block' : 'none';
+	} else {
+		console.log(`Element ${id} not found...`);
+	}
+};
+
+function getCurveData(station) {
+    console.log(`Base height: ${station.baseHeight} ${station.unit}`);
+    console.log(`Pos: ${station.latitude} ${station.longitude}`);
+
+    let now = new Date().toLocaleString('en-US', { timeZone: station.timeZone });
+    let zonedNow = new Date(now);
+
+	if (gpsDate !== null && gpsDate !== undefined) {
+		zonedNow = new Date(gpsDate.toLocaleString('en-US', { timeZone: station.timeZone }));
+	}
+
+    console.log(`Calculation started for ${dateFmt.formatDate(zonedNow, 'd-M-Y H:i')} (${station.timeZone})`);
+    // buildSiteConstSpeed, fixedForYear ?
+    // let siteCoeff = station.harmonicFixedForYear === undefined ?
+    //                     tideEngine.default.buildSiteConstSpeed() :
+    //                     station.harmonics; // station.harmonicFixedForYear === THE_YEAR
+    let siteCoeff = tideEngine.default.buildSiteConstSpeed();
+    // let utcJan1st = Date.UTC(THE_YEAR, 0, 1); // , 0, 0, 0, 0, 0));
+	let utcJan1st = Date.UTC(gpsDate.getFullYear(), 0, 1); // , 0, 0, 0, 0, 0));
+
+    // TODO Make sure that works... PST vs PDT, etc.
+    let timeOffset = station.timeOffset;
+    let hourOffset = parseInt(timeOffset.substring(0, timeOffset.indexOf(":")));
+    let minOffset = parseInt(timeOffset.substring(timeOffset.indexOf(":") + 1));
+    let decOffset = hourOffset + (minOffset / 60);
+
+    let jan1st = new Date(utcJan1st - (decOffset * 3600000));
+	// Uncomment to use current date... (not for replay !)
+    // zonedNow = new Date(Date.now()); // - (decOffset * 3600000));
+
+    // let jan1st = new Date(utcJan1st.toLocaleString('en-US', { timeZone: station.timeZone }));
+    // let jan1st = utcJan1st;
+    console.log(`Jan 1st, raw : ${jan1st} => ${jan1st.getTime()}`);
+    console.log(`Jan 1st in ${station.timeZone} : ${dateFmt.formatDate(jan1st, 'd-M-Y H:i:s')} => ${jan1st.getTime()}`);
+
+    // let jan1st = utcJan1st;
+    // Java says:  1641024000000
+
+    console.log(`For ${station.timeZone}, Jan1st = ${jan1st.getTime()}, now = ${zonedNow.getTime()}`);
+
+    let wh = tideEngine.default.getWaterHeight(zonedNow, jan1st, station, siteCoeff);
+    let whNow = wh;
+    // console.log("Here.");
+
+    // Extra: Calculate WH for the whole day, each minute. And tide table.
+    zonedNow.setHours(0);
+    zonedNow.setMinutes(0);
+    zonedNow.setSeconds(0);
+    zonedNow.setMilliseconds(0);
+    console.log(`Starting tide curve calculation at ${zonedNow}`);
+    const ONE_MINUTE = 1000 * 60;
+    let tideData = [];
+    let tideTable = [];
+    let goingUp = null;
+    let prevWH = null;
+
+    for (let i=0; i<=(60 * 24); i++) {
+        wh = tideEngine.default.getWaterHeight(zonedNow, jan1st, station, siteCoeff);
+        if (i < 5) {
+            console.log(`WH in ${decodeURIComponent(station.fullName)} on ${zonedNow}: ${wh.toFixed(3)} ${station.unit}`);
+        }
+        tideData.push({at: zonedNow, wh: wh, unit: station.unit});
+        if (goingUp !== null) {
+            if (goingUp) { // Rising
+                if (prevWH >= wh) { // Changing trend
+                    // console.log(`High Tide at ${zonedNow}, wh: ${wh.toFixed(3)}`);
+                    tideTable.push({ type: "HW", at: new Date(zonedNow.getTime() - ONE_MINUTE), wh: wh, unit: station.unit });
+                }
+            } else { // Going down
+                if (prevWH < wh) { // Changing trend
+                    // console.log(`Low Tide at ${zonedNow}, wh: ${wh.toFixed(3)}`);
+                    tideTable.push({ type: "LW", at: new Date(zonedNow.getTime() - ONE_MINUTE), wh: wh, unit: station.unit });
+                }
+            }
+        }
+        if (prevWH !== null) {
+            goingUp = prevWH < wh;
+        }
+        prevWH = wh;
+
+        zonedNow = new Date(zonedNow.getTime() + ONE_MINUTE);
+    }
+    console.log("Calculation completed.");
+    return {
+        now: now,
+        wh: whNow,
+        tideTable: tideTable,
+        tideData: tideData
+    };
+}
+
+// Show/Hide generated graphics dialog
+function showGeneratedDialog(station) {
+    let graphDialog = document.getElementById("generated-curve-dialog");
+    // Calculate tide curve here.
+    let tideStation = tideEngine.default.findTideStation(station, THE_YEAR);
+    if (tideStation !== null && tideStation.tideStation) { // Then calculate curve
+        console.log(`Calculating tide curve for [${decodeURIComponent(station)}]`);
+        let data = getCurveData(tideStation);
+        console.log("CurveData Done");
+
+        // Coeffs ?
+        let tideStationBrest = tideEngine.default.findTideStation("Brest%2C%20France", THE_YEAR);
+        let brestData = getCurveData(tideStationBrest);
+        let coeffInBrest = tideEngine.default.getCoeffInBrest(tideStationBrest, brestData.tideTable); // <= Send the tide table for Brest !!
+
+        // Example:
+        // console.log(`${data.tideTable[0].type}: at ${dateFmt.formatDate(data.tideTable[0].at, 'd-m-y H:i')}, ${data.tideTable[0].wh} ${data.tideTable[0].unit}`)
+        let tableContent = "<pre>";
+        let coeffIdx = 0;
+        data.tideTable.forEach(line => {
+            let coeff = null;
+            if (line.type === 'HW') {
+                coeff = coeffInBrest[coeffIdx];
+                coeffIdx++;
+            }
+            console.log(`${line.type}: at ${dateFmt.formatDate(line.at, 'd-M-y H:i')}, ${line.wh} ${line.unit}${coeff !== null ? ', coeff:' + coeff : ''}`);
+            tableContent += (`${line.type}: at ${dateFmt.formatDate(line.at, 'd-M-y H:i')}, ${line.wh.toFixed(2)} ${line.unit}${coeff !== null ? ', coeff:' + coeff : ''}\n`);
+        });
+        tableContent += "</pre>";
+        // Draw the graph.
+        let graph = document.getElementById("tide-graph-01");
+        let x = [];
+        let y = [];
+        let minX = NaN;
+        let maxX = NaN;
+        let minY = NaN;
+        let maxY = NaN;
+        let origin = NaN;
+        data.tideData.forEach(td => {
+            let X = td.at.getTime() / 1000; // hours in sesonds.
+            if (isNaN(origin)) {
+                origin = X;
+            }
+            X -= origin; // 86400: 24 h
+            X /= 3600; // In hours
+            // console.log(`X:${X}`);
+            let Y = td.wh;
+            minX = isNaN(minX) ? X : Math.min(minX, X);
+            maxX = isNaN(maxX) ? X : Math.max(maxX, X);
+            minY = isNaN(minY) ? Y : Math.min(minY, Y);
+            maxY = isNaN(maxY) ? Y : Math.max(maxY, Y);
+            x.push(X);
+            y.push(Y);
+        });
+        minY -= 0.2; // Slack below
+        maxY += 0.2; // Slack above
+        let currentDate = ((new Date(data.now).getTime() / 1000) - origin) / 3600; // in hours
+
+		if (gpsDate !== null && gpsDate !== undefined) {
+			currentDate = ((new Date(gpsDate).getTime() / 1000) - origin) / 3600; // in hours
+		}
+
+        // console.log(`Now:${currentDate}`);
+        let graphData = {
+			withGrid: true,
+			withXLabels: false,
+			withYLabels: true,
+			thickX: null,
+			thickY: null,  // number or array n numbers, like 10, or [0, 5, 10]
+			minX: minX,
+			maxX: maxX,
+			minY: minY,
+			maxY: maxY,
+			data: [{ // Curve
+					name: 'Water Heights',
+					lineColor: 'orange',
+					fillColor: 'rgba(0, 255, 0, 0.35)', // With gradient ?
+					thickness: 3,
+					x: x,
+					values: y // Same cardinality as x
+				},
+                { // Base Height
+                   name: "Base height",
+                   lineColor: 'red',
+                   fillColor: null,
+                   thickness: 2,
+                   x: [minX, maxX],
+                   values: [ tideStation.baseHeight, tideStation.baseHeight]
+                },
+                { // Now
+                    name: "Now",
+                    lineColor: 'white',
+                    fillColor: null,
+                    thickness: 2,
+                    x: [ currentDate, currentDate ],
+                    values: [ minY, maxY ]
+                }
+			]
+		};
+        graph.data = graphData;
+		if (gpsDate !== null && gpsDate !== undefined) {
+			graph.label = `WH at ${dateFmt.formatDate(new Date(gpsDate), 'd-M-y H:i')}, ${data.wh.toFixed(2)} ${tideStation.displayUnit}`;
+		} else {
+			graph.label = `WH at ${dateFmt.formatDate(new Date(data.now), 'd-M-y H:i')}, ${data.wh.toFixed(2)} ${tideStation.displayUnit}`;
+		}
+        // graph.label = `WH at ${dateFmt.formatDate(new Date(data.now), 'd-M-y H:i')}, ${data.wh.toFixed(2)} ${tideStation.displayUnit}`;
+        graph.repaint();
+        document.getElementById("station-name").innerText = decodeURIComponent(station);
+        document.getElementById("tide-table").innerHTML = tableContent;
+    }
+    graphDialog.show();
+}
+function closeGeneratedDialog() {
+    let graphDialog = document.getElementById("generated-curve-dialog");
+    graphDialog.close();
+}
+
+function go() {
+	let stationFullName = document.getElementById("station-list").value;
+	if (stationFullName.trim().length > 0) {
+		let stationObj = tideStations[stationFullName];
+		if (stationObj) {
+			// map.setCenter(stationObj.latitude, stationObj.longitude);
+			map.centerLat = stationObj.latitude; // val.lat;
+			map.centerLng = stationObj.longitude; // val.lng;
+			map.repaint();
+		} else {
+			alert(`Station ${stationFullName} not found...`);
+		}
+	} else {
+		alert("Please select a station...");
+	}
+}
+
+function editCurves() {
+	// http://localhost:9999/web/tide/curve.101.html?station=Brest%2C%20France
+	let stationFullName = document.getElementById("station-list").value;
+	let newUrl = `/web/tide/curve.101.html?station=${stationFullName}`;
+	window.open(newUrl, "_blank");
+}
+
+function panToStation(stationFullName) {
+    document.getElementById("station-list").value = stationFullName;
+    go();
+}
+
+function produceSearchList(pattern) {
+    document.getElementById("found-stations").innerHTML = '';
+    document.getElementById("nb-found-stations").innerHTML = '';
+
+    let foundStation = [];
+    Object.keys(tideStations).forEach(station => {
+        let stationObj = tideStations[station];
+        let foundOne = false;
+        // Look for partial match
+        if (decodeURIComponent(stationObj.fullName).toUpperCase().includes(pattern.toUpperCase())) {
+            foundOne = true;
+            foundStation.push(stationObj);
+        }
+        // Add regex match if not found above
+        if (!foundOne) {
+            let regexPattern = new RegExp(pattern, 'gi');
+            let match = regexPattern.test(decodeURIComponent(stationObj.fullName));
+            if (match) {
+                foundStation.push(stationObj);
+            }
+        }
+    });
+    // console.log("Found.");
+    let nbFoundContent = `<small>${foundStation.length} station${foundStation.length > 1 ? 's' : ''} found for '${pattern}'</small>\n`;
+    document.getElementById("nb-found-stations").innerHTML = nbFoundContent;
+    let foundContent = '';
+    if (foundStation.length > 0) {
+        foundContent += '<ul>';
+        foundStation.forEach(found => {
+            foundContent += `<li><a href="#" onclick="panToStation('${found.fullName}');" title="Click to go to&#13; ${decodeURIComponent(found.fullName)}">${decodeURIComponent(found.fullName)}</a></li>\n`;
+        });
+        foundContent += '</ul>';
+        document.getElementById("found-stations").innerHTML = foundContent;
+    // } else {
+    //     alert(`No station found for ${pattern}`);
+    }
+}
+
+// function clearSearch() {
+//     document.getElementById("search-field").value = '';
+// }
+
+function searchStation() {
+    let valueToLookFor = document.getElementById("search-field").value;
+    if (valueToLookFor.trim().length > 0) {
+        produceSearchList(valueToLookFor);
+    } else {
+        console.log("Nothing to look for...");
+    }
+}
+
+window.onload = () => {
+	initAjax(false, ping=250); // ping ununsed
+	// console.log("Commented initAjax!");
+
+    Object.keys(tideStations).sort().forEach(station => {
+        let stationObj = tideStations[station];
+        let popupContent = `<b>${decodeURIComponent(station)}</b><br/>`;
+        if (stationObj.tideStation) {
+            popupContent += `Base Height: ${stationObj.baseHeight.toFixed(2)} ${stationObj.unit}<br/>`;
+            popupContent += "Tide Station<br/>";
+        } else {
+            popupContent += "Current Station<br/>";
+        }
+        popupContent += `<a href='#' onclick='showGeneratedDialog("${station}");'>Current Status</a>`;
+
+		if (false) {
+			L.marker([stationObj.latitude, stationObj.longitude])
+				.addTo(map)
+				.bindPopup(popupContent)
+				.bindTooltip(`${decodeURIComponent(station)}`);
+		}
+    });
+    console.log("Tide Stations loaded!");
+
+    // Set action on [Return] on the search field.
+    let searchField = document.getElementById("search-field");
+    let searchButton = document.getElementById("search-button");
+    searchField.addEventListener("keyup", e => {
+        if (e.keyCode === 13) { // CR
+            e.preventDefault();
+            searchButton.click();
+        }
+    });
+
+	map = document.getElementById('chartless-map-01');
+	map.setDoAfter(updateMap);
+
+	// Invoked by onClick on the map
+	map._clickHandler = (event) => {
+		// console.log(`Click on map at ${event.lat} / ${event.lng}`);
+		let lat = event.pos.lat;
+		let lng = event.pos.lng;
+		// let pos = map.canvasToPos(event.x, event.y);
+		// if (pos) {
+		// 	lat = pos.lat;
+		// 	lng = pos.lng;
+		// }
+		console.log(`Click Handler: ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`);
+
+		// Check here if the click happens on a tide station.
+		let clickedStation = null;
+		Object.keys(tideStations).some(station => {
+			let stationObj = tideStations[station];
+			if (decodeURIComponent(station).toUpperCase().includes("Port-Navalo".toUpperCase())) {
+				console.log(`Checking station ${decodeURIComponent(station)} at ${stationObj.latitude} / ${stationObj.longitude}`);
+				console.log(`Delta Lat: ${Math.abs(stationObj.latitude - lat)}, Delta Lng: ${Math.abs(stationObj.longitude - lng)}`);
+			}
+			if (Math.abs(stationObj.latitude - lat) < 0.01 && Math.abs(stationObj.longitude - lng) < 0.01) {
+				clickedStation = stationObj;
+				return true;
+			}
+			return false;
+		});
+		console.log(`>> Clicked station: ${clickedStation ? decodeURIComponent(clickedStation.fullName) : 'None'}`);
+
+		if (clickedStation) {
+			// Show the station status dialog
+			showGeneratedDialog(clickedStation.fullName);
+		} else {
+			// Ask if waypoint is to be created
+			let text = `Do we create a WayPoint at ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")} ?`;
+			if (confirm(text) == true) {
+				// console.log("You pressed OK!");
+				// Wip...
+				let waypointSelect = document.getElementById('next-wp');
+				let newOption = document.createElement('option');
+				let idx = waypointSelect.childNodes.length;
+				newOption.value = `USER-DEF-${(idx - 1).toFixed(0)}`;
+				newOption.innerHTML = `UserDef-${(idx - 1).toFixed(0)}`; //  at ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`;
+				// newOption.title = `User Defined Waypoint #${(idx - 1).toFixed(0)} at ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`;
+				newOption.selected = true;
+				// _waypoints
+				waypointSelect.appendChild(newOption);
+
+				let newWP = {
+					id: `USER-DEF-${(idx - 1).toFixed(0)}`,
+					label: `User Defined (${(idx - 1).toFixed(0)})`,
+					latitude: lat,
+					longitude: lng,
+					type: 'red-triangle'
+				};
+				waypoints.push(newWP);
+				userDefinedWP.push(newWP); // TODO List management...
+			} else {
+				console.log("WP creation canceled.");
+			}
+			// document.getElementById("demo").innerHTML = text;
+		}
+	};
+
+	map._mouseMoveFeedback = (event) => { // Override. Unused.
+		let lat = event.pos.lat;
+		let lng = event.pos.lng;
+		// console.log(`Mouse moved to ${decToSex(lat, "NS")} / ${decToSex(lng, "EW")}`);
+	};
+}
+	</script>
+</head>
+<body>
+
+	<h1>With tides</h1>
+
+	<dialog id="generated-curve-dialog">
+		<div class="dialog-header">
+			<span>Tide Curve</span>
+			<span class="dialog-header-close" onclick="closeGeneratedDialog();">&times</span>
+		</div>
+		<div style="text-align: left; max-height: 300px; overflow-y: scroll;">
+			<div id="generated-graph">
+				<div id="station-name">Tide Graph</div>
+				<graph-display id="tide-graph-01"
+							tabindex="-1"
+							class=""
+							width="450"
+							height="200"
+							padding="5"
+							hgrid="0:1"
+							vgrid="0:3"
+							value="null"
+							label="Tide Curve"
+							title="Tide Curve"></graph-display>
+				<div id="tide-table" style="max-height: 80px; overflow-y: scroll;"></div>
+			</div>
+		</div>
+	</dialog>
+
+	<!--h1>GPS, AIS, Markers, Borders, Waypoints, Tides</h1-->
+    <table>
+        <tr>
+            <td valign="top" style="display: inline; /*height: 600px;*/">
+                <div class="chart-container" style="border: 1px solid silver; border-radius: 5px; padding: 10px;">
+                    <chartless-map id="chartless-map-01"
+                                   class="chartless-map-01"
+                                   center-lat="0.0"
+                                   center-lng="0.0"
+                                   chart-width="5.0"
+                                   width="1000"
+                                   height="600"></chartless-map>
+					<div class="chart-buttons">
+						<!-- Zoom in / out -->
+						<button class="zoom-button" onclick="zoomIn();" title="Zoom in">+</button>
+						<br/>
+						<button class="zoom-button" onclick="zoomOut();" title="Zoom out">-</button>
+					</div>
+                </div>
+
+				<div style="display: grid; grid-template-columns: auto auto auto auto auto auto;">
+					<input type="checkbox" onchange="centerChart(this);" checked>Center Chart on the boat
+					<input type="checkbox" onchange="plotBorders(this);" checked>Plot Borders
+					<input type="checkbox" onchange="plotBorderMarkers(this);">Plot Borders' Markers
+					<!--br/-->
+					<input type="checkbox" onchange="plotMarkers(this);" checked>Plot Markers
+					<input type="checkbox" onchange="plotMarkerNames(this);" checked>Plot Marker Names
+					<input type="checkbox" onchange="distBearing(this);">Dist &amp; Bearings
+					<!--br/-->
+					<input type="checkbox" onchange="plotAISTargets(this);" checked>Plot AIS Targets
+					<input type="checkbox" onchange="plotWorldMap(this);">Display World Map
+				</div>
+
+            </td>
+			<td valign="top" rowspan="4">
+				<table>
+					<tr>
+						<td>Theme:</td>
+						<td>
+							<select id="chart-style" onchange="setStyle(this);" style="width: 90%; font-family: 'Courier New';">
+								<option value="chartless-map-01" selected>Light</option>
+								<option value="chartless-map-02">Dark</option>
+								<option value="chartless-map-03">Darker</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"><hr/></td>
+					</tr>
+					<tr>
+						<td width="33%" align="center">
+							<compass-display id="cog"
+											 class="gray display-data"
+											 title="Course Over Ground"
+											 value="0"
+											 width="200"
+											 height="200"
+											 major-ticks="45"
+											 minor-ticks="5"
+											 label="COG"></compass-display>
+						</td>
+						<td width="33%" align="center">
+							<analog-display class="analogdisplay-flat-gray display-data"
+											title="Speed Over Ground&#13; in knots"
+											id="sog"
+											min-value="0"
+											max-value="15"
+											major-ticks="1"
+											minor-ticks="0.1"
+											with-border="true"
+											with-min-max="true"
+											overlap="40"
+											label="SOG"
+											unit="kn"
+											rotate-digits="false"
+											width="200"
+											height="200"></analog-display>
+						</td>
+					</tr>
+					<tr>
+						<td>GPS Date:</td>
+						<td><span id="gps-date"></span></td>
+					</tr>
+					<tr>
+						<td>GPS Time:</td>
+						<td><span id="gps-time"></span></td>
+					</tr>
+					<tr>
+						<td colspan="3"><hr/></td>
+					</tr>
+					<tr>
+						<td>Boat Position:</td>
+						<td><span id="gps-position"></span></td>
+					</tr>
+					<tr>
+						<td>Track length:</td>
+						<td><span id="track-length"></span></td>
+					</tr>
+					<tr>
+						<td>Track Max length:</td>
+						<td><input type="number" id="track-max-length" value="1000" style="text-align: right;" onchange="setMaxLength(this);"></input></td>
+					</tr>
+					<tr>
+						<td valign="top" colspan="2">
+							<div id="curr-pos" style="min-height: 40px; text-align: right;"></div>
+							<small>Choose, or search your tide station,<br/>or <button onclick="findClosestStation();" title="Find Closest Station">Find Closest One</button>, and hit a button</small>
+							<div id="station-list-div" style="margin-top: 10px;">
+								<select id="station-list" class="custom-select" style="width: 300px; max-width: 500px;"></select>
+							</div>
+							<div style="margin-top: 5px;">
+								<button onclick="go();" title="Click to pan">Go</button>
+								<button onclick="editCurves();" title="Click to edit curves">Edit Curves</button>
+							</div>
+							<hr/>
+							<div id="search-zone">
+								<input type="search" class="search-item" placeholder="Search Stations..." id="search-field" title="Enter filter on station name.&#13;Supports RegExp.">
+								<button class="search-item" id="search-button" onclick="searchStation();" title="Search Stations...">🔎</button>
+								<br/>
+								<div id="nb-found-stations" style="margin-top: 10px;"></div>
+								<div id="found-stations" style="max-height: 200px; overflow-y: scroll;">
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+        </tr>
+        <tr style="display: none;">  <!-- Hidden for now -->
+            <td valign="top" height="50">
+                <!-- A slider for the chart scale -->
+                <div id="div-slider" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">
+					Chart Width:
+                    <input type="range" id="scale-slider" value="5.0" min="0.01" max="100.0" step="0.01" style="width: 600px;" title="Chart's width in degrees"
+                           oninput="onSlider.call(this, event); sliderValue01.value = `${decToSex(parseFloat(this.value).toFixed(2))}`;"/>
+                    <output name="padding" id="sliderValue01" style="text-shadow: 2px 2px 4px gray, 0 0 25px white, 0 0 10px orange;">5&deg;00.00'</output>
+                </div>
+            </td>
+        </tr>
+		<tr>
+			<td valign="top">
+			</td>
+		</tr>
+    </table>
+
+</body>
+</html>
