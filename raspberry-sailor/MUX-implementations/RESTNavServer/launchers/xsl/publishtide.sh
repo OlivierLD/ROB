@@ -45,14 +45,15 @@ echo Transforming ${RADICAL}.xml into ${RADICAL}.pdf
 #
 export HOME=..
 #
-export CP=${CP}:../../build/libs/RESTNavServer-1.0-all.jar
+# export CP=${CP}:../../build/libs/RESTNavServer-1.0-all.jar
+export CP=$(find "../.." -name '*.jar' | xargs echo | tr ' ' ':')
 export CP=${CP}:${HOME}/libs/orai18n-collation.jar
 export CP=${CP}:${HOME}/libs/orai18n-mapping.jar
 export CP=${CP}:${HOME}/libs/fnd2.zip
 export CP=${CP}:${HOME}/libs/xdo-0301.jar
 #
 export XSL_STYLESHEET=./tide2fop.xsl
-echo Publishing
+echo -e "Publishing, CP=${CP} "
 COMMAND="java -Xms256m -Xmx1024m -classpath ${CP} oracle.apps.xdo.template.FOProcessor ${PRM_OPTION} -xml ${RADICAL}.xml -xsl ${XSL_STYLESHEET} -pdf ${RADICAL}.pdf"
 echo -e "Executing ${COMMAND}"
 ${COMMAND}
