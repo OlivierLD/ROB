@@ -4,6 +4,9 @@
 # Warning: If possible, run the process on the target machine.
 #          That will avoid unwanted version mismatch (java class version...)
 #
+echo -e "Warning: Prefer the script in ToProd..."
+exit 0
+#
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e "|                          P A C K A G E   f o r   D I S T R I B U T I O N                           |"
 echo -e "| CLI options:                                                                                       |"

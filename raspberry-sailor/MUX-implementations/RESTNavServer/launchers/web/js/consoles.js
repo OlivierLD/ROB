@@ -99,7 +99,7 @@ let updateMenu = () => {
 	document.querySelectorAll("#_31").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Console compl&egrave;te" : "Full Console"));
 	document.querySelectorAll("#_32").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Console Raymarine" : "Raymarine Console"));
 	document.querySelectorAll("#_33").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Vu du Cockpit" : "Cockpit View"));
-	document.querySelectorAll("#_34").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Simulateur" : "Simulator"));
+	// document.querySelectorAll("#_34").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Simulateur" : "Simulator"));
 	document.querySelectorAll("#_35").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Console avec Vent et WebComponents" : "Console with Wind and WebComponents"));
 	// document.querySelectorAll("#_36").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Console Leaflet - 1, donn&eacute;es GPS" : "Leaflet Console - 1, GPS Data"));
 	document.querySelectorAll("#_37").forEach(elmt => elmt.innerHTML = (currentLang === "FR" ? "Console Leaflet, donn&eacute;es GPS" : "Leaflet Console, GPS Data"));

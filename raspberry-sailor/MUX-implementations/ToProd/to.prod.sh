@@ -69,8 +69,8 @@ PROXY_SETTINGS=
 #
 REBUILD_REQUEST=Y
 #
-SMALL_DIR=../NMEA-multiplexer-basic
-BIG_DIR=../RESTNavServer
+SMALL_DIR=$(realpath ../NMEA-multiplexer-basic)
+BIG_DIR=$(realpath ../RESTNavServer)
 #
 if [[ "${OPTION}" == "BASIC" ]]; then
   JAR_NAME=${SMALL_DIR}/build/libs/NMEA-multiplexer-basic-1.0-all.jar
@@ -145,57 +145,66 @@ fi
 
 # Go to the right web folder. The extra stuff for tides, astro, fromSpace, etc...
 TO_PROD_DIR=$PWD
-#echo -en "1 - Hit return..."
-#read AKEU
+echo -e "Working from ${TO_PROD_DIR}"
+echo -en "Hit return..."; read DUMMY
 mkdir ${distdir}/web
-echo -en "2 - Hit return..."
-read AKEU
+echo -e "${distdir}/web folder created"
+echo -en "Hit return..."; read DUMMY
 if [[ "${OPTION}" == "BASIC" ]]; then
   pushd ${SMALL_DIR}
     pushd web
       cp -rf * ${TO_PROD_DIR}/${distdir}/web
+      echo -e "Star Wars index... to be fixed"
+      cp index.star.wars.html index.html  # Default index becomes star wars. Could depend on the option (big or not)
     popd
-
-#    zip -r ${TO_PROD_DIR}/${distdir}/web.zip *
-#    cp index.star.wars.html index.html  # Default index becomes star wars. Could depend on the option (big or not)
-#    zip ${TO_PROD_DIR}/${distdir}/web.zip index.html
-#    rm index.html
   popd
 else
   pushd ${BIG_DIR}/launchers
     pushd web
+      echo -e "Copying web content from ${PWD}"
+      echo -en "Hit return..."; read DUMMY
       cp -rf * ${TO_PROD_DIR}/${distdir}/web
+      cp ${SMALL_DIR}/web/index.star.wars.html ${TO_PROD_DIR}/${distdir}/web/index.html
     popd
-#    zip -r ${TO_PROD_DIR}/${distdir}/web.zip *
-#    #
-#    echo -e "Star Wars index... to be fixed"
-#    # cp index.star.wars.html index.html  # Default index becomes star wars. Could depend on the option (big or not)
-#    zip ${TO_PROD_DIR}/${distdir}/web.zip index.html
-#    rm index.html
   popd
 fi
 #
-# Remove the unwanted resources...
-echo -e "From ${PWD} : rm -r ${distdir}/web/20*"
+# Remove the unwanted resources from the web folder...
+echo -e "From ${PWD} : removing unwanted stuff... rm -r ${distdir}/web/20* etc."
 rm -r ${distdir}/web/20*
-echo -en "3 - Hit return..."
-read AKEU
-cd ${TO_PROD_DIR}/web
+rm -r ${distdir}/web/scratch
+rm -r ${distdir}/web/catalog
+rm -r ${distdir}/web/samples
+rm -r ${distdir}/web/json
+rm -r ${distdir}/web/misc.stuff
+rm -r ${distdir}/web/weather.wizard
+echo -en "Hit return..."; read DUMMY
+cd ${TO_PROD_DIR}/${distdir}/web
+echo -e "Now in ${PWD}..."
+echo -en "Hit return..."; read DUMMY
+find . -name '.DS_Store' -exec rm {} \;
+echo -e "Zipping from $(pwd) ..."
 zip -r ${TO_PROD_DIR}/${distdir}/web.zip *
 cd ..
-echo -en "4 - Hit return..."
-read AKEU
-rm -r ${TO_PROD_DIR}/${distdir}/web
-echo -en "5 - Hit return..."
-read AKEU
+echo -e "web.zip created"
+echo -en "Hit return..."; read DUMMY
+if [[ "${OPTION}" == "BASIC" ]]; then
+  rm -r ${TO_PROD_DIR}/${distdir}/web
+  echo -e "web folder removed."
+else
+  echo -e "web folder NOT removed."
+fi
+echo -en "Hit return..."; read DUMMY
 cd ${TO_PROD_DIR}
-#
 echo -e "Copying extra stuff..., from ${PWD}"
 cp -r ${SMALL_DIR}/scripts/* ${TO_PROD_DIR}/${distdir}/scripts
 cp -r ${SMALL_DIR}/resources/* ${TO_PROD_DIR}/${distdir}/resources
 # Properties files
 cp ${SMALL_DIR}/*.properties ${TO_PROD_DIR}/${distdir}
 cp ${SMALL_DIR}/*.yaml ${TO_PROD_DIR}/${distdir}
+if [[ "${OPTION}" == "BIG" ]]; then
+  cp -R ${BIG_DIR}/launchers/mux-configs ${TO_PROD_DIR}/${distdir}
+fi
 # If needed, more resources would go here (like dev curves, etc)
 cp ${SMALL_DIR}/mux.sh ${TO_PROD_DIR}/${distdir}
 cp ${SMALL_DIR}/runNavServer.sh ${TO_PROD_DIR}/${distdir}
@@ -210,6 +219,15 @@ cp ${SMALL_DIR}/dp_2011*.csv ${TO_PROD_DIR}/${distdir}
 cp ../../NMEA-multiplexer/find.port.sh ${TO_PROD_DIR}/${distdir}
 # cp tomux.sh ${distdir}
 # cp killmux.sh ${distdir}
+if [[ "${OPTION}" == "BIG" ]]; then
+  mkdir ${TO_PROD_DIR}/${distdir}/pub
+  mkdir ${TO_PROD_DIR}/${distdir}/libs
+  mkdir ${TO_PROD_DIR}/${distdir}/xsl
+  #
+  cp -R ${BIG_DIR}/launchers/pub/* ${TO_PROD_DIR}/${distdir}/pub
+  cp -R ${BIG_DIR}/launchers/libs/* ${TO_PROD_DIR}/${distdir}/libs
+  cp -R ${BIG_DIR}/launchers/xsl/* ${TO_PROD_DIR}/${distdir}/xsl
+fi
 #
 # The Python part...
 PACKAGE_PYTHON=Y
@@ -234,7 +252,9 @@ fi
 # 4 - Archiving
 #
 cd ${TO_PROD_DIR}
-echo -e "Now archiving... from $(pwd)"
+find . -name '.DS_Store' -exec rm {} \;
+echo -e "Now archiving the whole stuff... from ${PWD}"
+echo -en "Hit return..."; read DUMMY
 # zip -q -r ${distdir}.zip ${distdir}
 tar -cvzf ${distdir}.tar.gz ${distdir}
 # Drop directory ?
@@ -248,8 +268,11 @@ if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
 else
   echo -e "OK. This will be your responsibility to clean it up."
   echo -e "To test the distrib, from ${distdir}, you can run:"
-  echo -e "./mux.sh nmea.mux.basics.yaml "
+  echo -e "./mux.sh nmea.mux.basics.yaml (standard option) "
+  echo -e " or "
+  echo -e "./runNavServer.sh --mux:nmea.mux.basics.yaml (--big option) "
   echo -e "- Use Ctrl+C to stop it."
+  echo -en "Hit return..."; read DUMMY
 fi
 #
 # 5 - Ready!
@@ -274,6 +297,8 @@ echo -e "| For the runner/logger, use nmea.mux.gps.tcp.properties               
 echo -e "| Use it - for example - like:                                                                     |"
 echo -e "| $ cd ${distdir}                                                                                   "
 echo -e "| $ nohup ./mux.sh nmea.mux.gps.tcp.yaml &                                                         |"
+echo -e "| The script start.all.sh can also be invoked from an /etc/rc.local, it can be tweak for your      |"
+echo -e "|                                                        configuration (extra Python servers, etc) |"
 echo -e "|  >> Static web resources can be reached like http://<host>:<port>/zip/index.html                 |"
 echo -e "| Examples of /etc/rc.local are provided. See rc.local*.sh, in the 'scripts' directory.            |"
 echo -e "| The script 'start.all.sh' is worth a look too.                                                   |"
@@ -282,10 +307,13 @@ echo -e "+----------------------------------------------------------------------
 echo -e "PS: Current folder is ${PWD} "
 echo -e ""
 echo -e "For tests, you can run (form the distrib folder, if not dropped):"
-echo -e "    ./mux.sh nmea.mux.basics.yaml   (Ctrl+C to stop it)"
+echo -e "    ./mux.sh nmea.mux.basics.yaml (standard option) - Ctrl+C to stop it"
+echo -e "       or "
+echo -e "    ./runNavServer.sh --mux:nmea.mux.basics.yaml (--big option) - Ctrl+C to stop it"
 echo -e "    Then, for a first basic test, from a browser (on the machine you generated the distrib, or the target one), reach"
 echo -e "    http://localhost:9999/web/index.html, or http://localhost:9999/zip/index.html ..."
 echo -e "    Also http://localhost:9999/web/index.star.wars.html, or http://localhost:9999/zip/index.html ..."
+echo -e "         http://localhost:9999/web/index.prod.html, curl -X GET http://localhost:9999/oplist..."
 #
 # Also see ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/DRY_RUN.md
 # Yo!
