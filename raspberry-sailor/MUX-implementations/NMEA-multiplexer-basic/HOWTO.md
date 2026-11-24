@@ -67,7 +67,7 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   - Choose the version matching the Raspberry Pi you want to run on (A, A+, Zero, 2, 3, 4, 5, etc) 
   - > and **_do make sure you boot the first time on the right machine_**!!  
     Starting an A+ SDCard on an RPi-5 could put you in trouble (when moving back to A+)...   
-- Use the script `./to.prod.sh` to package the current software. This step happens on the machine you've cloned the repo on.
+- Use the script `./to.prod.sh` (in the `ToProd` module) to package the current software. This step happens on the machine you've cloned the repo on.
   - The script can take a CLI parameter with 2 options:
     - `--basic`, basic config
     - `--big`, more REST request managers, more options
