@@ -183,16 +183,18 @@ cd ${TO_PROD_DIR}/${distdir}/web
 echo -e "Now in ${PWD}..."
 echo -en "Hit return..."; read DUMMY
 find . -name '.DS_Store' -exec rm {} \;
-echo -e "Zipping from $(pwd) ..."
-zip -r ${TO_PROD_DIR}/${distdir}/web.zip *
-cd ..
-echo -e "web.zip created"
-echo -en "Hit return..."; read DUMMY
+#
 if [[ "${OPTION}" == "BASIC" ]]; then
+  echo -e "Zipping from $(pwd) ..."
+  zip -r ${TO_PROD_DIR}/${distdir}/web.zip *
+  cd ..
+  echo -e "web.zip created, removing the web folder."
+  echo -en "Hit return..."; read DUMMY
   rm -r ${TO_PROD_DIR}/${distdir}/web
   echo -e "web folder removed."
 else
-  echo -e "web folder NOT removed."
+  cd ..
+  echo -e "NO web.zip created."
 fi
 echo -en "Hit return..."; read DUMMY
 cd ${TO_PROD_DIR}
@@ -260,6 +262,33 @@ tar -cvzf ${distdir}.tar.gz ${distdir}
 # Drop directory ?
 echo -e "Archive ${distdir}.tar.gz was generated:"
 ls -lisah ${distdir}.tar.gz
+echo -en "Do you want to run a first basic test ? y|[n] > "
+read REPLY
+if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
+  echo -e "Server are going to start. Use Ctrl+C to stop them..."
+  # echo -en "Hit return..."; read DUMMY
+  #
+  pushd ${distdir}
+    if [[ "${OPTION}" == "BASIC" ]]; then
+      echo -e "Once the server is started, from a browser reach"
+      echo -e "    http://localhost:9999/zip/index.html ..."
+      echo -en "Hit return..."; read DUMMY
+      #
+      ./mux.sh nmea.mux.basics.yaml
+    else
+      echo -e "Once the server is started, from a browser reach"
+      echo -e "    http://localhost:9999/web/index.html"
+      echo -e "    http://localhost:9999/web/index.prod.html ..."
+      echo -e " or curl -X GET http://localhost:9999/oplist ..."
+      echo -en "Hit return..."; read DUMMY
+      #
+      ./runNavServer.sh --mux:nmea.mux.basics.yaml
+    fi
+  popd
+  echo -e "Server test completed."
+  echo -en "Hit return..."; read DUMMY
+fi
+#
 echo -en "Can we drop the ${distdir} directory ? > "
 read REPLY
 if [[ ${REPLY} =~ ^(yes|y|Y)$ ]]; then
@@ -272,6 +301,14 @@ else
   echo -e " or "
   echo -e "./runNavServer.sh --mux:nmea.mux.basics.yaml (--big option) "
   echo -e "- Use Ctrl+C to stop it."
+  echo -e "    ./mux.sh nmea.mux.basics.yaml (standard option) - Ctrl+C to stop it"
+  echo -e "       or "
+  echo -e "    ./runNavServer.sh --mux:nmea.mux.basics.yaml (--big option) - Ctrl+C to stop it"
+  echo -e "    Then, for a first basic test, from a browser (on the machine you generated the distrib, or the target one), reach"
+  echo -e "    http://localhost:9999/web/index.html, or http://localhost:9999/zip/index.html ..."
+  echo -e "    Also http://localhost:9999/web/index.star.wars.html, or http://localhost:9999/zip/index.html ..."
+  echo -e "         http://localhost:9999/web/index.prod.html, curl -X GET http://localhost:9999/oplist ..."
+  #
   echo -en "Hit return..."; read DUMMY
 fi
 #
@@ -306,14 +343,16 @@ echo -e "| Once the server is started, try http://<host>:<port>/zip/index.html f
 echo -e "+--------------------------------------------------------------------------------------------------+"
 echo -e "PS: Current folder is ${PWD} "
 echo -e ""
-echo -e "For tests, you can run (form the distrib folder, if not dropped):"
-echo -e "    ./mux.sh nmea.mux.basics.yaml (standard option) - Ctrl+C to stop it"
-echo -e "       or "
-echo -e "    ./runNavServer.sh --mux:nmea.mux.basics.yaml (--big option) - Ctrl+C to stop it"
-echo -e "    Then, for a first basic test, from a browser (on the machine you generated the distrib, or the target one), reach"
-echo -e "    http://localhost:9999/web/index.html, or http://localhost:9999/zip/index.html ..."
-echo -e "    Also http://localhost:9999/web/index.star.wars.html, or http://localhost:9999/zip/index.html ..."
-echo -e "         http://localhost:9999/web/index.prod.html, curl -X GET http://localhost:9999/oplist..."
+if [[ 1 == 2 ]]; then
+  echo -e "For tests, you can run (form the distrib folder, if not dropped):"
+  echo -e "    ./mux.sh nmea.mux.basics.yaml (standard option) - Ctrl+C to stop it"
+  echo -e "       or "
+  echo -e "    ./runNavServer.sh --mux:nmea.mux.basics.yaml (--big option) - Ctrl+C to stop it"
+  echo -e "    Then, for a first basic test, from a browser (on the machine you generated the distrib, or the target one), reach"
+  echo -e "    http://localhost:9999/web/index.html, or http://localhost:9999/zip/index.html ..."
+  echo -e "    Also http://localhost:9999/web/index.star.wars.html, or http://localhost:9999/zip/index.html ..."
+  echo -e "         http://localhost:9999/web/index.prod.html, curl -X GET http://localhost:9999/oplist..."
+fi
 #
 # Also see ROB/raspberry-sailor/MUX-implementations/NMEA-multiplexer-basic/DRY_RUN.md
 # Yo!
