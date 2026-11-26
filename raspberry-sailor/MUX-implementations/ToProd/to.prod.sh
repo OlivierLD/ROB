@@ -65,6 +65,7 @@ else
     echo -e "|    --help  (guess what)                                                                |"
     echo -e "|    --basic (default, just Nav Server)                                                  |"
     echo -e "| or --big   (all REST Services, including tide, astro, etc. But no Almanac publication) |"
+    echo -e "| --go    (not prompted step by step)                                                    |"
     echo -e "+----------------------------------------------------------------------------------------+"
     echo -e "We will you ${OPTION}."
     echo -e "------------------------------------"
