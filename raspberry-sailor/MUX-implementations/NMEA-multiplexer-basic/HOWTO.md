@@ -67,9 +67,9 @@ The process goes in two main big steps (also summarized [here](use_cases/summary
   - Choose the version matching the Raspberry Pi you want to run on (A, A+, Zero, 2, 3, 4, 5, etc) 
   - > and **_do make sure you boot the first time on the right machine_**!!  
     Starting an A+ SDCard on an RPi-5 could put you in trouble (when moving back to A+)...   
-- Use the script `./to.prod.sh` (in the `ToProd` module) to package the current software. This step happens on the machine you've cloned the repo on.
+- Use the script `./to.prod.sh` (in the [ToProd](../ToProd/README.md) module) to package the current software. This step happens on the machine you've cloned the repo on.
   - The script can take a CLI parameter with 2 options:
-    - `--basic`, basic config
+    - `--basic`, basic config (default)
     - `--big`, more REST request managers, more options
   - _Warning_: For the build, do make sure you use a JDK (Java Development Kit) compatible with your target!  
     If you've installed a JDK8 (see below) on the Raspberry Pi, do the build with a JDK of the same version!  
@@ -189,6 +189,7 @@ Again, the system is now operational, and can be re-booted.
 > . . .
 > exit 0
 > ```
+> The process will be started as `root`.
 
 _**Warning**_: The data read from the GPS are logged into some log-files. Make sure you download and delete them from time to time...,
 before they get too big (triggering the message "No space left on device"...). There is a Web page for that (in the embarked Web UI), called "Log Management".  

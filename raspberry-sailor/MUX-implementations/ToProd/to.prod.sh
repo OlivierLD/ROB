@@ -10,6 +10,7 @@ echo -e "| CLI options:                                                         
 echo -e "|    --help  (guess what)                                                                            |"
 echo -e "|    --basic (default, just Nav Server)                                                              |"
 echo -e "| or --big   (all REST Services, including tide, astro, etc. But no Almanac publication)             |"
+echo -e "| --go Not to be prompted step by step                                                               |"
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e "| This is an EXAMPLE showing how to generate a 'production' version, without having the full github  |"
 echo -e "| repo on the destination machine. We will deploy only what is needed to run the NMEA Multiplexer,   |"
@@ -29,22 +30,34 @@ echo -e "+----------------------------------------------------------------------
 echo -e ""
 #
 OPTION=BASIC        # Default value
+GO_FOR_IT=false
+#
 if [[ $# -gt 0 ]]; then
-  # echo -e "CLI prm: $1"
-  if [[ "$1" == "--basic" ]]; then
-    OPTION=BASIC
-  elif [ "$1" == "--big" ]; then
-    OPTION=BIG
-  else
-    if [ "$1" != "--help" ]; then
-      echo -e "Unmanaged CLI parameter ${1}"
+  for ARG in "$@"; do
+    echo -e "Managing prm ${ARG}"
+#    if [[ "${ARG}" == "--tiny:"* ]]; then
+#      TINY=${ARG#*:}
+#    fi
+    # echo -e "CLI prm: $1"
+    if [[ "${ARG}" == "--basic" ]]; then
+      OPTION=BASIC
+    elif [ "${ARG}" == "--big" ]; then
+      OPTION=BIG
+    elif [ "${ARG}" == "--go" ]; then
+      GO_FOR_IT=true
+      echo -e "We'll go for it!!"
+    else
+      if [ "${ARG}" != "--help" ]; then
+        echo -e "Unmanaged CLI parameter ${1}"
+      fi
+      echo -e "Managed parameters are:"
+      echo -e "$0 --basic (default, just Nav Server)"
+      echo -e "$0 --big   (all REST Services, including tide, astro, etc. But no Almanac publication)"
+      echo -e "$0 --go    (not prompted step by step)"
+      echo -e "$0 --help  (guess what)"
+      exit 1
     fi
-    echo -e "Managed parameters are:"
-    echo -e "$0 --basic (default, just Nav Server)"
-    echo -e "$0 --big   (all REST Services, including tide, astro, etc. But no Almanac publication)"
-    echo -e "$0 --help  (guess what)"
-    exit 1
-  fi
+  done
 else
   if [[ 1 == 0 ]]; then
     echo -e "+----------------------------------------------------------------------------------------+"
@@ -56,6 +69,10 @@ else
     echo -e "We will you ${OPTION}."
     echo -e "------------------------------------"
   fi
+fi
+#
+if [[ "${GO_FOR_IT}" == "false" ]]; then
+  echo -e ">> You'll be prompted step by step."
 fi
 #
 echo -e "We will use ${OPTION}."
@@ -146,10 +163,10 @@ fi
 # Go to the right web folder. The extra stuff for tides, astro, fromSpace, etc...
 TO_PROD_DIR=$PWD
 echo -e "Working from ${TO_PROD_DIR}"
-echo -en "Hit return..."; read DUMMY
+if [[ "${GO_FOR_IT}" == "false" ]]; then echo -en "Hit return..."; read DUMMY; fi
 mkdir ${distdir}/web
 echo -e "${distdir}/web folder created"
-echo -en "Hit return..."; read DUMMY
+if [[ "${GO_FOR_IT}" == "false" ]]; then echo -en "Hit return..."; read DUMMY; fi
 if [[ "${OPTION}" == "BASIC" ]]; then
   pushd ${SMALL_DIR}
     pushd web
@@ -162,7 +179,7 @@ else
   pushd ${BIG_DIR}/launchers
     pushd web
       echo -e "Copying web content from ${PWD}"
-      echo -en "Hit return..."; read DUMMY
+      if [[ "${GO_FOR_IT}" == "false" ]]; then echo -en "Hit return..."; read DUMMY; fi
       cp -rf * ${TO_PROD_DIR}/${distdir}/web
       cp ${SMALL_DIR}/web/index.star.wars.html ${TO_PROD_DIR}/${distdir}/web/index.html
     popd
@@ -178,10 +195,10 @@ rm -r ${distdir}/web/samples
 rm -r ${distdir}/web/json
 rm -r ${distdir}/web/misc.stuff
 rm -r ${distdir}/web/weather.wizard
-echo -en "Hit return..."; read DUMMY
+if [[ "${GO_FOR_IT}" == "false" ]]; then echo -en "Hit return..."; read DUMMY; fi
 cd ${TO_PROD_DIR}/${distdir}/web
 echo -e "Now in ${PWD}..."
-echo -en "Hit return..."; read DUMMY
+if [[ "${GO_FOR_IT}" == "false" ]]; then echo -en "Hit return..."; read DUMMY; fi
 find . -name '.DS_Store' -exec rm {} \;
 #
 if [[ "${OPTION}" == "BASIC" ]]; then
@@ -189,14 +206,14 @@ if [[ "${OPTION}" == "BASIC" ]]; then
   zip -r ${TO_PROD_DIR}/${distdir}/web.zip *
   cd ..
   echo -e "web.zip created, removing the web folder."
-  echo -en "Hit return..."; read DUMMY
+  if [[ "${GO_FOR_IT}" == "false" ]]; then echo -en "Hit return..."; read DUMMY; fi
   rm -r ${TO_PROD_DIR}/${distdir}/web
   echo -e "web folder removed."
 else
   cd ..
   echo -e "NO web.zip created."
 fi
-echo -en "Hit return..."; read DUMMY
+if [[ "${GO_FOR_IT}" == "false" ]]; then echo -en "Hit return..."; read DUMMY; fi
 cd ${TO_PROD_DIR}
 echo -e "Copying extra stuff..., from ${PWD}"
 cp -r ${SMALL_DIR}/scripts/* ${TO_PROD_DIR}/${distdir}/scripts
@@ -256,7 +273,7 @@ fi
 cd ${TO_PROD_DIR}
 find . -name '.DS_Store' -exec rm {} \;
 echo -e "Now archiving the whole stuff... from ${PWD}"
-echo -en "Hit return..."; read DUMMY
+if [[ "${GO_FOR_IT}" == "false" ]]; then echo -en "Hit return..."; read DUMMY; fi
 # zip -q -r ${distdir}.zip ${distdir}
 tar -cvzf ${distdir}.tar.gz ${distdir}
 # Drop directory ?
@@ -309,7 +326,7 @@ else
   echo -e "    Also http://localhost:9999/web/index.star.wars.html, or http://localhost:9999/zip/index.html ..."
   echo -e "         http://localhost:9999/web/index.prod.html, curl -X GET http://localhost:9999/oplist ..."
   #
-  echo -en "Hit return..."; read DUMMY
+  if [[ "${GO_FOR_IT}" == "false" ]]; then echo -en "Hit return..."; read DUMMY; fi
 fi
 #
 # 5 - Ready!
