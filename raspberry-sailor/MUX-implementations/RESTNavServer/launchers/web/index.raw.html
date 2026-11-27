@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Main Index</title>
+  <link rel="icon" type="image/jpg" href="icons/palm.04.jpg">
+  <link rel="stylesheet" href="css/stylesheet.css" type="text/css"/>
+  <style>
+body > * {
+    font-family: "Lato", sans-serif;
+    font-size: 2em;
+}
+
+ul > * {
+    font-size: 1.1em;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 18px;
+    color: white; /* #818181; */
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover, .offcanvas a:focus{
+    color: cyan; /* #f1f1f1; */
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 24px;
+    margin-left: 50px;
+}
+
+.description {
+    color: white;
+    text-align: right;
+    padding-right: 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+#wrap { position:fixed; left:0; width:100%; top:40px; height:100%; }
+
+  </style>
+</head>
+<body>
+    <h1>Main Index</h1>
+    <small>
+        Several console index samples.<br/>
+        Choose your own, and bookmark it!
+    </small>
+    <hr/>
+    <ul>
+        <li><a href="./index.1.html" target="_blank_01">Index 1</a>, GPS and misc demos.</li>
+        <li><a href="./index.2.html" target="_blank_02">For big screens</a>, Admin, logs, GPS &amp; AIS, etc.</li>
+        <li><a href="./index.2.bis.html" target="_blank_03">For small screens</a>, GPS &amp; AIS.</li>
+        <li><a href="./index.3.html" target="_blank_04">Index 3</a>, GPS, minimal.</li>
+    </ul>
+    <hr/>
+    <small style="font-style: italic;">OlivSoft never stops</small>
+</body>
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ | Star Wars stuff inspired by a pen by Darryl Huffman ;)
+ | https://codepen.io/darrylhuffman/pen/MYBYgN
+ |
+ | Multilingual. QS Parameter 'lang' can be used to switch language, or the browser's language is used.
+ +-->
+<head>
+    <meta charset="UTF-8">
+    <title>Star Wars Menu</title>
+    <link rel="icon" type="image/png" href="icons/jellyfish.png">
+
+    <style type="text/css">
+
+body {
+    font-family: "Lato", sans-serif;
+    font-size: 20px;
+}
+
+.sidenav {
+    height: 100%;
+    max-height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1200;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 255, 0.6);
+    color: orange;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 18px;
+    color: white; /* #818181; */
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover, .offcanvas a:focus {
+    color: cyan; /* #f1f1f1; */
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 24px;
+    margin-left: 50px;
+}
+
+.description {
+    color: gold;
+    text-align: right;
+    padding-right: 10px;
+    font-size: 16px;
+}
+
+.description:hover {
+	color: silver;
+	font-style: italic;
+}
+
+@media screen and (max-width: 600px) { /*(max-height: 600px) {*/
+  .sidenav {
+    padding-top: 15px;
+    font-size: 50px;
+  }
+  .sidenav a {
+  	font-size: 50px;
+  }
+  body {
+  	font-size: 50px;
+  }
+}
+
+h2 {
+   width: 100%;
+   text-align: center;
+   /*border-bottom: 1px solid blue;*/
+   line-height: 0.1em;
+   margin: 10px 0 20px;
+}
+
+h2 span {
+    background: transparent;
+    padding: 0 10px;
+}
+
+#wrap {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    top: 40px;
+    height: 100%;
+}
+
+    </style>
+
+    <style type="text/css">
+h1 {
+  width: 100%;
+  text-align: center;
+  color: #F8FF00;
+  position: absolute;
+  top: 10%;
+  font-size: 11vw;
+  font-family: Verdana, Helvetica, sans-serif;
+  font-weight: bold;
+  -webkit-animation: logo 4s linear; /* Chrome, Safari, Opera */
+  animation: logo 4s linear;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 3px;
+}
+
+h1x {
+  font: 800 40px Arial;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px;
+}
+
+#container {
+  text-align: center;
+  width: 300px;
+  margin:0 auto;
+  -webkit-perspective: 600;
+  perspective: 600;
+  transition: all .5s;
+
+}
+
+section {
+  font-smooth: always;
+  transition: all 5s;
+  font-size: 22px;
+  font-family: Helvetica, sans-serif;
+  width: 100%;
+  height: 100px;
+  color: #F8FF00;
+  -webkit-transform: rotateX(70deg) translate(0, -1800px);
+  transform: rotateX(70deg) translate(0, -1800px);
+  -webkit-animation: mymove 140s linear; /* Chrome, Safari, Opera */
+  animation: mymove 140s linear;
+}
+
+section p {
+  line-height: 20px;
+  font-size: 14px;
+  font-smooth: always;
+  text-align: justify;
+}
+
+@font-face {
+	font-family: "Digi Font";
+	src: url(./fonts/Sterion-BLLld.ttf) format("truetype");
+}
+.digifont {
+  font-family: "Digi Font", Verdana, Tahoma;
+}
+
+@-webkit-keyframes logo {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  50%{
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+}
+
+@keyframes logo {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  50%{
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+}
+
+@-webkit-keyframes mymove {
+  from {
+    -webkit-transform: rotateX(70deg) translate(0, 550px);
+    transform: rotateX(70deg) translate(0, 550px);
+  }
+  to {
+    -webkit-transform: rotateX(70deg) translate(0, -1800px);
+    transform: rotateX(70deg) translate(0, -1800px);
+  }
+}
+
+/* Standard syntax */
+@keyframes mymove {
+  from {
+    -webkit-transform: rotateX(70deg) translate(0, 550px);
+    transform: rotateX(70deg) translate(0, 550px);
+  }
+  to {
+    -webkit-transform: rotateX(70deg) translate(0, -1800px);
+    transform: rotateX(70deg) translate(0, -1800px);
+  }
+}
+
+/* Background */
+
+body {
+  background-color: #000000;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+canvas {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 1000;
+}
+
+.cleartxt {
+  top: 80px;
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+  height: 80px;
+  background: rgba(0, 0, 0, 1);
+  background: -moz-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0,0,0,1)), color-stop(100%, rgba(0,0,0,0)));
+  background: -webkit-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  background: -o-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  background: -ms-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000', GradientType=0 );
+}
+.black {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: #000;
+  z-index: 999;
+  height: 80px;
+  width: 100%;
+}
+/* End Background */
+    </style>
+
+</head>
+<body>
+
+<audio controls autoplay style="display: none;">
+<!--audio controls autoplay-->
+    <source src="Star.Wars.mp3" type="audio/mpeg"> <!-- May need some time to load... -->
+    <!--source src="horse.ogg" type="audio/ogg"-->
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Side navigation bar -->
+<div id="side-nav" class="sidenav" onmouseleave="closeNav()">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <!--a href="javascript:void(0)" onclick="document.getElementById('the-frame').src='';" title="Remove all data, clean screen.">Clear</a-->
+
+    <menu-section id="en-menu" style="display: block">
+      <h2 style="padding-top: 30px;"><span>Documentation</span></h2>
+      <a href="./doc/index.html" target="_blank">MUX doc</a>
+      <div class="description">How it works. Basic documentation.</div>
+
+      <h2 style="padding-top: 30px;"><span>Console Menus</span></h2>
+
+      <a href="./index.1.html" target="_blank_01">GPS and Basic features</a>
+      <div class="description">GPS and misc demos.</div>
+
+      <a href="./index.prod.html" target="_blank_02">Consoles index</a>
+      <div class="description">A full list of navigation consoles</div>
+      <a href="./index.2.html" target="_blank_02">For big screens</a>
+      <div class="description">Admin, logs, GPS &amp; AIS, etc.</div>
+      <a href="./index.2.bis.html" target="_blank_03">For small screens</a>
+      <div class="description">GPS &amp; AIS.</div>
+      <a href="./index.3.html" target="_blank_04">Basics</a>
+      <div class="description">Basic features.</div>
+    </menu-section>
+
+    <menu-section id="fr-menu" style="display: none;">
+      <h2 style="padding-top: 30px;"><span>Documentation</span></h2>
+      <a href="./doc/index.html?lang=FR" target="_blank">MUX doc</a>
+      <div class="description">Comment &ccedil;a marche. Doc de base.</div>
+
+      <h2 style="padding-top: 30px;"><span>Console Menus</span></h2>
+
+      <a href="./index.1.html" target="_blank_01">GPS</a>
+      <div class="description">GPS et demos diverses.</div>
+
+      <a href="./index.prod.html?lang=FR" target="_blank_02">Un index de Consoles</a>
+      <div class="description">A liste consoles de navigation</div>
+      <a href="./index.2.html" target="_blank_02">Pour les grands &eacute;crans</a>
+      <div class="description">Admin, logs, GPS &amp; AIS, etc.</div>
+      <a href="./index.2.bis.html" target="_blank_03">Pour les petits &eacute;crans</a>
+      <div class="description">GPS &amp; AIS.</div>
+      <a href="./index.3.html" target="_blank_04">Minimum...</a>
+      <div class="description">Fonctionnalit&eacute;s de base.</div>
+    </menu-section>
+
+    <menu-section id="es-menu" style="display: none;">
+      <h2 style="padding-top: 30px;"><span>Documentación</span></h2>
+      <a href="./doc/index.html?lang=ES" target="_blank">Documentación del MUX</a>
+      <div class="description">Funcionamiento. Documentación básica.</div>
+
+      <h2 style="padding-top: 30px;"><span>Menús de la consola</span></h2>
+
+      <a href="./index.1.html" target="_blank_01">GPS</a>
+      <div class="description">Funciones de GPS</div>
+
+      <a href="./index.prod.html?lang=ES" target="_blank_02">Consoles index</a>
+      <div class="description">A full list of navigation consoles</div>
+      <a href="./index.2.html" target="_blank_02">Para pantallas grandes</a>
+      <div class="description">Administración, registros, GPS y AIS, etc.</div>
+      <a href="./index.2.bis.html" target="_blank_03">Para pantallas pequeñas</a>
+      <div class="description">GPS y AIS.</div>
+      <a href="./index.3.html" target="_blank_04">Básico</a>
+      <div class="description">Funciones básicas.</div>
+    </menu-section>
+
+    <menu-section id="de-menu" style="display: none;">
+      <h2 style="padding-top: 30px;"><span>Dokumentation</span></h2>
+      <a href="./doc/index.html?lang=DE" target="_blank">MUX-Dokumentation</a>
+      <div class="description">Comment &ccedil;a marche. Doc de base.</div>
+
+      <h2 style="padding-top: 30px;"><span>Konsolenmenüs</span></h2>
+
+      <a href="./index.1.html" target="_blank_01">GPS - Funktionen</a>
+      <div class="description">GPS - und diverse Demos.</div>
+
+      <a href="./index.prod.html?lang=DE" target="_blank_02">Consoles index</a>
+      <div class="description">A full list of navigation consoles</div>
+      <a href="./index.2.html" target="_blank_02">Für große Bildschirme</a>
+      <div class="description">Admin, Protokolle, GPS & AIS usw.</div>
+      <a href="./index.2.bis.html" target="_blank_03">Für kleine Bildschirme</a>
+      <div class="description">GPS &amp; AIS.</div>
+      <a href="./index.3.html" target="_blank_04">Minimales</a>
+      <div class="description">Minimale Funktionen.</div>
+    </menu-section>
+
+    <!-- bottom -->
+    <div style="height: 100px;"><!-- Empty --></div>
+</div>
+
+<div style="position: relative; z-index: 1200;">
+    <span style="cursor:pointer; color: orange; font-size: 3vw;" onclick="openNav()">&#9776; Menu</span> <!-- the hamburger -->
+    <!--span style="cursor:pointer; color: orange; float: right;" onclick="javascript:window.history.back()">&#8617;</span--> <!-- Back arrow -->
+</div>
+
+<!-- The scrolling banner -->
+<h1 class="digifont">NMEA Multiplexer</h1>
+<div class="black"></div>
+<div class="cleartxt"></div>
+
+<div id="container">
+    <section id="en-version" style="display: none;">
+        <br/>
+        <br/>
+        <h2>NMEA Multiplexer,</h2>
+        <h3>Welcome on board!</h3>
+
+        <p>
+          This is a top level menu for the Web UI of the NMEA Multiplexer.<br/>
+          Different menus are available from the hamburger (&#9776;) at the top left.<br/>
+          Choose your favorite category and bookmark it.<br/>
+          This contains several categories: generic, small screens, big screens....<br/>
+          The list is not closed, and will be updated with new features and demos.<br/>
+          The limit is your imagination.<br/>
+          <br/>
+          Good luck with that!
+        </p>
+    </section>
+    <section id="fr-version" style="display: none;">
+        <br/>
+        <br/>
+        <h2>NMEA Multiplexer,</h2>
+        <h3>Bienvenue à bord !</h3>
+
+        <p>
+            Ceci est le menu principal de l'interface Web du NMEA Multiplexer.<br/>
+            Différents menus sont accessibles depuis le hamburger (&#9776;) en haut à gauche.<br/>
+            Choisissez votre catégorie préférée et mettez-la en favori.<br/>
+            Il y a plusieurs catégories : générique, petits écrans, grands écrans....<br/>
+            La liste n'est pas close, et sera mise à jour avec de nouvelles fonctionnalités et démos.<br/>
+            La seule limite, c'est votre imagination.<br/>
+            <br/>
+            Bonne chance!
+        </p>
+    </section>
+    <section id="es-version" style="display: none;">
+        <br/>
+        <br/>
+        <h2>Multiplexor NMEA</h2>
+        <!--div>
+            Spanish special characters: <br/>
+            &iexcl; &#161; &#xa1;<br/>
+            &iquest; &#191; &#xBF;
+        </div-->
+        <h3>¡Bienvenido!</h3>
+
+        <p>
+          Este es el menú principal de la interfaz web del Multiplexor NMEA.<br/>
+          Puedes acceder a diferentes menús desde el menú de hamburguesa (&#9776;) en la esquina superior izquierda.<br/>
+          Elige tu categoría preferida y añádela a tus favoritos.<br/>
+          Hay varias categorías: general, pantallas pequeñas, pantallas grandes...<br/>
+          Esta lista no es exhaustiva y se actualizará con nuevas funciones y demostraciones.<br/>
+          El único límite es tu imaginación.<br/>
+          <br/>
+          ¡Buena suerte!
+        </p>
+    </section>
+    <section id="de-version" style="display: none;">
+        <br/>
+        <br/>
+        <h2>NMEA Multiplexer</h2>
+        <h3>Willkommen an Bord!</h3>
+
+        <p>
+          Dies ist das Hauptmenü der Web-Oberfläche des NMEA Multiplexers.<br/>
+          Die verschiedenen Menüs erreichen Sie über das Hamburger-Menü (&#9776;) oben links.<br/>
+          Wählen Sie Ihre bevorzugte Kategorie und speichern Sie sie als Lesezeichen.<br/>
+          Hier finden Sie verschiedene Kategorien: Allgemein, Kleine Bildschirme, Große Bildschirme usw.<br/>
+          Die Liste wird laufend mit neuen Funktionen und Demos aktualisiert.<br/>
+          Ihrer Fantasie sind keine Grenzen gesetzt.<br/>
+          Viel Erfolg!
+        </p>
+    </section>
+</div>
+</body>
+
+<script type="text/javascript">
+
+let getQSPrm = (prm) => {
+	let value;
+	let loc = document.location.toString();
+	if (loc.indexOf("?") > -1) {
+		let qs = loc.substring(loc.indexOf("?") + 1);
+		let prms = qs.split('&');
+		for (let i=0; i<prms.length; i++) {
+			let nv = prms[i].split('=');
+			if (nv.length === 2) {
+				if (nv[0] === prm) {
+					return nv[1];
+				}
+			}
+		}
+	}
+	return value;
+};
+
+// Menu, et contenu
+let switchToFrench = () => {
+  document.getElementById('fr-version').style.display = 'block';
+  document.getElementById('en-version').style.display = 'none';
+  document.getElementById('es-version').style.display = 'none';
+  document.getElementById('de-version').style.display = 'none';
+
+  document.getElementById('fr-menu').style.display = 'block';
+  document.getElementById('en-menu').style.display = 'none';
+  document.getElementById('es-menu').style.display = 'none';
+  document.getElementById('de-menu').style.display = 'none';
+};
+
+// Menú y contenido
+let switchToSpanish = () => {
+  document.getElementById('fr-version').style.display = 'none';
+  document.getElementById('en-version').style.display = 'none';
+  document.getElementById('es-version').style.display = 'block';
+  document.getElementById('de-version').style.display = 'none';
+
+  document.getElementById('fr-menu').style.display = 'none';
+  document.getElementById('en-menu').style.display = 'none';
+  document.getElementById('es-menu').style.display = 'block';
+  document.getElementById('de-menu').style.display = 'none';
+};
+
+// Menu, and content
+let switchToEnglish = () => {
+  document.getElementById('fr-version').style.display = 'none';
+  document.getElementById('en-version').style.display = 'block';
+  document.getElementById('es-version').style.display = 'none';
+  document.getElementById('de-version').style.display = 'none';
+
+  document.getElementById('fr-menu').style.display = 'none';
+  document.getElementById('en-menu').style.display = 'block';
+  document.getElementById('es-menu').style.display = 'none';
+  document.getElementById('de-menu').style.display = 'none';
+};
+
+// Menü und Inhalt
+let switchToGerman = () => {
+  document.getElementById('fr-version').style.display = 'none';
+  document.getElementById('en-version').style.display = 'none';
+  document.getElementById('es-version').style.display = 'none';
+  document.getElementById('de-version').style.display = 'block';
+
+  document.getElementById('fr-menu').style.display = 'none';
+  document.getElementById('en-menu').style.display = 'none';
+  document.getElementById('es-menu').style.display = 'none';
+  document.getElementById('de-menu').style.display = 'block';
+};
+
+// The text 3D affect, and animation is pure CSS.
+// Javascript is only here to create stars.
+// Created by Darryl Huffman
+
+window.onload = function() {
+    // 1 - lang QS parameter or browser language.
+    let userLang = getQSPrm('lang');
+  	if (!userLang) {
+	  	let browserUserLang = navigator.language || navigator.userLanguage;
+		  console.log("The browser's language is: " + browserUserLang);
+		  if (browserUserLang) {
+			  if (browserUserLang.substring(0, 2).toUpperCase() === 'FR') {
+		  		userLang = 'FR';
+				  console.log("On va parler français.");
+			  } else if (browserUserLang.substring(0, 2).toUpperCase() === 'ES') {
+				  userLang = 'ES';
+				  console.log("Vamos a hablar español.");
+			  } else if (browserUserLang.substring(0, 2).toUpperCase() === 'DE') {
+				  userLang = 'DE';
+				  console.log("Jetz sprechen wir deutsch.");
+			  } else {
+				  userLang = 'EN';
+				  console.log("We'll speak english");
+			  }
+		  }
+	  }
+	  if (userLang && userLang === 'FR') {
+      console.log('Switching to French');
+		  switchToFrench();
+	  } else if (userLang && userLang === 'ES') {
+      console.log('Switching to Spanish');
+      switchToSpanish();
+	  } else if (userLang && userLang === 'DE') {
+      console.log('Switching to German');
+      switchToGerman();
+	  } else {
+      console.log('Switching to English');
+      switchToEnglish();
+    }
+
+//////////////// 2 - STAR BACKGROUND and Co.
+		// Creating the Canvas and related onbjects
+		var canvas = document.createElement("canvas"),
+			  c = canvas.getContext("2d"),
+			  particles = {},
+			  particleIndex = 0,
+			  particleNum = 4;
+
+		canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+		canvas.id = "motion";
+		document.body.appendChild(canvas);
+		// Finished Creating Canvas & Co
+
+		// Setting color which is just one big square
+		c.fillStyle = "black";
+		c.fillRect(0, 0, canvas.width, canvas.height);
+		// Finished Color
+
+		function Particle() {
+			var random_x = Math.floor(Math.random() * (canvas.width - 1 + 1)) + 1;
+			var random_y = Math.floor(Math.random() * (canvas.height - 1 + 1)) + 1;
+			this.x = random_x;
+			this.y = random_y;
+			this.vx = 0;
+			this.vy = 0;
+			this.gravity = 0;
+			particleIndex++;
+			particles[particleIndex] = this;
+			this.id = particleIndex;
+			this.life = 0;
+      this.size = Math.random() * 6 - 2;
+			this.maxlife = Math.random() * 80 + 20; // Stars are set to have a random life length right now, but you can shorten this or make it longer
+			this.color = "#FFF"; // White. Change color being displayed here
+		}
+
+		Particle.prototype.draw = function() {
+			this.x += this.vx;
+			this.y += this.vy;
+
+			this.vy += this.gravity;
+			this.life++;
+			if (this.life >= this.maxlife) {
+				delete particles[this.id];
+			}
+			c.fillStyle = this.color;
+			c.fillRect(this.x, this.y, this.size, this.size);
+		};
+
+		setInterval(function() {
+			c.fillStyle = "black";
+			c.clearRect(0,0,canvas.width,canvas.height);
+			for (var i = 0; i < particleNum; i++) {
+				new Particle();
+			}
+			for (var i in particles) {
+				particles[i].draw();
+			}
+		}, 30); // 30 ms
+//////////////// END STAR BACKGROUND
+	};
+
+</script>
+
+<script type="text/javascript">
+
+let openNav = function() {
+    document.getElementById("side-nav").style.width = "350px";
+};
+
+let closeNav = function() {
+    document.getElementById("side-nav").style.width = "0";
+};
+</script>
+
+</html>
