@@ -1,16 +1,24 @@
 #!/usr/bin/env bash
 #
-# WIP
+# WIP. Runs on bash.
 # Warning: If possible, run the process on the target machine.
 #          That will avoid unwanted version mismatch (java class version...)
 #
+RED='\033[0;31;1m'                 # Red and Bold
+GREEN="\033[1;32m"                 # Green and bold
+YELLOW="\033[1;33m"                # Yellow and bold
+BLUE="\033[1;34m"                  # Blue and bold
+CYAN="\033[1;36m"                  # Cyan and bold
+BOLD_GREEN_BLINK='\033[0;32;1;5m'  # Green, bold, blink.
+NC='\033[0m'                       # Back to No Color
+#
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e "|                          P A C K A G E   f o r   D I S T R I B U T I O N                           |"
-echo -e "| CLI options:                                                                                       |"
-echo -e "|    --help  (guess what)                                                                            |"
-echo -e "|    --basic (default, just Nav Server)                                                              |"
-echo -e "| or --big   (all REST Services, including tide, astro, etc. But no Almanac publication)             |"
-echo -e "| --go Not to be prompted step by step                                                               |"
+echo -e "| CLI parameters:                                                                                    |"
+echo -e "|    ${YELLOW}--help${NC}  : Guess what!                                                                           |"
+echo -e "|    ${YELLOW}--basic${NC} : Default, just Nav Server                                                              |"
+echo -e "| or ${YELLOW}--big${NC}   : NavServer and all REST Services, including tide, astro, almanac publication, etc.     |"
+echo -e "| ${YELLOW}--go${NC}       : NOT to be prompted step by step. This goes faster.                                    |"
 echo -e "+----------------------------------------------------------------------------------------------------+"
 echo -e "| This is an EXAMPLE showing how to generate a 'production' version, without having the full github  |"
 echo -e "| repo on the destination machine. We will deploy only what is needed to run the NMEA Multiplexer,   |"
@@ -47,36 +55,24 @@ if [[ $# -gt 0 ]]; then
       GO_FOR_IT=true
       echo -e "We'll go for it!!"
     else
-      if [ "${ARG}" != "--help" ]; then
+      if [ "${ARG}" != "--help" ] && [ "${ARG}" != "-h" ] && [ "${ARG}" != "?" ]; then
         echo -e "Unmanaged CLI parameter ${1}"
       fi
       echo -e "Managed parameters are:"
       echo -e "$0 --basic (default, just Nav Server)"
-      echo -e "$0 --big   (all REST Services, including tide, astro, etc. But no Almanac publication)"
+      echo -e "$0 --big   (all REST Services, including tide, astro, almanac publication, etc)"
       echo -e "$0 --go    (not prompted step by step)"
       echo -e "$0 --help  (guess what)"
       exit 1
     fi
   done
-else
-  if [[ 1 == 0 ]]; then
-    echo -e "+----------------------------------------------------------------------------------------+"
-    echo -e "| CLI options:                                                                           |"
-    echo -e "|    --help  (guess what)                                                                |"
-    echo -e "|    --basic (default, just Nav Server)                                                  |"
-    echo -e "| or --big   (all REST Services, including tide, astro, etc. But no Almanac publication) |"
-    echo -e "| --go    (not prompted step by step)                                                    |"
-    echo -e "+----------------------------------------------------------------------------------------+"
-    echo -e "We will you ${OPTION}."
-    echo -e "------------------------------------"
-  fi
 fi
 #
 if [[ "${GO_FOR_IT}" == "false" ]]; then
   echo -e ">> You'll be prompted step by step."
 fi
 #
-echo -e "We will use ${OPTION}."
+echo -e "We will use ${OPTION} option."
 echo -e "------------------------------------"
 #
 # 1 - Build
@@ -189,13 +185,13 @@ fi
 #
 # Remove the unwanted resources from the web folder...
 echo -e "From ${PWD} : removing unwanted stuff... rm -r ${distdir}/web/20* etc."
-rm -r ${distdir}/web/20*
-rm -r ${distdir}/web/scratch
-rm -r ${distdir}/web/catalog
-rm -r ${distdir}/web/samples
-rm -r ${distdir}/web/json
-rm -r ${distdir}/web/misc.stuff
-rm -r ${distdir}/web/weather.wizard
+rm -r ${distdir}/web/20* 2> /dev/null
+rm -r ${distdir}/web/scratch 2> /dev/null
+rm -r ${distdir}/web/catalog 2> /dev/null
+rm -r ${distdir}/web/samples 2> /dev/null
+rm -r ${distdir}/web/json 2> /dev/null
+rm -r ${distdir}/web/misc.stuff 2> /dev/null
+rm -r ${distdir}/web/weather.wizard 2> /dev/null
 if [[ "${GO_FOR_IT}" == "false" ]]; then echo -en "Hit return..."; read DUMMY; fi
 cd ${TO_PROD_DIR}/${distdir}/web
 echo -e "Now in ${PWD}..."
@@ -333,7 +329,8 @@ fi
 # 5 - Ready!
 #
 echo -e "+--------------------------------------------------------------------------------------------------+"
-echo -e " >> Archive $PWD/${distdir}.tar.gz ready for deployment."
+echo -e " >> ${BOLD_GREEN_BLINK}Archive $PWD/${distdir}.tar.gz ready for deployment.${NC}"
+echo -e " >> size $(ls -lh ${PWD}/${distdir}.tar.gz | awk '{ print $5 }')"
 echo -e "+--------------------------------------------------------------------------------------------------+"
 echo -e "| Send it to another machine (with scp for example), and un-archive it.                            |"
 echo -e "| Use 'tar -xzvf ${distdir}.tar.gz' to un-archive.                                                  "
