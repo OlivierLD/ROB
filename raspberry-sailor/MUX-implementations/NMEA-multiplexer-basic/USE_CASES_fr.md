@@ -68,7 +68,7 @@ machine-a [NMEA-multiplexer] $ ../../gradlew shadowJar -x :astro-computer:AstroC
 - Enregistreur de données basique (mais fonctionnel) – déploiement en production : [Raspberry Pi, BMP180]
   Un barographe (enregistreur de pression atmosphérique).
   Disponible dans un document séparé, [ici](./use_cases/USE_CASES_4_fr.md). - La station de navigation la plus petite (et la moins coûteuse). Raspberry Pi Zero W, GPS, écran à encre électronique (e-ink) en option. Détails dans un document séparé, [ici](./HOWTO.md).
-- Une configuration plus robuste. Raspberry Pi 4B, GPS, écran, clavier... Détails dans un document séparé, [ici](./use_cases/USE_CASES_5_fr.md).
+- Une configuration plus robuste. Raspberry Pi Zero, ..., 4B, GPS, options écran, clavier... Détails dans un document séparé, [ici](./use_cases/USE_CASES_5_fr.md).
 - Cette liste n'est pas exhaustive — et ne saurait l'être.  
   Voir également [ici](https://hocus-blogus.blogspot.com/2021/01/several-configurations-for-raspberry-pi.html) pour d'autres configurations basées sur Raspberry Pi...
 

@@ -74,7 +74,7 @@ machine-a [NMEA-multiplexer] $ ../../gradlew shadowJar -x :astro-computer:AstroC
   A Barograph (Atmospheric Pressure recorder).    
   In a separate document, [here](./use_cases/USE_CASES_4.md).
 - The smallest (and cheapest) Navigation Station. Raspberry Pi Zero W, GPS, optional e-ink bonnet. In a separate document, [here](./HOWTO.md).
-- A stronger configuration. Raspberry Pi 4B, GPS, screen, keyboard.... In a separate document, [here](./use_cases/USE_CASES_5.md).
+- A stronger configuration. Raspberry Pi Zero, ..., 4B, GPS, optional screen, keyboard.... In a separate document, [here](./use_cases/USE_CASES_5.md).
 - This list is not closed - nor closeable.  
   Also see [here](https://hocus-blogus.blogspot.com/2021/01/several-configurations-for-raspberry-pi.html), several RPi configs...
 
