@@ -1,9 +1,19 @@
 _**Note**_: the links below are just examples, provided to have an idea of the cost of the different components. Components are available from several providers, and prices may vary.
 
 ---
+# Minimal configuration
+- Just a `Raspberry Pi Zero W` and a GPS
+  - [raspberripi.com](https://www.raspberrypi.com/products/raspberry-pi-zero-w/)
+  - [aliexpress](https://fr.aliexpress.com/item/1005012287292738.html?src=google&src=google&albch=shopping&acnt=297-491-5278&isdl=y&slnk=&plac=&mtctp=&albbt=Google_7_shopping&aff_platform=google&aff_short_key=_oFgTQeV&gclsrc=aw.ds&albagn=888888&ds_e_adid=&ds_e_matchtype=&ds_e_device=c&ds_e_network=x&ds_e_product_group_id=&ds_e_product_id=fr1005012287292738&ds_e_product_merchant_id=5852344715&ds_e_product_country=FR&ds_e_product_language=fr&ds_e_product_channel=online&ds_e_product_store_id=&ds_url_v=2&albcp=23484074629&albag=&isSmbAutoCall=false&needSmbHouyi=false&gad_source=1&gad_campaignid=23479465904&gbraid=0AAAABCRGU4k-Jf-MFc_eMMUxxlo3Jc1Rg&gclid=Cj0KCQiA8aTYBhCvARIsAJFINld6EsRalpdUKeVXaV29_vKOUyXSjM7r16t9wrloKFifh-pDYbE5EEcaAkYkEALw_wcB)
+  - [Kubii](https://www.kubii.com/fr/cartes-nano-ordinateurs/1851-raspberry-pi-zero-w-kubii-3272496006997.html)
+- The prices are, to say the least, disparate...
+- Power supply: Cigarette lighter and a USB Adapter, with a USB cable (A to micro-B)
+- The Raspberry Pi Zero has no device interface (no screen, no keyboard). It emits its own network, on
+  which you can connect with a cell-phone, tablet or eles (no SIM-card required), to reach the different screens (admin, and runtime)
+  through a web browser. `ssh` and `scp` are also - obviously - available.
+- GPS (and/or other NMEA inputs) are connected on the Raspberry's USB port.
 
 # Full Stack
-
 - [Raspberry Pi 4B, 4Go](https://www.kubii.com/fr/cartes-nano-ordinateurs/2772-raspberry-pi-4-modele-b-4gb-5056561800349.html)
   - To be tested, [Orange Pi](https://fr.aliexpress.com/item/1005010198029047.html?spm=a2g0o.tm1000063736.appPushSupportRecommend.2.2a2837c2ZYTEkR&gps-id=appPushSupportRecommend&scm=1007.67346.516851.0&scm_id=1007.67346.516851.0&scm-url=1007.67346.516851.0&pvid=a40564af-e6b5-47da-a411-176647958039&_t=gps-id%3AappPushSupportRecommend%2Cscm-url%3A1007.67346.516851.0%2Cpvid%3Aa40564af-e6b5-47da-a411-176647958039%2Ctpp_buckets%3A668%232846%238107%231934&pdp_ext_f=%7B%22order%22%3A%22869%22%2C%22spu_best_type%22%3A%22price%22%2C%22eval%22%3A%221%22%2C%22sceneId%22%3A%2257346%22%2C%22fromPage%22%3A%22recommend%22%7D&pdp_npi=6%40dis%21EUR%2159.99%2159.99%21%21%2165.77%2165.77%21%40210384a717917310095573143e0ce3%2112000051496788840%21rec%21FR%211894764174%21XZ%211%210%21n_tag%3A-29919%3Bd%3A9594669f%3Bm03_new_user%3A-29895&utparam-url=scene%3AappPushSupportRecommend%7Cquery_from%3A%7Cx_object_id%3A1005010198029047%7C_p_origin_prod%3A)...
 - [In a box](https://www.kubii.com/fr/boitiers-fixations/2681-boitier-officiel-pour-raspberry-pi-4-3272496298583.html)
