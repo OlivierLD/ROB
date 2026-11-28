@@ -13,6 +13,17 @@ context:
   with.http.server: true
   http.port: 9999
   init.cache: true
+  markers.list:
+    - markers: mux-configs/markers/markers.stphil.kerpenhir.yaml
+    - markers: mux-configs/markers/markers.etel.gx.stphil.yaml
+    - markers: mux-configs/markers/markers.lorient.blavet.yaml
+    - markers: mux-configs/markers/markers.03.yaml
+    - markers: mux-configs/markers/markers.le.four.la.plate.yaml
+    - markers: mux-configs/markers/markers.houat.hoedic.belle-ile.yaml
+    - markers: mux-configs/markers/markers.couregant.la.plate.yaml
+    - markers: mux-configs/markers/markers.glenan.yaml
+    - markers: mux-configs/markers/markers.pte.du.talud.ste.marine.yaml
+    - markers: mux-configs/markers/markers.port-navalo.vilaine.yaml
 channels:
   - type: zda
     description: "ZDA Generator, GP prefix."
